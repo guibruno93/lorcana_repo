@@ -1,0 +1,542 @@
+'use strict';
+
+/**
+ * mulliganAdvisor-SMART.js
+ * Sistema inteligente de análise de mulligan para Lorcana
+ * 
+ * Lógica baseada em:
+ * - Curva de ink
+ * - Estratégia do deck (Aggro/Midrange/Control)
+ * - Inkable vs Non-inkable
+ * - Efeitos de cartas específicas
+ * - Synergias
+ */
+
+// ── Card Database Reference ──────────────────────────────────────────────────
+
+const CARD_EFFECTS = {
+  // Early game threats
+  'Tipo - Growing Son': { priority: 'high', role: 'tempo', inkable: false },
+  'Captain Hook - Forceful Duelist': { priority: 'high', role: 'tempo', inkable: false },
+  'Olaf - Helping Hand': { priority: 'medium', role: 'ramp', inkable: true },
+  
+  // Ramp
+  'Sail the Azurite Sea': { priority: 'high', role: 'ramp', inkable: false },
+  'Beyond the Horizon': { priority: 'medium', role: 'ramp', inkable: false },
+  
+  // Draw engines
+  'Vision of the Future': { priority: 'medium', role: 'draw', inkable: true },
+  'Develop Your Brain': { priority: 'medium', role: 'draw', inkable: true },
+  
+  // Threats
+  'Hades - Infernal Schemer': { priority: 'high', role: 'threat', inkable: false },
+  'Goliath - Clan Leader': { priority: 'high', role: 'threat', inkable: false },
+  'Namaari - Single-Minded Rival': { priority: 'medium', role: 'threat', inkable: true },
+  
+  // Removal
+  'He Hurled His Thunderbolt': { priority: 'low', role: 'removal', inkable: true },
+  'Spooky Sight': { priority: 'low', role: 'removal', inkable: true },
+  
+  // Finishers
+  'Tinker Bell - Giant Fairy': { priority: 'low', role: 'finisher', inkable: false },
+  'Cinderella - Dream Come True': { priority: 'low', role: 'finisher', inkable: false },
+};
+
+// ── Strategy Detection ───────────────────────────────────────────────────────
+
+function detectStrategy(deckAnalysis) {
+  if (!deckAnalysis || !deckAnalysis.cards) {
+    return { type: 'midrange', aggression: 50 };
+  }
+  
+  const cards = deckAnalysis.cards;
+  let avgCost = 0;
+  let totalCards = 0;
+  let earlyGameCount = 0;
+  let lateGameCount = 0;
+  
+  for (const card of cards) {
+    const cost = card.cost || 0;
+    const qty = card.quantity || 1;
+    
+    avgCost += cost * qty;
+    totalCards += qty;
+    
+    if (cost <= 2) earlyGameCount += qty;
+    if (cost >= 6) lateGameCount += qty;
+  }
+  
+  avgCost = avgCost / totalCards;
+  
+  const earlyPct = (earlyGameCount / totalCards) * 100;
+  const latePct = (lateGameCount / totalCards) * 100;
+  
+  // Determine strategy
+  let type = 'midrange';
+  let aggression = 50;
+  
+  if (avgCost <= 2.5 && earlyPct > 40) {
+    type = 'aggro';
+    aggression = 80;
+  } else if (avgCost >= 4.5 && latePct > 30) {
+    type = 'control';
+    aggression = 20;
+  } else if (avgCost < 3.5 && earlyPct > 30) {
+    type = 'tempo';
+    aggression = 65;
+  } else {
+    type = 'midrange';
+    aggression = 50;
+  }
+  
+  return { 
+    type, 
+    aggression,
+    avgCost,
+    earlyPct,
+    latePct,
+  };
+}
+
+// ── Hand Analysis ────────────────────────────────────────────────────────────
+
+function analyzeHandComposition(hand, deckAnalysis) {
+  const strategy = detectStrategy(deckAnalysis);
+  
+  const composition = {
+    totalCards: hand.length,
+    inkable: 0,
+    nonInkable: 0,
+    
+    // Por custo
+    costDistribution: {},
+    avgCost: 0,
+    
+    // Por role
+    tempo: 0,
+    ramp: 0,
+    draw: 0,
+    threat: 0,
+    removal: 0,
+    finisher: 0,
+    
+    // Cartas específicas
+    cards: [],
+  };
+  
+  let totalCost = 0;
+  
+  for (const cardName of hand) {
+    const cardInfo = CARD_EFFECTS[cardName] || {};
+    const cardData = deckAnalysis.cards?.find(c => c.name === cardName);
+    
+    const cost = cardData?.cost || 0;
+    const inkable = cardData?.inkable ?? cardInfo.inkable ?? true;
+    const role = cardInfo.role || 'unknown';
+    const priority = cardInfo.priority || 'medium';
+    
+    // Inkable
+    if (inkable) {
+      composition.inkable++;
+    } else {
+      composition.nonInkable++;
+    }
+    
+    // Cost
+    totalCost += cost;
+    composition.costDistribution[cost] = (composition.costDistribution[cost] || 0) + 1;
+    
+    // Role
+    if (role !== 'unknown') {
+      composition[role]++;
+    }
+    
+    composition.cards.push({
+      name: cardName,
+      cost,
+      inkable,
+      role,
+      priority,
+    });
+  }
+  
+  composition.avgCost = (totalCost / hand.length).toFixed(2);
+  
+  return { composition, strategy };
+}
+
+// ── Mulligan Decision Engine ─────────────────────────────────────────────────
+
+function evaluateHand(hand, deckAnalysis) {
+  const { composition, strategy } = analyzeHandComposition(hand, deckAnalysis);
+  
+  const issues = [];
+  const strengths = [];
+  const mulliganCandidates = [];
+  const keepCandidates = [];
+  
+  // Avaliar baseado na estratégia
+  
+  // 1. Ink curve check
+  const earlyGame = composition.costDistribution[0] + 
+                    composition.costDistribution[1] + 
+                    composition.costDistribution[2];
+  
+  const midGame = composition.costDistribution[3] + 
+                  composition.costDistribution[4] + 
+                  composition.costDistribution[5];
+  
+  const lateGame = composition.costDistribution[6] + 
+                   composition.costDistribution[7] + 
+                   (composition.costDistribution[8] || 0) +
+                   (composition.costDistribution[9] || 0) +
+                   (composition.costDistribution[10] || 0);
+  
+  // 2. Estratégia-specific checks
+  
+  if (strategy.type === 'aggro' || strategy.type === 'tempo') {
+    // Aggro/Tempo precisa de early game
+    if (earlyGame === 0) {
+      issues.push({
+        type: 'no-early-game',
+        severity: 'critical',
+        message: 'Nenhuma carta de early game (0-2 ink)',
+      });
+    } else if (earlyGame >= 2) {
+      strengths.push({
+        type: 'good-early-game',
+        message: `Bom early game (${earlyGame} cartas 0-2 ink)`,
+      });
+    }
+    
+    // Não quer muita late game
+    if (lateGame >= 3) {
+      issues.push({
+        type: 'too-slow',
+        severity: 'medium',
+        message: 'Mão muito pesada para deck agressivo',
+      });
+    }
+    
+  } else if (strategy.type === 'control') {
+    // Control precisa de ink/ramp/removal
+    if (composition.inkable < 3) {
+      issues.push({
+        type: 'not-enough-inkable',
+        severity: 'high',
+        message: 'Poucas cartas inkable para deck de controle',
+      });
+    }
+    
+    if (composition.removal === 0) {
+      issues.push({
+        type: 'no-removal',
+        severity: 'medium',
+        message: 'Nenhuma remoção na mão',
+      });
+    }
+    
+    // Control pode aguentar mãos lentas
+    if (earlyGame === 7) {
+      issues.push({
+        type: 'too-fast',
+        severity: 'low',
+        message: 'Mão muito rápida, falta late game',
+      });
+    }
+    
+  } else { // midrange
+    // Midrange precisa de equilíbrio
+    if (earlyGame === 0 && midGame === 0) {
+      issues.push({
+        type: 'no-plays',
+        severity: 'critical',
+        message: 'Nenhuma jogada nos primeiros turnos',
+      });
+    }
+    
+    if (composition.inkable < 2) {
+      issues.push({
+        type: 'not-enough-inkable',
+        severity: 'medium',
+        message: 'Poucas cartas inkable',
+      });
+    }
+  }
+  
+  // 3. Universal checks
+  
+  // Muito non-inkable é ruim
+  if (composition.nonInkable >= 5) {
+    issues.push({
+      type: 'too-many-non-inkable',
+      severity: 'high',
+      message: 'Muitas cartas não-inkable (difícil de fazer ink)',
+    });
+  }
+  
+  // Custo médio muito alto
+  if (parseFloat(composition.avgCost) > 5) {
+    issues.push({
+      type: 'too-expensive',
+      severity: 'high',
+      message: `Custo médio muito alto (${composition.avgCost})`,
+    });
+  }
+  
+  // Ramp sem payoff
+  if (composition.ramp >= 2 && lateGame === 0) {
+    issues.push({
+      type: 'ramp-no-payoff',
+      severity: 'low',
+      message: 'Ramp sem ameaças late game',
+    });
+  }
+  
+  // 4. Decidir quais cartas fazer mulligan
+  
+  for (const card of composition.cards) {
+    let mulliganScore = 0;
+    let keepScore = 0;
+    
+    // High priority cards sempre keep (se forem apropriadas)
+    if (card.priority === 'high') {
+      if (strategy.type === 'aggro' && card.cost <= 3) {
+        keepScore += 3;
+      } else if (strategy.type === 'control' && card.cost >= 4) {
+        keepScore += 2;
+      } else if (card.role === 'ramp') {
+        keepScore += 2;
+      }
+    }
+    
+    // Early game em deck aggro = keep
+    if ((strategy.type === 'aggro' || strategy.type === 'tempo') && card.cost <= 2) {
+      keepScore += 2;
+    }
+    
+    // Inkable em deck control = keep
+    if (strategy.type === 'control' && card.inkable) {
+      keepScore += 1;
+    }
+    
+    // Late game em deck aggro = mulligan
+    if ((strategy.type === 'aggro' || strategy.type === 'tempo') && card.cost >= 6) {
+      mulliganScore += 2;
+    }
+    
+    // Early game em deck control = pode mulligan
+    if (strategy.type === 'control' && card.cost <= 2 && card.role !== 'ramp') {
+      mulliganScore += 1;
+    }
+    
+    // Non-inkable demais = mulligan alguns
+    if (!card.inkable && composition.nonInkable >= 4) {
+      mulliganScore += 1;
+    }
+    
+    // Ramp = geralmente keep
+    if (card.role === 'ramp') {
+      keepScore += 2;
+    }
+    
+    // Decidir
+    if (mulliganScore > keepScore) {
+      mulliganCandidates.push({
+        card: card.name,
+        reason: getMulliganReason(card, strategy, composition),
+        confidence: Math.min((mulliganScore - keepScore) * 20, 100),
+      });
+    } else {
+      keepCandidates.push({
+        card: card.name,
+        reason: getKeepReason(card, strategy, composition),
+      });
+    }
+  }
+  
+  return {
+    composition,
+    strategy,
+    issues,
+    strengths,
+    mulliganCandidates,
+    keepCandidates,
+  };
+}
+
+function getMulliganReason(card, strategy, composition) {
+  if (strategy.type === 'aggro' && card.cost >= 6) {
+    return 'Muito caro para deck agressivo';
+  }
+  if (strategy.type === 'control' && card.cost <= 2 && card.role !== 'ramp') {
+    return 'Priorize ramp/remoção em control';
+  }
+  if (!card.inkable && composition.nonInkable >= 4) {
+    return 'Muitas cartas não-inkable';
+  }
+  return 'Não se encaixa na estratégia';
+}
+
+function getKeepReason(card, strategy, composition) {
+  if (card.priority === 'high') {
+    return 'Carta de alta prioridade';
+  }
+  if (card.role === 'ramp') {
+    return 'Ramp é essencial';
+  }
+  if (strategy.type === 'aggro' && card.cost <= 2) {
+    return 'Early game em deck agressivo';
+  }
+  if (card.inkable && composition.inkable < 4) {
+    return 'Precisa de ink';
+  }
+  return 'Boa carta para manter';
+}
+
+// ── Main Function ────────────────────────────────────────────────────────────
+
+function analyzeMulligan(hand, deckAnalysis) {
+  const evaluation = evaluateHand(hand, deckAnalysis);
+  
+  // Decidir: Keep ou Mulligan?
+  const criticalIssues = evaluation.issues.filter(i => i.severity === 'critical');
+  const highIssues = evaluation.issues.filter(i => i.severity === 'high');
+  
+  let decision = 'Keep';
+  let confidence = 70;
+  let reasoning = '';
+  
+  if (criticalIssues.length > 0) {
+    decision = 'Mulligan';
+    confidence = 90;
+    reasoning = criticalIssues[0].message;
+  } else if (highIssues.length >= 2) {
+    decision = 'Mulligan';
+    confidence = 75;
+    reasoning = `Múltiplos problemas: ${highIssues.map(i => i.type).join(', ')}`;
+  } else if (evaluation.mulliganCandidates.length >= 5) {
+    decision = 'Mulligan';
+    confidence = 70;
+    reasoning = 'Muitas cartas inadequadas';
+  } else if (evaluation.strengths.length >= 2) {
+    decision = 'Keep';
+    confidence = 85;
+    reasoning = evaluation.strengths[0].message;
+  } else {
+    decision = 'Keep';
+    confidence = 60;
+    reasoning = 'Mão aceitável';
+  }
+  
+  return {
+    decision,
+    confidence,
+    reasoning,
+    strategy: evaluation.strategy,
+    composition: evaluation.composition,
+    issues: evaluation.issues,
+    strengths: evaluation.strengths,
+    suggestions: evaluation.mulliganCandidates.map(m => ({
+      card: m.card,
+      action: 'Mulligan',
+      priority: m.confidence > 70 ? 'High' : 'Medium',
+      reason: m.reason,
+      confidence: m.confidence,
+    })),
+  };
+}
+
+// ── Simulate Mulligan ────────────────────────────────────────────────────────
+
+function simulateMulligan(hand, mulliganIndices, deckAnalysis) {
+  // Criar novo array de mão
+  const newHand = [...hand];
+  
+  // Expandir deck
+  const deck = [];
+  for (const card of deckAnalysis.cards || []) {
+    for (let i = 0; i < (card.quantity || 1); i++) {
+      deck.push(card.name);
+    }
+  }
+  
+  // Remover cartas da mão do deck
+  const remainingDeck = deck.filter(c => !hand.includes(c));
+  
+  // Shuffle
+  for (let i = remainingDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [remainingDeck[i], remainingDeck[j]] = [remainingDeck[j], remainingDeck[i]];
+  }
+  
+  // Substituir cartas
+  for (let i = 0; i < mulliganIndices.length && i < remainingDeck.length; i++) {
+    const idx = mulliganIndices[i];
+    if (idx >= 0 && idx < 7) {
+      newHand[idx] = remainingDeck[i];
+    }
+  }
+  
+  return newHand;
+}
+
+// ── Monte Carlo Simulation ───────────────────────────────────────────────────
+
+function simulateHands(deckAnalysis, numSimulations = 1000) {
+  const results = {
+    avgCost: 0,
+    avgInkable: 0,
+    keepRate: 0,
+    distributions: {
+      cost: {},
+      inkable: {},
+    },
+  };
+  
+  const deck = [];
+  for (const card of deckAnalysis.cards || []) {
+    for (let i = 0; i < (card.quantity || 1); i++) {
+      deck.push(card);
+    }
+  }
+  
+  let keepCount = 0;
+  let totalCost = 0;
+  let totalInkable = 0;
+  
+  for (let sim = 0; sim < numSimulations; sim++) {
+    // Shuffle
+    const shuffled = [...deck];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    
+    // Draw 7
+    const hand = shuffled.slice(0, 7).map(c => c.name);
+    
+    // Analyze
+    const analysis = analyzeMulligan(hand, deckAnalysis);
+    
+    if (analysis.decision === 'Keep') keepCount++;
+    
+    totalCost += parseFloat(analysis.composition.avgCost);
+    totalInkable += analysis.composition.inkable;
+  }
+  
+  results.avgCost = (totalCost / numSimulations).toFixed(2);
+  results.avgInkable = (totalInkable / numSimulations).toFixed(2);
+  results.keepRate = ((keepCount / numSimulations) * 100).toFixed(1);
+  
+  return results;
+}
+
+// ── Exports ──────────────────────────────────────────────────────────────────
+
+module.exports = {
+  analyzeMulligan,
+  simulateMulligan,
+  simulateHands,
+  detectStrategy,
+};
