@@ -1,0 +1,43 @@
+{
+  "lastUpdated": "2026-02-01",
+  "formats": {
+    "Core": {
+      "tier1": [
+        {
+          "name": "Amber/Steel Songs",
+          "archetype": "Aggro Lore Rush",
+          "avgPlacement": 3.4,
+          "matchups": {
+            "aggro": 55,
+            "midrange": 60,
+            "control": 48
+          },
+          "cards": {
+            "Lilo - Making a Wish": 4,
+            "Ariel - Spectacular Singer": 4,
+            "A Whole New World": 4,
+            "Captain Hook - Forceful Duelist": 4
+          }
+        }
+      ]
+    },
+    "Infinity": {
+      "tier1": [
+        {
+          "name": "Sapphire/Ruby Control",
+          "archetype": "Control / Late Game",
+          "avgPlacement": 4.1,
+          "matchups": {
+            "aggro": 62,
+            "midrange": 58,
+            "control": 50
+          },
+          "cards": {
+            "Be Prepared": 4,
+            "Hades - Lord of the Underworld": 3
+          }
+        }
+      ]
+    }
+  }
+}

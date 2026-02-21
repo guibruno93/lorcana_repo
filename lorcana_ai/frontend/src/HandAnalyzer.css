@@ -1,0 +1,314 @@
+/* HandAnalyzer.css - Estilos específicos do Hand Analyzer */
+
+.hand-analyzer-v3 {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Hand Cards Grid */
+.hand-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* Mulligan Decision Badge */
+.mulligan-decision-badge {
+  display: inline-block;
+  padding: 1.5rem 2rem;
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border: 3px solid;
+}
+
+.mulligan-decision-badge.keep {
+  background: #d1fae5;
+  border-color: #10b981;
+}
+
+.mulligan-decision-badge.partial {
+  background: #fef3c7;
+  border-color: #f59e0b;
+}
+
+.mulligan-decision-badge.full {
+  background: #fee2e2;
+  border-color: #ef4444;
+}
+
+.decision-label {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.mulligan-decision-badge.keep .decision-label {
+  color: #065f46;
+}
+
+.mulligan-decision-badge.partial .decision-label {
+  color: #92400e;
+}
+
+.mulligan-decision-badge.full .decision-label {
+  color: #991b1b;
+}
+
+.decision-confidence {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Mulligan Suggestions Grid */
+.mulligan-suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.mulligan-card-item {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: 2px solid;
+  transition: var(--transition);
+  position: relative;
+}
+
+.mulligan-card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.mulligan-card-item.keep {
+  background: #f0fdf4;
+  border-color: #10b981;
+}
+
+.mulligan-card-item.mulligan {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+/* Action Badge */
+.action-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.action-badge.keep {
+  background: #10b981;
+  color: white;
+}
+
+.action-badge.mulligan {
+  background: #ef4444;
+  color: white;
+}
+
+/* Cost Badge */
+.cost-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 0.5rem;
+  background: var(--gray-800);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+/* Reasons List */
+.reasons-list {
+  margin-bottom: 0.75rem;
+}
+
+.reason-item {
+  font-size: 0.875rem;
+  color: var(--gray-700);
+  padding: 0.25rem 0;
+  line-height: 1.5;
+}
+
+.reason-item:before {
+  content: "•";
+  margin-right: 0.5rem;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Effects List */
+.effects-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Priority Indicator */
+.priority-indicator {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.priority-indicator.priority-3 {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.priority-indicator.priority-2 {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.priority-indicator.priority-1 {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* Alternatives */
+.alternatives {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--gray-200);
+}
+
+.alternatives strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--gray-700);
+}
+
+.alternatives p {
+  margin: 0.25rem 0;
+}
+
+/* Score Display */
+.score-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+  border-radius: var(--radius-lg);
+}
+
+.score-number {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 1.5rem;
+  color: var(--gray-500);
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+/* Loading States */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hand-analyzer-v3 {
+    padding: 1rem;
+  }
+
+  .hand-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mulligan-suggestions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .score-display {
+    flex-direction: column;
+  }
+
+  .score-number {
+    font-size: 3rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mulligan-card-item {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Scrollbar */
+.hand-analyzer-v3::-webkit-scrollbar {
+  width: 8px;
+}
+
+.hand-analyzer-v3::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: 4px;
+}
+
+.hand-analyzer-v3::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 4px;
+}
+
+.hand-analyzer-v3::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
