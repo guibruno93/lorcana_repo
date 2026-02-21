@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "id": "4ce7bc48-cad1-489b-b9a6-5fbf1aa6471f",
+      "username": "d2acf5548ffe290878832ff8b9ac4937:fa6fd39adcb7ccccf02db67ce72e805f",
+      "email": "1cec8a0edf6a08b5641968bbc07e6c82:be7dd35c3304404911231bf12cbe20d82bdded7d4cf5afa0496730eef84d1756",
+      "password": "$2b$10$DIqA7n98wRzAyDZZcu5gfOhqyn7HqzzYQ4EJYJ7tzHWk3lJXxa/KK",
+      "country": "e0d7b71cd97894e1bc9db3bb32c912b5:9720055d32b1f916bd8cd4398baafcff",
+      "emailVerified": true,
+      "createdAt": "2026-02-21T00:15:50.451Z",
+      "verifiedAt": "2026-02-21T00:16:03.157Z"
+    },
+    {
+      "id": "42e3beda-7ad3-4831-9c32-18218e129c18",
+      "username": "8c7acc5af9290495038fb9de966db437:e038b11f4dfb391a2462c175c2945f30",
+      "email": "02e0f589fd31424c37fe819451c614ba:5a02e39799a05f03d6b45b73a4266f7d24061f68da95faf200d60f2de54dcaba",
+      "password": "$2b$10$Q1zjp3aocNKxJUt66teuu.HOxxdytdn60k918iqKHVuGmrvzhkHKi",
+      "country": null,
+      "emailVerified": true,
+      "createdAt": "2026-02-21T16:43:12.971Z",
+      "verifiedAt": "2026-02-21T16:43:25.161Z"
+    }
+  ]
+}

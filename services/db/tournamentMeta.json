@@ -1,0 +1,2905 @@
+[
+  {
+    "source": "inkdecks",
+    "deckId": "ps-tempo-499994",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994",
+    "title": "PS tempo",
+    "author": "Cody Kellerbauer",
+    "archetype": "Steel/Amethyst",
+    "strategy": "Midrange",
+    "inks": [
+      "Steel",
+      "Amethyst"
+    ],
+    "cards": [
+      {
+        "name": "Captain Hook - Forceful Duelist",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Olaf - Helping Hand",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Palace Guard - Spectral Sentry",
+        "quantity": 2,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Calhoun - Marine Sergeant",
+        "quantity": 3,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Doc - Bold Knight",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Jafar - Royal Vizier",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Madam Mim - Tiny Adversary",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Cheshire Cat - Inexplicable",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Genie - Magical Researcher",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Giant Cobra - Ghostly Serpent",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Tinker Bell - Fast Flier",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Angel - Experiment 624",
+        "quantity": 3,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Dumbo - Ninth Wonder of the Universe",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Genie - Wish Fulfilled",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Yzma - Conniving Chemist",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Elsa - The Fifth Spirit",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Hades - Looking for a Deal",
+        "quantity": 3,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Demona - Scourge of the Wyvern Clan",
+        "quantity": 3,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Tinker Bell - Giant Fairy",
+        "quantity": 1,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Strength of a Raging Fire",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      }
+    ],
+    "standing": "2nd",
+    "event": "Refined Gaming Set 11 Case Tournament                                        @Refined Gaming",
+    "organizer": "Refined Gaming",
+    "players": 14,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:08.586Z",
+    "fingerprint": "de98164131d99d3d3833cc2e4ef9d7256e34fe909b3345d8a2f66c3bb5857932"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "bs-sonic-boom-499973",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-bs-sonic-boom-499973",
+    "title": "BS Sonic Boom",
+    "author": "orelio",
+    "archetype": "Sapphire/Steel",
+    "strategy": "Songs",
+    "inks": [
+      "Sapphire",
+      "Steel"
+    ],
+    "cards": [
+      {
+        "name": "Mulan - Disguised Soldier",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Angel - Experiment 624",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Belle - Snowfield Strategist",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Cinderella - Dream Come True",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Namaari - Single-Minded Rival",
+        "quantity": 2,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Pete - Ghost of Christmas Future",
+        "quantity": 2,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Pluto - Steel Champion",
+        "quantity": 2,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Ariel - Sonic Warrior",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Goliath - Clan Leader",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Tinker Bell - Giant Fairy",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Arthur - King Victorious",
+        "quantity": 1,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Hades - Infernal Schemer",
+        "quantity": 3,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Vincenzo Santorini - The Explosives Expert",
+        "quantity": 3,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "But I'm Much Faster",
+        "quantity": 2,
+        "type": "song",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Strength of a Raging Fire",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "He Hurled His Thunderbolt",
+        "quantity": 4,
+        "type": "song",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Let It Go",
+        "quantity": 2,
+        "type": "song",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Down in New Orleans",
+        "quantity": 1,
+        "type": "song",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Beyond the Horizon",
+        "quantity": 2,
+        "type": "song",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "The Mob Song",
+        "quantity": 1,
+        "type": "song",
+        "ink": "10",
+        "cost": 10
+      }
+    ],
+    "standing": "Top8",
+    "event": "Refined Gaming Set 11 Case Tournament                                        @Refined Gaming",
+    "organizer": "Refined Gaming",
+    "players": 14,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:11.003Z",
+    "fingerprint": "4e84068c12e1f7cd5398610dba2fdb85955ca7114bfad01657ce2277b3105f89"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "blue-yellow-control-499972",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-blue-yellow-control-499972",
+    "title": "Blue yellow control",
+    "author": "sonny9107",
+    "archetype": "Amber/Sapphire",
+    "strategy": "Control",
+    "inks": [
+      "Amber",
+      "Sapphire"
+    ],
+    "cards": [
+      {
+        "name": "Eilonwy - Princess of Llyr",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Cinderella - Dream Come True",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Moana - Curious Explorer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Pete - Ghost of Christmas Future",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Hades - Infernal Schemer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Stitch - Carefree Surfer",
+        "quantity": 3,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Inkrunner",
+        "quantity": 2,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "The Black Cauldron",
+        "quantity": 2,
+        "type": "item",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Develop Your Brain",
+        "quantity": 4,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Vision of the Future",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Ohana Means Family",
+        "quantity": 4,
+        "type": "action",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "The Horseman Strikes!",
+        "quantity": 4,
+        "type": "action",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Spooky Sight",
+        "quantity": 2,
+        "type": "action",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Raging Storm",
+        "quantity": 3,
+        "type": "action",
+        "ink": "8",
+        "cost": 8
+      },
+      {
+        "name": "World's Greatest Criminal Mind",
+        "quantity": 2,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Let It Go",
+        "quantity": 2,
+        "type": "song",
+        "ink": "5",
+        "cost": 5
+      }
+    ],
+    "standing": "Top8",
+    "event": "Refined Gaming Set 11 Case Tournament                                        @Refined Gaming",
+    "organizer": "Refined Gaming",
+    "players": 14,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:13.423Z",
+    "fingerprint": "3c5656c2e617fc169c7c106386756eac7065771408cf1aa2a049e1e4df99c2fe"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "ruby-steel-maximal-tink-499971",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-ruby-steel-maximal-tink-499971",
+    "title": "Ruby Steel Maximal Tink",
+    "author": "tonymccarthy26",
+    "archetype": "Ruby/Steel",
+    "strategy": "Mushu",
+    "inks": [
+      "Ruby",
+      "Steel"
+    ],
+    "cards": [
+      {
+        "name": "Mulan - Disguised Soldier",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tinker Bell - Fancy Footwork",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Lumiere - Fiery Friend",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Tinker Bell - Insistent Fairy",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Bronx - Ferocious Beast",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Lexington - Small in Stature",
+        "quantity": 3,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Angel - Experiment 624",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Pluto - Guard Dog",
+        "quantity": 3,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Willie the Giant - Ghost of Christmas Present",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Mushu - Majestic Dragon",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Scar - Finally King",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Maximus - Team Champion",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Mushu - Your Worst Nightmare",
+        "quantity": 1,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Tinker Bell - Giant Fairy",
+        "quantity": 2,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Mulan - Imperial General",
+        "quantity": 3,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Mushu's Rocket",
+        "quantity": 2,
+        "type": "item",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Medallion Weights",
+        "quantity": 4,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Strength of a Raging Fire",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      }
+    ],
+    "standing": "Top8",
+    "event": "Refined Gaming Set 11 Case Tournament                                        @Refined Gaming",
+    "organizer": "Refined Gaming",
+    "players": 14,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:15.862Z",
+    "fingerprint": "5065b49fb5ca2c1b669f2b1d29f52bcd4b293306691b7248efb62d3b573f50a6"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "as-aggro-499970",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-as-aggro-499970",
+    "title": "AS aggro",
+    "author": "Heist17",
+    "archetype": "Steel/Amber",
+    "strategy": "Aggro",
+    "inks": [
+      "Steel",
+      "Amber"
+    ],
+    "cards": [
+      {
+        "name": "Daisy Duck - Donald's Date",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Lilo - Snow Artist",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Mulan - Disguised Soldier",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Angel - Siren Singer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Doc - Bold Knight",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Lilo - Bundled Up",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Lilo - Escape Artist",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Nala - Undaunted Lioness",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Pudge - Controls the Weather",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Stitch - High Badness Level",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Lady - Family Dog",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Nani - Stage Manager",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Lilo - Rock Star",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Fire the Cannons!",
+        "quantity": 4,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Strength of a Raging Fire",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      }
+    ],
+    "standing": "Top4",
+    "event": "Refined Gaming Set 11 Case Tournament                                        @Refined Gaming",
+    "organizer": "Refined Gaming",
+    "players": 14,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:18.292Z",
+    "fingerprint": "faafe10963bf85f47a8cddea708a9cb2ade8817d0f239915977bcd075edcff02"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "green-blue-with-2-new-friends-499969",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-green-blue-with-2-new-friends-499969",
+    "title": "Green Blue with 2 new friends",
+    "author": "matt",
+    "archetype": "Sapphire/Emerald",
+    "strategy": "Control",
+    "inks": [
+      "Sapphire",
+      "Emerald"
+    ],
+    "cards": [
+      {
+        "name": "Clarabelle - Clumsy Guest",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Clarabelle - Contented Wallflower",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Prince Phillip - Royal Explorer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Cinderella - Dream Come True",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Donald Duck - Perfect Gentleman",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Chernabog - Unnatural Force",
+        "quantity": 2,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Moana - Curious Explorer",
+        "quantity": 1,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "John Silver - Alien Pirate",
+        "quantity": 3,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Basil - Undercover Detective",
+        "quantity": 2,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Clarabelle - Light on Her Hooves",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Hades - Infernal Schemer",
+        "quantity": 2,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Prince Phillip - Vanquisher of Foes",
+        "quantity": 4,
+        "type": "character",
+        "ink": "9",
+        "cost": 9
+      },
+      {
+        "name": "Develop Your Brain",
+        "quantity": 4,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Vision of the Future",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Malicious, Mean, and Scary",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "You're Welcome",
+        "quantity": 4,
+        "type": "song",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Under the Sea",
+        "quantity": 2,
+        "type": "song",
+        "ink": "8",
+        "cost": 8
+      }
+    ],
+    "standing": "3rd",
+    "event": "Refined Gaming Set 11 Case Tournament                                        @Refined Gaming",
+    "organizer": "Refined Gaming",
+    "players": 14,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:20.724Z",
+    "fingerprint": "1999eaf43ab9f2c90d14e035f5b7aa76cf9166a2150b6574494400e0495994ca"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "jdrr-bp-499968",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-jdrr-bp-499968",
+    "title": "JDRR BP",
+    "author": "CaptainFershizz",
+    "archetype": "Sapphire/Amethyst",
+    "strategy": "Evasive",
+    "inks": [
+      "Sapphire",
+      "Amethyst"
+    ],
+    "cards": [
+      {
+        "name": "Basil - Practiced Detective",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Rafiki - Mystical Fighter",
+        "quantity": 2,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Royal Guard - Octopus Soldier",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Cheshire Cat - Inexplicable",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Dumbo - Ninth Wonder of the Universe",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Genie - Wish Fulfilled",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Iago - Giant Spectral Parrot",
+        "quantity": 3,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Tigger - Bouncing All the Way",
+        "quantity": 1,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Elsa - The Fifth Spirit",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Hades - Looking for a Deal",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Demona - Scourge of the Wyvern Clan",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Hades - Infernal Schemer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Junior Woodchuck Guidebook",
+        "quantity": 4,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Into the Unknown",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Let It Go",
+        "quantity": 3,
+        "type": "song",
+        "ink": "5",
+        "cost": 5
+      }
+    ],
+    "standing": "1st",
+    "event": "Refined Gaming Set 11 Case Tournament                                        @Refined Gaming",
+    "organizer": "Refined Gaming",
+    "players": 14,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:23.149Z",
+    "fingerprint": "6d4de91e29dcae3a421497bc0c87be8c3403342006f104921e36b2098b582fd9"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "ao-499966",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-ao-499966",
+    "title": "AO",
+    "author": "Leon Garcia",
+    "archetype": "Sapphire/Emerald",
+    "strategy": "Control",
+    "inks": [
+      "Sapphire",
+      "Emerald"
+    ],
+    "cards": [
+      {
+        "name": "Clarabelle - Clumsy Guest",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Prince Phillip - Royal Explorer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Cinderella - Dream Come True",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Donald Duck - Perfect Gentleman",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Baymax - Giant Robot",
+        "quantity": 1,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "John Silver - Alien Pirate",
+        "quantity": 3,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Basil - Undercover Detective",
+        "quantity": 3,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Clarabelle - Light on Her Hooves",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Prince Phillip - Vanquisher of Foes",
+        "quantity": 4,
+        "type": "character",
+        "ink": "9",
+        "cost": 9
+      },
+      {
+        "name": "Develop Your Brain",
+        "quantity": 4,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Improvise",
+        "quantity": 2,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Vision of the Future",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Bend to My Will",
+        "quantity": 1,
+        "type": "action",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Malicious, Mean, and Scary",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Mother Knows Best",
+        "quantity": 2,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "You're Welcome",
+        "quantity": 4,
+        "type": "song",
+        "ink": "4",
+        "cost": 4
+      }
+    ],
+    "standing": "Top16",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:25.566Z",
+    "fingerprint": "f1ee1eae38239fa5ab3f6bc91a1a996f61e1342d7041f1ffc84d0ea0775d5d82"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "las-vacas-de-felipe-499964",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-las-vacas-de-felipe-499964",
+    "title": "Las Vacas de Felipe",
+    "author": "Esteban Rojas",
+    "archetype": "Sapphire/Emerald",
+    "strategy": "Control",
+    "inks": [
+      "Sapphire",
+      "Emerald"
+    ],
+    "cards": [
+      {
+        "name": "Clarabelle - Clumsy Guest",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Prince Phillip - Royal Explorer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Cinderella - Dream Come True",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Donald Duck - Perfect Gentleman",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "John Silver - Alien Pirate",
+        "quantity": 3,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Basil - Undercover Detective",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Clarabelle - Light on Her Hooves",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Prince Phillip - Vanquisher of Foes",
+        "quantity": 4,
+        "type": "character",
+        "ink": "9",
+        "cost": 9
+      },
+      {
+        "name": "Develop Your Brain",
+        "quantity": 4,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Improvise",
+        "quantity": 2,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Vision of the Future",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Spooky Sight",
+        "quantity": 1,
+        "type": "action",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Bend to My Will",
+        "quantity": 1,
+        "type": "action",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Malicious, Mean, and Scary",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Mother Knows Best",
+        "quantity": 1,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "You're Welcome",
+        "quantity": 4,
+        "type": "song",
+        "ink": "4",
+        "cost": 4
+      }
+    ],
+    "standing": "Top8",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T18:46:30.393Z",
+    "fingerprint": "12d2070d59d603ca44d6bcb0af0aa1425af20701d95e895410e0d0b456faeacc"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "dognado-499963",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-dognado-499963",
+    "title": "Dognado",
+    "author": "Nicolas Gomez",
+    "archetype": "Amber/Emerald",
+    "strategy": "Aggro",
+    "inks": [
+      "Amber",
+      "Emerald"
+    ],
+    "cards": [
+      {
+        "name": "Bobby Zimuruski - Spray Cheese Kid",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Daisy Duck - Donald's Date",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Finnick - Tiny Terror",
+        "quantity": 1,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Lady - Decisive Dog",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Lady - Elegant Spaniel",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Webby Vanderquack - Mystery Enthusiast",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Go Go Tomago - Darting Dynamo",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Lilo - Escape Artist",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Mowgli - Man Cub",
+        "quantity": 3,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Tramp - Enterprising Dog",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Ursula - Deceiver",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Yzma - Exasperated Schemer",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Clarabelle - Contented Wallflower",
+        "quantity": 1,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Lady - Family Dog",
+        "quantity": 1,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Mickey Mouse - Amber Champion",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Lady - Miss Park Avenue",
+        "quantity": 3,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Tramp - Street-Smart Dog",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Emerald Chromicon",
+        "quantity": 3,
+        "type": "item",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "The Horseman Strikes!",
+        "quantity": 2,
+        "type": "action",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Della's Moon Lullaby",
+        "quantity": 3,
+        "type": "song",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Under the Sea",
+        "quantity": 2,
+        "type": "song",
+        "ink": "8",
+        "cost": 8
+      }
+    ],
+    "standing": "Top16",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:02.069Z",
+    "fingerprint": "01fc38983c1e1a67ea774a0604a41399c88a3ff71a5fc878abcbbef9a5992a83"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "steelple-ss2-499962",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-steelple-ss2-499962",
+    "title": "steelple SS2",
+    "author": "Juan Manuel Aguila",
+    "archetype": "Steel/Amethyst",
+    "strategy": "Challengers",
+    "inks": [
+      "Steel",
+      "Amethyst"
+    ],
+    "cards": [
+      {
+        "name": "Captain Hook - Forceful Duelist",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Diablo - Obedient Raven",
+        "quantity": 2,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Palace Guard - Spectral Sentry",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Black Heron - Real Bad Egg",
+        "quantity": 3,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Calhoun - Marine Sergeant",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Doc - Bold Knight",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Violet Sabrewing - Senior Junior Woodchuck",
+        "quantity": 3,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Cheshire Cat - Inexplicable",
+        "quantity": 3,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Giant Cobra - Ghostly Serpent",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Jafar - Aspiring Ruler",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Lexington - Small in Stature",
+        "quantity": 3,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Dumbo - Ninth Wonder of the Universe",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Genie - Wish Fulfilled",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Iago - Giant Spectral Parrot",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Yzma - Conniving Chemist",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Elsa - The Fifth Spirit",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Hades - Looking for a Deal",
+        "quantity": 2,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Pluto - Steel Champion",
+        "quantity": 1,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Demona - Scourge of the Wyvern Clan",
+        "quantity": 2,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Junior Woodchuck Guidebook",
+        "quantity": 3,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Strength of a Raging Fire",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Can't Hold It Back Anymore",
+        "quantity": 1,
+        "type": "song",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "He Hurled His Thunderbolt",
+        "quantity": 1,
+        "type": "song",
+        "ink": "4",
+        "cost": 4
+      }
+    ],
+    "standing": "Top16",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:04.490Z",
+    "fingerprint": "73bad0ea94ab91caf54fa5d0ec4ff9d477fde4a885d1009a28bb6021aad46711"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "ya-ha-499961",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-ya-ha-499961",
+    "title": "YA-HA!",
+    "author": "Cristian Reyes",
+    "archetype": "Emerald/Steel",
+    "strategy": "Aggro",
+    "inks": [
+      "Emerald",
+      "Steel"
+    ],
+    "cards": [
+      {
+        "name": "Bobby Zimuruski - Spray Cheese Kid",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Captain Hook - Forceful Duelist",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Cursed Merfolk - Ursula's Handiwork",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Mulan - Disguised Soldier",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Webby Vanderquack - Mystery Enthusiast",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Calhoun - Marine Sergeant",
+        "quantity": 3,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Doc - Bold Knight",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Go Go Tomago - Darting Dynamo",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Ursula - Deceiver",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Lexington - Small in Stature",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Louis - Endearing Alligator",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Webby Vanderquack - Junior Prospector",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Goliath - Clan Leader",
+        "quantity": 3,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Emerald Chromicon",
+        "quantity": 4,
+        "type": "item",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Fire the Cannons!",
+        "quantity": 2,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Strength of a Raging Fire",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      }
+    ],
+    "standing": "Top32",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:06.900Z",
+    "fingerprint": "db50ed49747ca1728bad3ec87c3c8efcd9a2f574428600d68e39bb32064660a1"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "chromidogs-499960",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-chromidogs-499960",
+    "title": "Chromidogs",
+    "author": "Nicolas Arias",
+    "archetype": "Amber/Emerald",
+    "strategy": "Aggro",
+    "inks": [
+      "Amber",
+      "Emerald"
+    ],
+    "cards": [
+      {
+        "name": "Bobby Zimuruski - Spray Cheese Kid",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Daisy Duck - Donald's Date",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Lady - Decisive Dog",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Lady - Elegant Spaniel",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Webby Vanderquack - Mystery Enthusiast",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Go Go Tomago - Darting Dynamo",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Lilo - Escape Artist",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Mowgli - Man Cub",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Scrooge McDuck - S.H.U.S.H. Agent",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Tramp - Enterprising Dog",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Ursula - Deceiver",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Lady - Family Dog",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Lady - Miss Park Avenue",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Tramp - Dapper Rascal",
+        "quantity": 2,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Tramp - Street-Smart Dog",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Emerald Chromicon",
+        "quantity": 3,
+        "type": "item",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Under the Sea",
+        "quantity": 2,
+        "type": "song",
+        "ink": "8",
+        "cost": 8
+      }
+    ],
+    "standing": "Top8",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:09.326Z",
+    "fingerprint": "aba0ca32303c442197c6be614338e5ca6098341b421f739e606f4089740676f7"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "amethgreen-499959",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-amethgreen-499959",
+    "title": "AmethGreen",
+    "author": "Catalina Cordero",
+    "archetype": "Amethyst/Emerald",
+    "strategy": "Aggro",
+    "inks": [
+      "Amethyst",
+      "Emerald"
+    ],
+    "cards": [
+      {
+        "name": "Bobby Zimuruski - Spray Cheese Kid",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Cursed Merfolk - Ursula's Handiwork",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Diablo - Obedient Raven",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Finnick - Tiny Terror",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Flynn Rider - Spectral Scoundrel",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Fred - Mascot by Day",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Pegasus - Gift for Hercules",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Go Go Tomago - Darting Dynamo",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Honeymaren - Northuldra Guide",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Scrooge McDuck - S.H.U.S.H. Agent",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Ursula - Deceiver",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "The White Rose - Jewel of the Garden",
+        "quantity": 3,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Amethyst Chromicon",
+        "quantity": 4,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Enigmatic Inkcaster",
+        "quantity": 4,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Gathering Knowledge and Wisdom",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Show Me More!",
+        "quantity": 3,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "They Never Come Back",
+        "quantity": 4,
+        "type": "action",
+        "ink": "3",
+        "cost": 3
+      }
+    ],
+    "standing": "Top32",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:11.749Z",
+    "fingerprint": "22e03e0d70fcb029278033dbd2da1a58e43066229921b43b721a43c84ca18036"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "last-flower-in-the-farm-499958",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-last-flower-in-the-farm-499958",
+    "title": "last flower in the farm🌹",
+    "author": "Joaquin Godoy",
+    "archetype": "Sapphire/Amethyst",
+    "strategy": "Dumbo",
+    "inks": [
+      "Sapphire",
+      "Amethyst"
+    ],
+    "cards": [
+      {
+        "name": "Basil - Practiced Detective",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Rafiki - Mystical Fighter",
+        "quantity": 1,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Royal Guard - Octopus Soldier",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Cheshire Cat - Inexplicable",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Dumbo - Ninth Wonder of the Universe",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Genie - Wish Fulfilled",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Iago - Giant Spectral Parrot",
+        "quantity": 3,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Madam Mim - Elephant",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Belle - Accomplished Mystic",
+        "quantity": 2,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Elsa - The Fifth Spirit",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Ursula - Whisper of Vanessa",
+        "quantity": 2,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Demona - Scourge of the Wyvern Clan",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Hades - Infernal Schemer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Junior Woodchuck Guidebook",
+        "quantity": 4,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Hypnotic Strength",
+        "quantity": 3,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Into the Unknown",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      }
+    ],
+    "standing": "Top32",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:14.169Z",
+    "fingerprint": "38198ec273455edf26c8415806c0c6a436b4b0dcc5b080dbc1554fd617d1a23b"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "melfork-talquino-499957",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-melfork-talquino-499957",
+    "title": "Melfork Talquino",
+    "author": "Rolando Carrasco",
+    "archetype": "Amethyst/Emerald",
+    "strategy": "Aggro",
+    "inks": [
+      "Amethyst",
+      "Emerald"
+    ],
+    "cards": [
+      {
+        "name": "Bobby Zimuruski - Spray Cheese Kid",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Cursed Merfolk - Ursula's Handiwork",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Diablo - Obedient Raven",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Finnick - Tiny Terror",
+        "quantity": 2,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Flynn Rider - Spectral Scoundrel",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Fred - Mascot by Day",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Palace Guard - Spectral Sentry",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Pegasus - Gift for Hercules",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Webby Vanderquack - Mystery Enthusiast",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Honeymaren - Northuldra Guide",
+        "quantity": 3,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Scrooge McDuck - S.H.U.S.H. Agent",
+        "quantity": 3,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Ursula - Deceiver",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "The White Rose - Jewel of the Garden",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Webby Vanderquack - Junior Prospector",
+        "quantity": 3,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Amethyst Chromicon",
+        "quantity": 4,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Enigmatic Inkcaster",
+        "quantity": 4,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Gathering Knowledge and Wisdom",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Show Me More!",
+        "quantity": 3,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "They Never Come Back",
+        "quantity": 4,
+        "type": "action",
+        "ink": "3",
+        "cost": 3
+      }
+    ],
+    "standing": "Top16",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:16.587Z",
+    "fingerprint": "b11521ae97fbf4efc0951e747ee21c63f7cb70d15fff15e754b13e3c6e955861"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "exotico-499956",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-exotico-499956",
+    "title": "Exótico",
+    "author": "Catalina Palma",
+    "archetype": "Steel/Amethyst",
+    "strategy": "Challengers",
+    "inks": [
+      "Steel",
+      "Amethyst"
+    ],
+    "cards": [
+      {
+        "name": "Captain Hook - Forceful Duelist",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Olaf - Helping Hand",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Palace Guard - Spectral Sentry",
+        "quantity": 3,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Black Heron - Real Bad Egg",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Calhoun - Marine Sergeant",
+        "quantity": 3,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Doc - Bold Knight",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Madam Mim - Tiny Adversary",
+        "quantity": 1,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Mr. Arrow - Legacy's First Mate",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Violet Sabrewing - Senior Junior Woodchuck",
+        "quantity": 2,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Benja - Guardian of the Dragon Gem",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Cheshire Cat - Inexplicable",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Giant Cobra - Ghostly Serpent",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Lexington - Small in Stature",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Pete - Games Referee",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "The White Rose - Jewel of the Garden",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Tinker Bell - Fast Flier",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Dumbo - Ninth Wonder of the Universe",
+        "quantity": 3,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Genie - Wish Fulfilled",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Elsa - The Fifth Spirit",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Demona - Scourge of the Wyvern Clan",
+        "quantity": 3,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Strength of a Raging Fire",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "He Hurled His Thunderbolt",
+        "quantity": 2,
+        "type": "song",
+        "ink": "4",
+        "cost": 4
+      }
+    ],
+    "standing": "Top32",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:19.001Z",
+    "fingerprint": "9d218b280fc5152bf99f83506a8dd291afe5fabd24c371be93391942cd3e8215"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "la-vaca-y-el-corcel-499955",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-la-vaca-y-el-corcel-499955",
+    "title": "La Vaca y el Corcel",
+    "author": "Jonathan D'Alessandro",
+    "archetype": "Sapphire/Emerald",
+    "strategy": "Control",
+    "inks": [
+      "Sapphire",
+      "Emerald"
+    ],
+    "cards": [
+      {
+        "name": "Clarabelle - Clumsy Guest",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Prince Phillip - Royal Explorer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Cinderella - Dream Come True",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Donald Duck - Perfect Gentleman",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "John Silver - Alien Pirate",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Basil - Undercover Detective",
+        "quantity": 3,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Clarabelle - Light on Her Hooves",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Prince Phillip - Vanquisher of Foes",
+        "quantity": 4,
+        "type": "character",
+        "ink": "9",
+        "cost": 9
+      },
+      {
+        "name": "Develop Your Brain",
+        "quantity": 4,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Improvise",
+        "quantity": 2,
+        "type": "action",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Vision of the Future",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Bend to My Will",
+        "quantity": 1,
+        "type": "action",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Malicious, Mean, and Scary",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "You're Welcome",
+        "quantity": 4,
+        "type": "song",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Under the Sea",
+        "quantity": 2,
+        "type": "song",
+        "ink": "8",
+        "cost": 8
+      }
+    ],
+    "standing": "Top16",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:21.404Z",
+    "fingerprint": "24819c78dc5e0e4e6ace0a016f24dffc26fb665d9c558661134e0cebc6d753ce"
+  },
+  {
+    "source": "inkdecks",
+    "deckId": "burple-499954",
+    "url": "https://inkdecks.com/lorcana-metagame/deck-burple-499954",
+    "title": "Burple",
+    "author": "Xavier Fernandez",
+    "archetype": "Sapphire/Amethyst",
+    "strategy": "Dumbo",
+    "inks": [
+      "Sapphire",
+      "Amethyst"
+    ],
+    "cards": [
+      {
+        "name": "Basil - Practiced Detective",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Olaf - Helping Hand",
+        "quantity": 2,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Rafiki - Mystical Fighter",
+        "quantity": 4,
+        "type": "character",
+        "ink": "1",
+        "cost": 1
+      },
+      {
+        "name": "Tipo - Growing Son",
+        "quantity": 4,
+        "type": "character",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Cheshire Cat - Inexplicable",
+        "quantity": 2,
+        "type": "character",
+        "ink": "3",
+        "cost": 3
+      },
+      {
+        "name": "Dumbo - Ninth Wonder of the Universe",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Genie - Wish Fulfilled",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Iago - Giant Spectral Parrot",
+        "quantity": 4,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Madam Mim - Elephant",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Wasabi - Methodical Engineer",
+        "quantity": 2,
+        "type": "character",
+        "ink": "4",
+        "cost": 4
+      },
+      {
+        "name": "Elsa - The Fifth Spirit",
+        "quantity": 4,
+        "type": "character",
+        "ink": "5",
+        "cost": 5
+      },
+      {
+        "name": "Demona - Scourge of the Wyvern Clan",
+        "quantity": 4,
+        "type": "character",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Hades - Infernal Schemer",
+        "quantity": 4,
+        "type": "character",
+        "ink": "7",
+        "cost": 7
+      },
+      {
+        "name": "Elsa - Spirit of Winter",
+        "quantity": 1,
+        "type": "character",
+        "ink": "8",
+        "cost": 8
+      },
+      {
+        "name": "Inkrunner",
+        "quantity": 1,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Junior Woodchuck Guidebook",
+        "quantity": 2,
+        "type": "item",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Hypnotic Strength",
+        "quantity": 2,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Sail the Azurite Sea",
+        "quantity": 4,
+        "type": "action",
+        "ink": "2",
+        "cost": 2
+      },
+      {
+        "name": "Spooky Sight",
+        "quantity": 2,
+        "type": "action",
+        "ink": "6",
+        "cost": 6
+      },
+      {
+        "name": "Into the Unknown",
+        "quantity": 4,
+        "type": "song",
+        "ink": "3",
+        "cost": 3
+      }
+    ],
+    "standing": "Top16",
+    "event": "Desafio Guayacan - Whispers in the Well                                        @Cartones Guayacan",
+    "organizer": "Cartones Guayacan",
+    "players": 23,
+    "date": "2026-02-15",
+    "fetchedAt": "2026-02-19T19:06:23.817Z",
+    "fingerprint": "0fff7bffedacdc9c9c14387359a9d8f96f275094fbbcb285d3cedfdadee4e2e3"
+  }
+]
