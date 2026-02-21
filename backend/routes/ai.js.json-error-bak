@@ -1,0 +1,315 @@
+'use strict';
+
+/**
+ * routes/ai-COMPLETE.js
+ * Versão completa com TODOS os endpoints necessários
+ */
+
+const express = require('express');
+const router = express.Router();
+
+// ── Imports ──────────────────────────────────────────────────────────────────
+const resolveNames = require('../services/ai/resolveNames');
+const { analyzeDeck } = require('../parser/deckParser');
+
+// Tentar importar services que podem existir
+let analyzeHand, analyzeMulligan, simulateHands, analyzeMatchups;
+
+try {
+  const handAnalyzer = require('../services/ai/handAnalyzer');
+  analyzeHand = handAnalyzer.analyzeHand || handAnalyzer;
+} catch (e) {
+  console.warn('⚠️  handAnalyzer not found');
+}
+
+try {
+  const mulliganAdvisor = require('../services/ai/mulliganAdvisor');
+  analyzeMulligan = mulliganAdvisor.analyzeMulligan || mulliganAdvisor;
+  simulateHands = mulliganAdvisor.simulateHands;
+} catch (e) {
+  console.warn('⚠️  mulliganAdvisor not found');
+}
+
+try {
+  const matchupAnalyzer = require('../services/ai/matchupAnalyzer');
+  analyzeMatchups = matchupAnalyzer.analyzeMatchups || matchupAnalyzer;
+} catch (e) {
+  console.warn('⚠️  matchupAnalyzer not found');
+}
+
+// ── Shuffle Helper ───────────────────────────────────────────────────────────
+
+/**
+ * Embaralha um deck e retorna 7 cartas
+ */
+function shuffleDeck(cards) {
+  // Fisher-Yates shuffle
+  const shuffled = [...cards];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function drawHand(deckAnalysis) {
+  if (!deckAnalysis || !deckAnalysis.cards) {
+    throw new Error('Invalid deck analysis');
+  }
+
+  // Expandir cards com quantidades
+  const expandedDeck = [];
+  for (const card of deckAnalysis.cards) {
+    const qty = card.quantity || 1;
+    for (let i = 0; i < qty; i++) {
+      expandedDeck.push(card.name);
+    }
+  }
+
+  if (expandedDeck.length < 7) {
+    throw new Error('Deck has less than 7 cards');
+  }
+
+  // Embaralhar e pegar 7
+  const shuffled = shuffleDeck(expandedDeck);
+  return shuffled.slice(0, 7);
+}
+
+// ── Validators ───────────────────────────────────────────────────────────────
+
+function validateDecklist(decklist, res) {
+  if (!decklist || typeof decklist !== 'string') {
+    res.status(400).json({ error: 'Invalid decklist' });
+    return false;
+  }
+  if (decklist.length > 50000) {
+    res.status(400).json({ error: 'Decklist too large' });
+    return false;
+  }
+  return true;
+}
+
+function validateHand(hand, res) {
+  if (!Array.isArray(hand)) {
+    res.status(400).json({ error: 'Hand must be an array' });
+    return false;
+  }
+  if (hand.length !== 7) {
+    res.status(400).json({ error: 'Hand must have exactly 7 cards' });
+    return false;
+  }
+  for (let i = 0; i < hand.length; i++) {
+    if (typeof hand[i] !== 'string') {
+      res.status(400).json({ error: `Card ${i+1} must be a string` });
+      return false;
+    }
+  }
+  return true;
+}
+
+// ── Routes ───────────────────────────────────────────────────────────────────
+
+/**
+ * GET /api/ai/ping
+ */
+router.get('/ping', (req, res) => {
+  res.json({ ok: true, note: 'AI services online' });
+});
+
+/**
+ * POST /api/ai/shuffle
+ * Embaralha o deck e retorna 7 cartas
+ */
+router.post('/shuffle', async (req, res) => {
+  try {
+    const { decklist } = req.body;
+
+    if (!validateDecklist(decklist, res)) return;
+
+    // Parse deck
+    const deckAnalysis = analyzeDeck(decklist);
+
+    // Draw hand
+    const hand = drawHand(deckAnalysis);
+
+    res.json({ hand });
+
+  } catch (err) {
+    console.error('❌ /api/ai/shuffle error:', err);
+    res.status(500).json({ 
+      error: 'Failed to shuffle deck',
+      details: err.message 
+    });
+  }
+});
+
+/**
+ * POST /api/ai/mulligan
+ * Analisa mulligan
+ */
+router.post('/mulligan', async (req, res) => {
+  try {
+    const { hand, decklist } = req.body;
+
+    if (!validateHand(hand, res)) return;
+    if (!validateDecklist(decklist, res)) return;
+
+    const deckAnalysis = analyzeDeck(decklist);
+
+    if (analyzeMulligan && typeof analyzeMulligan === 'function') {
+      const result = analyzeMulligan(hand, deckAnalysis);
+      res.json(result);
+    } else {
+      // Fallback básico
+      res.json({
+        decision: 'Keep',
+        confidence: 0.7,
+        reasoning: 'Basic mulligan analysis',
+        suggestions: hand.map(card => ({
+          card,
+          action: 'Keep',
+          priority: 1,
+        })),
+      });
+    }
+
+  } catch (err) {
+    console.error('❌ /api/ai/mulligan error:', err);
+    res.status(500).json({ 
+      error: 'Failed to analyze mulligan',
+      details: err.message 
+    });
+  }
+});
+
+/**
+ * POST /api/ai/simulate-mulligan
+ * Simula mulligan trocando cartas específicas
+ */
+router.post('/simulate-mulligan', async (req, res) => {
+  try {
+    const { hand, mulligan, decklist } = req.body;
+
+    if (!validateHand(hand, res)) return;
+    if (!validateDecklist(decklist, res)) return;
+
+    if (!Array.isArray(mulligan)) {
+      return res.status(400).json({ error: 'Mulligan must be an array of indices' });
+    }
+
+    for (const idx of mulligan) {
+      if (!Number.isInteger(idx) || idx < 0 || idx >= 7) {
+        return res.status(400).json({ error: 'Invalid mulligan index' });
+      }
+    }
+
+    // Parse deck
+    const deckAnalysis = analyzeDeck(decklist);
+
+    // Expandir deck
+    const expandedDeck = [];
+    for (const card of deckAnalysis.cards) {
+      const qty = card.quantity || 1;
+      for (let i = 0; i < qty; i++) {
+        expandedDeck.push(card.name);
+      }
+    }
+
+    // Remover cartas da mão do deck
+    const remainingDeck = expandedDeck.filter(card => !hand.includes(card));
+
+    // Shufflar deck restante
+    const shuffled = shuffleDeck(remainingDeck);
+
+    // Criar nova mão
+    const newHand = [...hand];
+    for (let i = 0; i < mulligan.length && i < shuffled.length; i++) {
+      const idx = mulligan[i];
+      newHand[idx] = shuffled[i];
+    }
+
+    res.json({ hand: newHand });
+
+  } catch (err) {
+    console.error('❌ /api/ai/simulate-mulligan error:', err);
+    res.status(500).json({ 
+      error: 'Failed to simulate mulligan',
+      details: err.message 
+    });
+  }
+});
+
+/**
+ * POST /api/ai/matchups
+ */
+router.post('/matchups', async (req, res) => {
+  try {
+    const { decklist } = req.body;
+
+    if (!validateDecklist(decklist, res)) return;
+
+    const deckAnalysis = analyzeDeck(decklist);
+
+    if (analyzeMatchups && typeof analyzeMatchups === 'function') {
+      const result = analyzeMatchups(deckAnalysis);
+      res.json(result);
+    } else {
+      // Fallback básico
+      res.json({
+        userArchetype: deckAnalysis.archetype || 'Unknown',
+        matchups: [],
+        dataSource: 'Fallback',
+      });
+    }
+
+  } catch (err) {
+    console.error('❌ /api/ai/matchups error:', err);
+    res.status(500).json({ 
+      error: 'Failed to analyze matchups',
+      details: err.message 
+    });
+  }
+});
+
+/**
+ * POST /api/ai/resolve
+ */
+router.post('/resolve', async (req, res) => {
+  try {
+    const decklist = req.body.decklist || req.body.text || '';
+    
+    if (!decklist.trim()) {
+      return res.status(400).json({ error: 'decklist is required' });
+    }
+
+    if (resolveNames && typeof resolveNames === 'function') {
+      const result = await resolveNames(decklist);
+      res.json(result);
+    } else {
+      res.json({ resolved: decklist });
+    }
+
+  } catch (err) {
+    console.error('❌ /api/ai/resolve error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * GET /api/ai/health
+ */
+router.get('/health', (req, res) => {
+  res.json({ 
+    ok: true,
+    service: 'ai',
+    version: '4.3',
+    features: {
+      shuffle: true,
+      mulligan: !!analyzeMulligan,
+      matchups: !!analyzeMatchups,
+      resolve: !!resolveNames,
+    }
+  });
+});
+
+module.exports = router;

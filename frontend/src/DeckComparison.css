@@ -1,0 +1,375 @@
+/* ═══════════════════════════════════════════════════════════
+   DeckComparison.css
+   Estilização do componente de comparação de decks
+   ═══════════════════════════════════════════════════════════ */
+
+.deck-comparison {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 32px;
+  margin: 24px 0;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+  color: white;
+}
+
+/* ── Header ────────────────────────────────────────────────── */
+
+.comparison-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.comparison-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.comparison-description {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+/* ── Filter Section ──────────────────────────────────────── */
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-section label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background: white;
+  color: #667eea;
+  border-color: white;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+/* ── Compare Button ──────────────────────────────────────── */
+
+.compare-btn {
+  width: 100%;
+  padding: 16px;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.compare-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.compare-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Spinner ─────────────────────────────────────────────── */
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Messages ────────────────────────────────────────────── */
+
+.error-message {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 2px solid rgba(239, 68, 68, 0.5);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+}
+
+.info-message {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 2px solid rgba(59, 130, 246, 0.5);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* ── Results ─────────────────────────────────────────────── */
+
+.comparison-result {
+  margin-top: 24px;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Score Card ──────────────────────────────────────────── */
+
+.score-card,
+.stats-card,
+.top-matches-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.score-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.confidence-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+.score-value {
+  font-size: 64px;
+  font-weight: 700;
+  text-align: center;
+  margin: 16px 0;
+  line-height: 1;
+}
+
+.score-max {
+  font-size: 32px;
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+.score-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  transition: width 0.6s ease, background-color 0.3s;
+  border-radius: 4px;
+}
+
+/* ── Stats Card ──────────────────────────────────────────── */
+
+.stats-card h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.stat-value {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ── Top Matches ─────────────────────────────────────────── */
+
+.top-matches-card {
+  grid-column: 1 / -1;
+}
+
+.top-matches-card h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.match-item {
+  display: flex;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s;
+}
+
+.match-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.match-rank {
+  font-size: 24px;
+  font-weight: 700;
+  opacity: 0.6;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.match-info {
+  flex: 1;
+}
+
+.match-similarity {
+  margin-bottom: 8px;
+}
+
+.similarity-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.similarity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.similarity-value {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.match-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.match-placement {
+  font-weight: 600;
+}
+
+.match-tournament {
+  opacity: 0.8;
+  font-size: 12px;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .deck-comparison {
+    padding: 20px;
+  }
+
+  .comparison-header h2 {
+    font-size: 24px;
+  }
+
+  .score-value {
+    font-size: 48px;
+  }
+
+  .filter-buttons {
+    flex-direction: column;
+  }
+
+  .filter-btn {
+    min-width: 100%;
+  }
+}

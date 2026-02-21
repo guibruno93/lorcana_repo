@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": "2026-02-19T00:14:11.220Z",
+    "stats": {
+      "sources": {
+        "melee.gg": 0,
+        "lorcania.com": 0
+      },
+      "totalFetched": 0,
+      "totalAfterMerge": 0,
+      "duration": 847
+    }
+  },
+  {
+    "timestamp": "2026-02-19T10:48:13.871Z",
+    "stats": {
+      "localCount": 0,
+      "externalCount": 0,
+      "totalAfterMerge": 0,
+      "duration": 8
+    }
+  },
+  {
+    "timestamp": "2026-02-19T10:55:17.772Z",
+    "stats": {
+      "localCount": 400,
+      "externalCount": 0,
+      "totalAfterMerge": 333,
+      "duration": 29
+    }
+  }
+]
