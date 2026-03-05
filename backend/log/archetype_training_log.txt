@@ -1,0 +1,112 @@
+PS S:\INKREC\lorcana_ai\backend> node scripts\train-archetype-ml.js
+[dotenv@17.3.1] injecting env (16) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+🤖 ARCHETYPE ML TRAINER
+
+🚀 Initializing Hybrid Archetype Identifier...
+🔍 Building card vocabulary...
+✅ Vocabulary: 200 cards, 121 archetypes
+⚠️  No pre-trained model found. Will need to train.
+
+🎓 Starting training...
+🎓 Starting training...
+📊 Training with 720 decks
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+✅ Model created:
+__________________________________________________________________________________________
+Layer (type)                Input Shape               Output shape              Param #
+==========================================================================================
+dense_Dense1 (Dense)        [[null,221]]              [null,128]                28416
+__________________________________________________________________________________________
+dropout_Dropout1 (Dropout)  [[null,128]]              [null,128]                0
+__________________________________________________________________________________________
+dense_Dense2 (Dense)        [[null,128]]              [null,64]                 8256
+__________________________________________________________________________________________
+dropout_Dropout2 (Dropout)  [[null,64]]               [null,64]                 0
+__________________________________________________________________________________________
+dense_Dense3 (Dense)        [[null,64]]               [null,32]                 2080
+__________________________________________________________________________________________
+dense_Dense4 (Dense)        [[null,32]]               [null,121]                3993
+==========================================================================================
+Total params: 42745
+Trainable params: 42745
+Non-trainable params: 0
+__________________________________________________________________________________________
+Epoch 1/50 - loss: 5.6473 - acc: 18.75% - val_loss: 4.9636 - val_acc: 4.17%
+Epoch 2/50 - loss: 3.6287 - acc: 48.26% - val_loss: 6.0891 - val_acc: 5.56%
+Epoch 3/50 - loss: 2.7196 - acc: 53.65% - val_loss: 5.6810 - val_acc: 5.56%
+Epoch 4/50 - loss: 2.3396 - acc: 54.86% - val_loss: 6.0432 - val_acc: 5.56%
+Epoch 5/50 - loss: 2.0877 - acc: 55.56% - val_loss: 6.6211 - val_acc: 5.56%
+Epoch 6/50 - loss: 1.9485 - acc: 57.29% - val_loss: 6.7789 - val_acc: 5.56%
+Epoch 7/50 - loss: 1.8060 - acc: 59.20% - val_loss: 6.9224 - val_acc: 5.56%
+Epoch 8/50 - loss: 1.6883 - acc: 61.63% - val_loss: 7.3191 - val_acc: 5.56%
+Epoch 9/50 - loss: 1.6008 - acc: 64.76% - val_loss: 7.4361 - val_acc: 5.56%
+Epoch 10/50 - loss: 1.5199 - acc: 66.67% - val_loss: 7.6769 - val_acc: 5.56%
+Epoch 11/50 - loss: 1.4348 - acc: 68.06% - val_loss: 7.6214 - val_acc: 6.25%
+Epoch 12/50 - loss: 1.3707 - acc: 69.27% - val_loss: 7.4300 - val_acc: 6.25%
+Epoch 13/50 - loss: 1.3183 - acc: 69.79% - val_loss: 7.9597 - val_acc: 5.56%
+Epoch 14/50 - loss: 1.2659 - acc: 70.83% - val_loss: 7.7908 - val_acc: 6.94%
+Epoch 15/50 - loss: 1.2260 - acc: 72.57% - val_loss: 8.2341 - val_acc: 6.94%
+Epoch 16/50 - loss: 1.1818 - acc: 73.09% - val_loss: 8.2665 - val_acc: 6.94%
+Epoch 17/50 - loss: 1.1394 - acc: 73.61% - val_loss: 8.4785 - val_acc: 6.94%
+Epoch 18/50 - loss: 1.1098 - acc: 75.35% - val_loss: 9.0210 - val_acc: 6.94%
+Epoch 19/50 - loss: 1.0976 - acc: 75.17% - val_loss: 8.4212 - val_acc: 6.25%
+Epoch 20/50 - loss: 1.0733 - acc: 75.35% - val_loss: 8.7954 - val_acc: 6.94%
+Epoch 21/50 - loss: 1.0257 - acc: 77.43% - val_loss: 8.7522 - val_acc: 6.25%
+Epoch 22/50 - loss: 1.0019 - acc: 77.43% - val_loss: 9.2602 - val_acc: 7.64%
+Epoch 23/50 - loss: 0.9972 - acc: 77.95% - val_loss: 8.7732 - val_acc: 6.94%
+Epoch 24/50 - loss: 0.9678 - acc: 77.95% - val_loss: 9.3326 - val_acc: 6.94%
+Epoch 25/50 - loss: 0.9550 - acc: 78.82% - val_loss: 8.9584 - val_acc: 6.94%
+Epoch 26/50 - loss: 0.9306 - acc: 78.47% - val_loss: 9.2238 - val_acc: 6.94%
+Epoch 27/50 - loss: 0.9086 - acc: 79.51% - val_loss: 9.0492 - val_acc: 7.64%
+Epoch 28/50 - loss: 0.8843 - acc: 80.38% - val_loss: 9.1987 - val_acc: 6.94%
+Epoch 29/50 - loss: 0.8697 - acc: 79.86% - val_loss: 9.5741 - val_acc: 6.94%
+Epoch 30/50 - loss: 0.8530 - acc: 80.38% - val_loss: 9.1616 - val_acc: 7.64%
+Epoch 31/50 - loss: 0.8289 - acc: 81.60% - val_loss: 9.4540 - val_acc: 6.94%
+Epoch 32/50 - loss: 0.8401 - acc: 78.99% - val_loss: 9.4774 - val_acc: 6.94%
+Epoch 33/50 - loss: 0.8214 - acc: 80.73% - val_loss: 8.9951 - val_acc: 6.94%
+Epoch 34/50 - loss: 0.7991 - acc: 80.73% - val_loss: 9.5106 - val_acc: 6.94%
+Epoch 35/50 - loss: 0.7893 - acc: 81.42% - val_loss: 9.8070 - val_acc: 6.94%
+Epoch 36/50 - loss: 0.7805 - acc: 81.94% - val_loss: 9.2925 - val_acc: 6.94%
+Epoch 37/50 - loss: 0.7938 - acc: 82.64% - val_loss: 10.0629 - val_acc: 6.94%
+Epoch 38/50 - loss: 0.7820 - acc: 81.94% - val_loss: 9.4537 - val_acc: 6.94%
+Epoch 39/50 - loss: 0.7562 - acc: 82.81% - val_loss: 9.7314 - val_acc: 6.94%
+Epoch 40/50 - loss: 0.7934 - acc: 81.94% - val_loss: 9.0920 - val_acc: 6.94%
+Epoch 41/50 - loss: 0.7571 - acc: 82.99% - val_loss: 9.0996 - val_acc: 6.94%
+Epoch 42/50 - loss: 0.7356 - acc: 82.64% - val_loss: 9.7169 - val_acc: 6.94%
+Epoch 43/50 - loss: 0.7180 - acc: 82.47% - val_loss: 9.8557 - val_acc: 6.94%
+Epoch 44/50 - loss: 0.7098 - acc: 83.33% - val_loss: 9.1465 - val_acc: 6.94%
+Epoch 45/50 - loss: 0.7104 - acc: 83.16% - val_loss: 9.1076 - val_acc: 6.94%
+Epoch 46/50 - loss: 0.6930 - acc: 83.85% - val_loss: 9.3203 - val_acc: 7.64%
+Epoch 47/50 - loss: 0.6888 - acc: 82.47% - val_loss: 10.0105 - val_acc: 6.94%
+Epoch 48/50 - loss: 0.6797 - acc: 83.68% - val_loss: 9.7614 - val_acc: 6.94%
+Epoch 49/50 - loss: 0.6772 - acc: 83.16% - val_loss: 9.7858 - val_acc: 6.94%
+Epoch 50/50 - loss: 0.6624 - acc: 84.20% - val_loss: 9.6875 - val_acc: 6.94%
+
+✅ Training completed! Final validation accuracy: 6.94%
+⚠️  Using manual save (no file handler available)
+✅ Model saved manually to ./models/archetype-classifier
+✅ Vocabulary saved
+
+📊 Training Results:
+   Accuracy: 6.94%
+   Epochs: 50
+   Training samples: 576
+   Validation samples: 144
+
+🧪 Testing with sample deck...
+
+   Prediction:
+   Archetype: Evasive
+   Confidence: 73.48%
+   Method: ml
+
+   Alternatives:
+   - Dumbo: 21.82%
+   - Control: 2.96%
+
+✅ Training completed successfully!
+   Model saved to: ./models/archetype-classifier
+   Vocabulary saved to: ./models/vocabulary.json

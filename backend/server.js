@@ -8,7 +8,6 @@ require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 
-
 const app = express();
 
 // ── Middlewares ──────────────────────────────────────────────────────────────
@@ -32,7 +31,9 @@ app.use((req, res, next) => {
 // ── Health check ─────────────────────────────────────────────────────────────
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
-// ── Rotas ────────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// TODAS AS ROTAS - ANTES DO 404!
+// ══════════════════════════════════════════════════════════════════════════════
 
 // Deck analyzer
 try {
@@ -63,27 +64,49 @@ try {
 
 // Meta analyzer
 try {
-  const metaRouter = require("./routes/meta");
+  const metaRouter = require("./routes/M3ta");
   app.use("/api/meta", metaRouter);
   console.log("✅ Meta router carregado: /api/meta");
 } catch (e) {
   console.warn("⚠️  Meta router não carregado:", e.message);
 }
 
-// Após outras rotas existentes
-const deckComparison = require('./routes/deckComparison');
-app.use('/api/deck-comparison', deckComparison);
-console.log("✅ Deck Comparison carregado");
+// Deck Comparison
+try {
+  const deckComparison = require('./routes/deckComparison');
+  app.use('/api/deck-comparison', deckComparison);
+  console.log("✅ Deck Comparison carregado: /api/deck-comparison");
+} catch (e) {
+  console.warn("⚠️  Deck Comparison não carregado:", e.message);
+}
 
-const auth = require('./routes/auth');
-app.use('/api/auth', auth);
-console.log("✅ Auth carregado");
+// Auth
+try {
+  const auth = require('./routes/auth');
+  app.use('/api/auth', auth);
+  console.log("✅ Auth carregado: /api/auth");
+  
+  // Rotas protegidas
+  const { authenticateToken } = require('./routes/auth');
+  app.get('/api/protected', authenticateToken, (req, res) => {
+    res.json({ message: 'Protected route', user: req.user });
+  });
+} catch (e) {
+  console.error("❌ Auth não carregado:", e.message);
+}
 
-// Rotas protegidas (exemplo)
-const { authenticateToken } = require('./routes/auth');
-app.get('/api/protected', authenticateToken, (req, res) => {
-  res.json({ message: 'Protected route', user: req.user });
-});
+// Meta Analysis - ✅ MOVIDO PARA CÁ (ANTES DO 404)!
+try {
+  const metaAnalysisRoutes = require('./routes/meta-analysis');
+  app.use('/api/meta-analysis', metaAnalysisRoutes);
+  console.log("✅ Meta Analysis carregado: /api/meta-analysis");
+} catch (e) {
+  console.warn("⚠️  Meta Analysis não carregado:", e.message);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 404 E ERROR HANDLERS - SEMPRE POR ÚLTIMO!
+// ══════════════════════════════════════════════════════════════════════════════
 
 // ── Catch-all 404 ────────────────────────────────────────────────────────────
 app.use((req, res) => {
@@ -91,7 +114,15 @@ app.use((req, res) => {
   res.status(404).json({ 
     error: 'Not Found',
     path: req.path,
-    method: req.method
+    method: req.method,
+    availableRoutes: [
+      '/api/deck/*',
+      '/api/ai/*',
+      '/api/meta/*',
+      '/api/auth/*',
+      '/api/meta-analysis/*',
+      '/api/deck-comparison/*'
+    ]
   });
 });
 
@@ -104,10 +135,31 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ── Start server ─────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+// START SERVER
+// ══════════════════════════════════════════════════════════════════════════════
+
 const PORT = process.env.PORT || 3002;
+
 const server = app.listen(PORT, () => {
   console.log(`\n✅ API on: http://localhost:${PORT}\n`);
+  console.log('📋 Available routes:');
+  console.log('   - /api/deck/*');
+  console.log('   - /api/ai/*');
+  console.log('   - /api/meta/*');
+  console.log('   - /api/auth/*');
+  console.log('   - /api/meta-analysis/*');
+  console.log('   - /api/deck-comparison/*');
+  console.log('');
+  
+  // Initialize cron jobs DEPOIS do servidor iniciar
+  try {
+    const metaCron = require('./jobs/meta-cron');
+    metaCron.init();
+    console.log("✅ Cron jobs initialized\n");
+  } catch (e) {
+    console.warn("⚠️  Cron jobs not initialized:", e.message);
+  }
 });
 
 server.on("error", (e) => {

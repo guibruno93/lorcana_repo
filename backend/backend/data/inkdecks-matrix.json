@@ -1,0 +1,2233 @@
+{
+  "opponents": [
+    {
+      "name": "evasive",
+      "inks": [
+        "Amethyst",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "aggro",
+      "inks": [
+        "Amber",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "midrange",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ]
+    },
+    {
+      "name": "control",
+      "inks": [
+        "Emerald",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "evasives",
+      "inks": [
+        "Amber",
+        "Amethyst"
+      ]
+    },
+    {
+      "name": "control",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "evasives",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ]
+    },
+    {
+      "name": "aggro",
+      "inks": [
+        "Amber",
+        "Steel"
+      ]
+    },
+    {
+      "name": "allies",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ]
+    },
+    {
+      "name": "dumbo",
+      "inks": [
+        "Amethyst",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "challengers",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ]
+    },
+    {
+      "name": "evasive",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "evasive",
+      "inks": [
+        "Amethyst",
+        "Ruby"
+      ]
+    },
+    {
+      "name": "songs",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ]
+    },
+    {
+      "name": "characters",
+      "inks": [
+        "Amber",
+        "Ruby"
+      ]
+    },
+    {
+      "name": "shark control",
+      "inks": [
+        "Ruby",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "song",
+      "inks": [
+        "Amber",
+        "Steel"
+      ]
+    },
+    {
+      "name": "burn",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "locations",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ]
+    },
+    {
+      "name": "aggro",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "detectives",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ]
+    },
+    {
+      "name": "bounce",
+      "inks": [
+        "Amethyst",
+        "Ruby"
+      ]
+    },
+    {
+      "name": "songs",
+      "inks": [
+        "Amber",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "ward",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ]
+    },
+    {
+      "name": "control",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "detectives",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "tod",
+      "inks": [
+        "Emerald",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "princesses",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "songs",
+      "inks": [
+        "Amber",
+        "Ruby"
+      ]
+    },
+    {
+      "name": "lantern",
+      "inks": [
+        "Amber",
+        "Amethyst"
+      ]
+    },
+    {
+      "name": "brainiac",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "evasive",
+      "inks": [
+        "Amethyst",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "aggro",
+      "inks": [
+        "Amber",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "midrange",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ]
+    },
+    {
+      "name": "control",
+      "inks": [
+        "Emerald",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "evasives",
+      "inks": [
+        "Amber",
+        "Amethyst"
+      ]
+    },
+    {
+      "name": "control",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "evasives",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ]
+    },
+    {
+      "name": "aggro",
+      "inks": [
+        "Amber",
+        "Steel"
+      ]
+    },
+    {
+      "name": "allies",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ]
+    },
+    {
+      "name": "dumbo",
+      "inks": [
+        "Amethyst",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "challengers",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ]
+    },
+    {
+      "name": "evasive",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "evasive",
+      "inks": [
+        "Amethyst",
+        "Ruby"
+      ]
+    },
+    {
+      "name": "songs",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ]
+    },
+    {
+      "name": "characters",
+      "inks": [
+        "Amber",
+        "Ruby"
+      ]
+    },
+    {
+      "name": "shark control",
+      "inks": [
+        "Ruby",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "song",
+      "inks": [
+        "Amber",
+        "Steel"
+      ]
+    },
+    {
+      "name": "burn",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "locations",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ]
+    },
+    {
+      "name": "aggro",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "detectives",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ]
+    },
+    {
+      "name": "bounce",
+      "inks": [
+        "Amethyst",
+        "Ruby"
+      ]
+    },
+    {
+      "name": "songs",
+      "inks": [
+        "Amber",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "ward",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ]
+    },
+    {
+      "name": "control",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    },
+    {
+      "name": "detectives",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "tod",
+      "inks": [
+        "Emerald",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "princesses",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ]
+    },
+    {
+      "name": "songs",
+      "inks": [
+        "Amber",
+        "Ruby"
+      ]
+    },
+    {
+      "name": "lantern",
+      "inks": [
+        "Amber",
+        "Amethyst"
+      ]
+    },
+    {
+      "name": "brainiac",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ]
+    }
+  ],
+  "matrix": [
+    {
+      "archetype": "evasive",
+      "inks": [
+        "Amethyst",
+        "Sapphire"
+      ],
+      "overall_winrate": 56,
+      "overall_matches": 1772,
+      "matchups": {
+        "overall": {
+          "winrate": 56,
+          "matches": 1772
+        },
+        "aggro": {
+          "winrate": 60,
+          "matches": 10
+        },
+        "midrange": {
+          "winrate": 57,
+          "matches": 159
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 6
+        },
+        "evasives": {
+          "winrate": 57,
+          "matches": 129
+        },
+        "allies": {
+          "winrate": 56,
+          "matches": 86
+        },
+        "dumbo": {
+          "winrate": 64,
+          "matches": 64
+        },
+        "challengers": {
+          "winrate": 58,
+          "matches": 60
+        },
+        "evasive": {
+          "winrate": 45,
+          "matches": 38
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "characters": {
+          "winrate": 79,
+          "matches": 33
+        },
+        "shark control": {
+          "winrate": 85,
+          "matches": 20
+        },
+        "song": {
+          "winrate": 60,
+          "matches": 20
+        },
+        "burn": {
+          "winrate": 25,
+          "matches": 12
+        },
+        "locations": {
+          "winrate": 55,
+          "matches": 11
+        },
+        "detectives": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "bounce": {
+          "winrate": 40,
+          "matches": 10
+        },
+        "ward": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "tod": {
+          "winrate": 100,
+          "matches": 4
+        },
+        "princesses": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "lantern": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "brainiac": {
+          "winrate": 67,
+          "matches": 3
+        }
+      }
+    },
+    {
+      "archetype": "aggro",
+      "inks": [
+        "Amber",
+        "Emerald"
+      ],
+      "overall_winrate": 55,
+      "overall_matches": 1111,
+      "matchups": {
+        "overall": {
+          "winrate": 55,
+          "matches": 1111
+        },
+        "evasive": {
+          "winrate": 36,
+          "matches": 28
+        },
+        "midrange": {
+          "winrate": 44,
+          "matches": 86
+        },
+        "control": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "evasives": {
+          "winrate": 40,
+          "matches": 67
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 11
+        },
+        "allies": {
+          "winrate": 58,
+          "matches": 52
+        },
+        "dumbo": {
+          "winrate": 48,
+          "matches": 44
+        },
+        "challengers": {
+          "winrate": 52,
+          "matches": 58
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "characters": {
+          "winrate": 44,
+          "matches": 9
+        },
+        "shark control": {
+          "winrate": 67,
+          "matches": 18
+        },
+        "song": {
+          "winrate": 50,
+          "matches": 10
+        },
+        "burn": {
+          "winrate": 100,
+          "matches": 10
+        },
+        "locations": {
+          "winrate": 50,
+          "matches": 6
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 4
+        },
+        "ward": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "tod": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "princesses": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "lantern": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "brainiac": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "midrange",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ],
+      "overall_winrate": 56,
+      "overall_matches": 606,
+      "matchups": {
+        "overall": {
+          "winrate": 56,
+          "matches": 606
+        },
+        "evasive": {
+          "winrate": 50,
+          "matches": 14
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "control": {
+          "winrate": 43,
+          "matches": 37
+        },
+        "evasives": {
+          "winrate": 50,
+          "matches": 28
+        },
+        "allies": {
+          "winrate": 48,
+          "matches": 21
+        },
+        "dumbo": {
+          "winrate": 52,
+          "matches": 21
+        },
+        "challengers": {
+          "winrate": 50,
+          "matches": 10
+        },
+        "songs": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "characters": {
+          "winrate": 62,
+          "matches": 13
+        },
+        "shark control": {
+          "winrate": 60,
+          "matches": 5
+        },
+        "song": {
+          "winrate": 100,
+          "matches": 5
+        },
+        "burn": {
+          "winrate": 80,
+          "matches": 5
+        },
+        "locations": {
+          "winrate": 73,
+          "matches": 11
+        },
+        "detectives": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "bounce": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "tod": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "princesses": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "brainiac": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "control",
+      "inks": [
+        "Emerald",
+        "Sapphire"
+      ],
+      "overall_winrate": 53,
+      "overall_matches": 599,
+      "matchups": {
+        "overall": {
+          "winrate": 53,
+          "matches": 599
+        },
+        "evasive": {
+          "winrate": 61,
+          "matches": 18
+        },
+        "aggro": {
+          "winrate": 54,
+          "matches": 26
+        },
+        "midrange": {
+          "winrate": 52,
+          "matches": 42
+        },
+        "evasives": {
+          "winrate": 60,
+          "matches": 48
+        },
+        "control": {
+          "winrate": 59,
+          "matches": 37
+        },
+        "allies": {
+          "winrate": 54,
+          "matches": 24
+        },
+        "dumbo": {
+          "winrate": 56,
+          "matches": 16
+        },
+        "challengers": {
+          "winrate": 7,
+          "matches": 15
+        },
+        "songs": {
+          "winrate": 44,
+          "matches": 9
+        },
+        "characters": {
+          "winrate": 64,
+          "matches": 11
+        },
+        "shark control": {
+          "winrate": 67,
+          "matches": 9
+        },
+        "song": {
+          "winrate": 33,
+          "matches": 6
+        },
+        "burn": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "detectives": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "bounce": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "tod": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "lantern": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "brainiac": {
+          "winrate": 50,
+          "matches": 2
+        }
+      }
+    },
+    {
+      "archetype": "evasives",
+      "inks": [
+        "Amber",
+        "Amethyst"
+      ],
+      "overall_winrate": 53,
+      "overall_matches": 575,
+      "matchups": {
+        "overall": {
+          "winrate": 53,
+          "matches": 575
+        },
+        "evasive": {
+          "winrate": 80,
+          "matches": 10
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "midrange": {
+          "winrate": 35,
+          "matches": 34
+        },
+        "control": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "evasives": {
+          "winrate": 56,
+          "matches": 50
+        },
+        "allies": {
+          "winrate": 42,
+          "matches": 36
+        },
+        "dumbo": {
+          "winrate": 80,
+          "matches": 15
+        },
+        "challengers": {
+          "winrate": 52,
+          "matches": 33
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "characters": {
+          "winrate": 53,
+          "matches": 15
+        },
+        "shark control": {
+          "winrate": 33,
+          "matches": 9
+        },
+        "song": {
+          "winrate": 17,
+          "matches": 6
+        },
+        "burn": {
+          "winrate": 80,
+          "matches": 5
+        },
+        "locations": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "detectives": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "ward": {
+          "winrate": 100,
+          "matches": 3
+        }
+      }
+    },
+    {
+      "archetype": "control",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ],
+      "overall_winrate": 46,
+      "overall_matches": 512,
+      "matchups": {
+        "overall": {
+          "winrate": 46,
+          "matches": 512
+        },
+        "evasive": {
+          "winrate": 58,
+          "matches": 12
+        },
+        "aggro": {
+          "winrate": 27,
+          "matches": 22
+        },
+        "midrange": {
+          "winrate": 57,
+          "matches": 37
+        },
+        "control": {
+          "winrate": 41,
+          "matches": 37
+        },
+        "evasives": {
+          "winrate": 24,
+          "matches": 25
+        },
+        "allies": {
+          "winrate": 62,
+          "matches": 29
+        },
+        "dumbo": {
+          "winrate": 46,
+          "matches": 13
+        },
+        "challengers": {
+          "winrate": 27,
+          "matches": 11
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "characters": {
+          "winrate": 80,
+          "matches": 5
+        },
+        "shark control": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "song": {
+          "winrate": 80,
+          "matches": 5
+        },
+        "bounce": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "tod": {
+          "winrate": 50,
+          "matches": 2
+        }
+      }
+    },
+    {
+      "archetype": "evasives",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ],
+      "overall_winrate": 53,
+      "overall_matches": 502,
+      "matchups": {
+        "overall": {
+          "winrate": 53,
+          "matches": 502
+        },
+        "evasive": {
+          "winrate": 73,
+          "matches": 11
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "midrange": {
+          "winrate": 50,
+          "matches": 28
+        },
+        "control": {
+          "winrate": 76,
+          "matches": 25
+        },
+        "evasives": {
+          "winrate": 44,
+          "matches": 50
+        },
+        "allies": {
+          "winrate": 59,
+          "matches": 22
+        },
+        "dumbo": {
+          "winrate": 33,
+          "matches": 15
+        },
+        "challengers": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "songs": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "characters": {
+          "winrate": 50,
+          "matches": 8
+        },
+        "shark control": {
+          "winrate": 60,
+          "matches": 5
+        },
+        "song": {
+          "winrate": 60,
+          "matches": 5
+        },
+        "burn": {
+          "winrate": 100,
+          "matches": 6
+        },
+        "locations": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "ward": {
+          "winrate": 80,
+          "matches": 5
+        }
+      }
+    },
+    {
+      "archetype": "aggro",
+      "inks": [
+        "Amber",
+        "Steel"
+      ],
+      "overall_winrate": 44,
+      "overall_matches": 480,
+      "matchups": {
+        "overall": {
+          "winrate": 44,
+          "matches": 480
+        },
+        "evasive": {
+          "winrate": 44,
+          "matches": 9
+        },
+        "aggro": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "midrange": {
+          "winrate": 16,
+          "matches": 44
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "evasives": {
+          "winrate": 39,
+          "matches": 23
+        },
+        "allies": {
+          "winrate": 46,
+          "matches": 13
+        },
+        "dumbo": {
+          "winrate": 73,
+          "matches": 11
+        },
+        "challengers": {
+          "winrate": 45,
+          "matches": 11
+        },
+        "songs": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "characters": {
+          "winrate": 40,
+          "matches": 5
+        },
+        "song": {
+          "winrate": 40,
+          "matches": 5
+        },
+        "burn": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "locations": {
+          "winrate": 67,
+          "matches": 6
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "bounce": {
+          "winrate": 50,
+          "matches": 4
+        },
+        "tod": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "princesses": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "brainiac": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "allies",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ],
+      "overall_winrate": 51,
+      "overall_matches": 388,
+      "matchups": {
+        "overall": {
+          "winrate": 51,
+          "matches": 388
+        },
+        "evasive": {
+          "winrate": 25,
+          "matches": 12
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "midrange": {
+          "winrate": 52,
+          "matches": 21
+        },
+        "control": {
+          "winrate": 38,
+          "matches": 29
+        },
+        "evasives": {
+          "winrate": 41,
+          "matches": 22
+        },
+        "dumbo": {
+          "winrate": 70,
+          "matches": 10
+        },
+        "challengers": {
+          "winrate": 40,
+          "matches": 5
+        },
+        "songs": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "characters": {
+          "winrate": 71,
+          "matches": 7
+        },
+        "song": {
+          "winrate": 86,
+          "matches": 7
+        },
+        "burn": {
+          "winrate": 67,
+          "matches": 6
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "ward": {
+          "winrate": 75,
+          "matches": 4
+        }
+      }
+    },
+    {
+      "archetype": "dumbo",
+      "inks": [
+        "Amethyst",
+        "Sapphire"
+      ],
+      "overall_winrate": 49,
+      "overall_matches": 291,
+      "matchups": {
+        "overall": {
+          "winrate": 49,
+          "matches": 291
+        },
+        "evasive": {
+          "winrate": 83,
+          "matches": 6
+        },
+        "aggro": {
+          "winrate": 27,
+          "matches": 11
+        },
+        "midrange": {
+          "winrate": 48,
+          "matches": 21
+        },
+        "control": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "evasives": {
+          "winrate": 67,
+          "matches": 15
+        },
+        "allies": {
+          "winrate": 30,
+          "matches": 10
+        },
+        "challengers": {
+          "winrate": 64,
+          "matches": 11
+        },
+        "songs": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "shark control": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "song": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "locations": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "bounce": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "tod": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "challengers",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ],
+      "overall_winrate": 53,
+      "overall_matches": 287,
+      "matchups": {
+        "overall": {
+          "winrate": 53,
+          "matches": 287
+        },
+        "evasive": {
+          "winrate": 50,
+          "matches": 4
+        },
+        "aggro": {
+          "winrate": 55,
+          "matches": 11
+        },
+        "midrange": {
+          "winrate": 50,
+          "matches": 10
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 6
+        },
+        "evasives": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "allies": {
+          "winrate": 60,
+          "matches": 5
+        },
+        "dumbo": {
+          "winrate": 36,
+          "matches": 11
+        },
+        "songs": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "characters": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "shark control": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "burn": {
+          "winrate": 100,
+          "matches": 5
+        },
+        "locations": {
+          "winrate": 100,
+          "matches": 4
+        },
+        "bounce": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "lantern": {
+          "winrate": 67,
+          "matches": 3
+        }
+      }
+    },
+    {
+      "archetype": "evasive",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ],
+      "overall_winrate": 47,
+      "overall_matches": 218,
+      "matchups": {
+        "overall": {
+          "winrate": 47,
+          "matches": 218
+        },
+        "evasive": {
+          "winrate": 29,
+          "matches": 7
+        },
+        "aggro": {
+          "winrate": 55,
+          "matches": 11
+        },
+        "midrange": {
+          "winrate": 43,
+          "matches": 14
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 8
+        },
+        "evasives": {
+          "winrate": 31,
+          "matches": 16
+        },
+        "allies": {
+          "winrate": 33,
+          "matches": 9
+        },
+        "dumbo": {
+          "winrate": 45,
+          "matches": 11
+        },
+        "challengers": {
+          "winrate": 33,
+          "matches": 6
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "characters": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "shark control": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "song": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "locations": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "tod": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "princesses": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "evasive",
+      "inks": [
+        "Amethyst",
+        "Ruby"
+      ],
+      "overall_winrate": 52,
+      "overall_matches": 201,
+      "matchups": {
+        "overall": {
+          "winrate": 52,
+          "matches": 201
+        },
+        "evasive": {
+          "winrate": 71,
+          "matches": 7
+        },
+        "aggro": {
+          "winrate": 56,
+          "matches": 9
+        },
+        "midrange": {
+          "winrate": 50,
+          "matches": 14
+        },
+        "control": {
+          "winrate": 42,
+          "matches": 12
+        },
+        "evasives": {
+          "winrate": 27,
+          "matches": 11
+        },
+        "allies": {
+          "winrate": 75,
+          "matches": 12
+        },
+        "dumbo": {
+          "winrate": 17,
+          "matches": 6
+        },
+        "challengers": {
+          "winrate": 50,
+          "matches": 4
+        },
+        "songs": {
+          "winrate": 60,
+          "matches": 5
+        },
+        "characters": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "burn": {
+          "winrate": 100,
+          "matches": 4
+        },
+        "ward": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "princesses": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "songs",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ],
+      "overall_winrate": 44,
+      "overall_matches": 158,
+      "matchups": {
+        "overall": {
+          "winrate": 44,
+          "matches": 158
+        },
+        "evasive": {
+          "winrate": 40,
+          "matches": 5
+        },
+        "aggro": {
+          "winrate": 20,
+          "matches": 5
+        },
+        "midrange": {
+          "winrate": 14,
+          "matches": 7
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 10
+        },
+        "evasives": {
+          "winrate": 43,
+          "matches": 7
+        },
+        "allies": {
+          "winrate": 50,
+          "matches": 6
+        },
+        "dumbo": {
+          "winrate": 60,
+          "matches": 5
+        },
+        "challengers": {
+          "winrate": 63,
+          "matches": 8
+        },
+        "characters": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "locations": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "ward": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "characters",
+      "inks": [
+        "Amber",
+        "Ruby"
+      ],
+      "overall_winrate": 42,
+      "overall_matches": 139,
+      "matchups": {
+        "overall": {
+          "winrate": 42,
+          "matches": 139
+        },
+        "evasive": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "aggro": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "midrange": {
+          "winrate": 38,
+          "matches": 13
+        },
+        "control": {
+          "winrate": 20,
+          "matches": 5
+        },
+        "evasives": {
+          "winrate": 50,
+          "matches": 8
+        },
+        "allies": {
+          "winrate": 29,
+          "matches": 7
+        },
+        "dumbo": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "challengers": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "songs": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "shark control": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "song": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "burn": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "locations": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "shark control",
+      "inks": [
+        "Ruby",
+        "Sapphire"
+      ],
+      "overall_winrate": 44,
+      "overall_matches": 107,
+      "matchups": {
+        "overall": {
+          "winrate": 44,
+          "matches": 107
+        },
+        "evasive": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "midrange": {
+          "winrate": 40,
+          "matches": 5
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "evasives": {
+          "winrate": 40,
+          "matches": 5
+        },
+        "allies": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "dumbo": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "song",
+      "inks": [
+        "Amber",
+        "Steel"
+      ],
+      "overall_winrate": 46,
+      "overall_matches": 91,
+      "matchups": {
+        "overall": {
+          "winrate": 46,
+          "matches": 91
+        },
+        "evasive": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "aggro": {
+          "winrate": 60,
+          "matches": 5
+        },
+        "control": {
+          "winrate": 20,
+          "matches": 5
+        },
+        "evasives": {
+          "winrate": 40,
+          "matches": 5
+        },
+        "allies": {
+          "winrate": 14,
+          "matches": 7
+        },
+        "challengers": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "shark control": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "lantern": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "burn",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ],
+      "overall_winrate": 41,
+      "overall_matches": 86,
+      "matchups": {
+        "overall": {
+          "winrate": 41,
+          "matches": 86
+        },
+        "evasive": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "midrange": {
+          "winrate": 20,
+          "matches": 5
+        },
+        "control": {
+          "winrate": 100,
+          "matches": 4
+        },
+        "evasives": {
+          "winrate": 20,
+          "matches": 5
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "allies": {
+          "winrate": 33,
+          "matches": 6
+        },
+        "dumbo": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "shark control": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "locations": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "princesses": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "locations",
+      "inks": [
+        "Amethyst",
+        "Steel"
+      ],
+      "overall_winrate": 41,
+      "overall_matches": 75,
+      "matchups": {
+        "overall": {
+          "winrate": 41,
+          "matches": 75
+        },
+        "evasive": {
+          "winrate": 45,
+          "matches": 11
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "midrange": {
+          "winrate": 27,
+          "matches": 11
+        },
+        "control": {
+          "winrate": 100,
+          "matches": 2
+        },
+        "allies": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "dumbo": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "shark control": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "ward": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "aggro",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ],
+      "overall_winrate": 34,
+      "overall_matches": 59,
+      "matchups": {
+        "overall": {
+          "winrate": 34,
+          "matches": 59
+        },
+        "evasive": {
+          "winrate": 40,
+          "matches": 10
+        },
+        "control": {
+          "winrate": 100,
+          "matches": 8
+        },
+        "aggro": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "dumbo": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "characters": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "shark control": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "detectives",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ],
+      "overall_winrate": 22,
+      "overall_matches": 36,
+      "matchups": {
+        "overall": {
+          "winrate": 22,
+          "matches": 36
+        },
+        "midrange": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "evasives": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "characters": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "bounce",
+      "inks": [
+        "Amethyst",
+        "Ruby"
+      ],
+      "overall_winrate": 53,
+      "overall_matches": 34,
+      "matchups": {
+        "overall": {
+          "winrate": 53,
+          "matches": 34
+        },
+        "evasive": {
+          "winrate": 60,
+          "matches": 10
+        },
+        "aggro": {
+          "winrate": 50,
+          "matches": 4
+        },
+        "midrange": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "control": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "evasives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "challengers": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "songs",
+      "inks": [
+        "Amber",
+        "Emerald"
+      ],
+      "overall_winrate": 53,
+      "overall_matches": 30,
+      "matchups": {
+        "overall": {
+          "winrate": 53,
+          "matches": 30
+        },
+        "evasive": {
+          "winrate": 63,
+          "matches": 8
+        },
+        "control": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "evasives": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "aggro": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "dumbo": {
+          "winrate": 67,
+          "matches": 3
+        }
+      }
+    },
+    {
+      "archetype": "ward",
+      "inks": [
+        "Sapphire",
+        "Steel"
+      ],
+      "overall_winrate": 48,
+      "overall_matches": 29,
+      "matchups": {
+        "overall": {
+          "winrate": 48,
+          "matches": 29
+        },
+        "evasive": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "control": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "evasives": {
+          "winrate": 20,
+          "matches": 5
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "allies": {
+          "winrate": 25,
+          "matches": 4
+        },
+        "song": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "brainiac": {
+          "winrate": 100,
+          "matches": 2
+        }
+      }
+    },
+    {
+      "archetype": "control",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ],
+      "overall_winrate": 50,
+      "overall_matches": 26,
+      "matchups": {
+        "overall": {
+          "winrate": 50,
+          "matches": 26
+        },
+        "evasive": {
+          "winrate": 50,
+          "matches": 6
+        },
+        "aggro": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "control": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "evasives": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "challengers": {
+          "winrate": 50,
+          "matches": 6
+        },
+        "songs": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "detectives",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ],
+      "overall_winrate": 48,
+      "overall_matches": 21,
+      "matchups": {
+        "overall": {
+          "winrate": 48,
+          "matches": 21
+        },
+        "evasive": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "midrange": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "evasives": {
+          "winrate": 100,
+          "matches": 3
+        },
+        "song": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "tod": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "tod",
+      "inks": [
+        "Emerald",
+        "Sapphire"
+      ],
+      "overall_winrate": 20,
+      "overall_matches": 20,
+      "matchups": {
+        "overall": {
+          "winrate": 20,
+          "matches": 20
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "burn": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "aggro": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "princesses",
+      "inks": [
+        "Amber",
+        "Sapphire"
+      ],
+      "overall_winrate": 44,
+      "overall_matches": 16,
+      "matchups": {
+        "overall": {
+          "winrate": 44,
+          "matches": 16
+        },
+        "evasive": {
+          "winrate": 67,
+          "matches": 3
+        },
+        "midrange": {
+          "winrate": 33,
+          "matches": 3
+        }
+      }
+    },
+    {
+      "archetype": "songs",
+      "inks": [
+        "Amber",
+        "Ruby"
+      ],
+      "overall_winrate": 50,
+      "overall_matches": 16,
+      "matchups": {
+        "overall": {
+          "winrate": 50,
+          "matches": 16
+        },
+        "aggro": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "midrange": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "evasives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "allies": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "challengers": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "evasive": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "detectives": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    },
+    {
+      "archetype": "lantern",
+      "inks": [
+        "Amber",
+        "Amethyst"
+      ],
+      "overall_winrate": 38,
+      "overall_matches": 13,
+      "matchups": {
+        "overall": {
+          "winrate": 38,
+          "matches": 13
+        },
+        "evasive": {
+          "winrate": 75,
+          "matches": 4
+        },
+        "evasives": {
+          "winrate": 100,
+          "matches": 1
+        },
+        "challengers": {
+          "winrate": 33,
+          "matches": 3
+        }
+      }
+    },
+    {
+      "archetype": "brainiac",
+      "inks": [
+        "Amethyst",
+        "Emerald"
+      ],
+      "overall_winrate": 27,
+      "overall_matches": 11,
+      "matchups": {
+        "overall": {
+          "winrate": 27,
+          "matches": 11
+        },
+        "evasive": {
+          "winrate": 33,
+          "matches": 3
+        },
+        "control": {
+          "winrate": 50,
+          "matches": 2
+        },
+        "evasives": {
+          "winrate": 100,
+          "matches": 1
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,850 @@
+{
+  "cardToIndex": [
+    [
+      "Cheshire Cat - Inexplicable",
+      0
+    ],
+    [
+      "Genie - Wish Fulfilled",
+      1
+    ],
+    [
+      "Tipo - Growing Son",
+      2
+    ],
+    [
+      "Sail the Azurite Sea",
+      3
+    ],
+    [
+      "Demona - Scourge of the Wyvern Clan",
+      4
+    ],
+    [
+      "Elsa - The Fifth Spirit",
+      5
+    ],
+    [
+      "Dumbo - Ninth Wonder of the Universe",
+      6
+    ],
+    [
+      "Hades - Looking for a Deal",
+      7
+    ],
+    [
+      "Hades - Infernal Schemer",
+      8
+    ],
+    [
+      "Let It Go",
+      9
+    ],
+    [
+      "Junior Woodchuck Guidebook",
+      10
+    ],
+    [
+      "Tigger - Bouncing All the Way",
+      11
+    ],
+    [
+      "Royal Guard - Octopus Soldier",
+      12
+    ],
+    [
+      "Basil - Practiced Detective",
+      13
+    ],
+    [
+      "Into the Unknown",
+      14
+    ],
+    [
+      "Strength of a Raging Fire",
+      15
+    ],
+    [
+      "Doc - Bold Knight",
+      16
+    ],
+    [
+      "Mowgli - Man Cub",
+      17
+    ],
+    [
+      "Iago - Giant Spectral Parrot",
+      18
+    ],
+    [
+      "Cinderella - Dream Come True",
+      19
+    ],
+    [
+      "Grandmother Willow - Ancient Advisor",
+      20
+    ],
+    [
+      "Under the Sea",
+      21
+    ],
+    [
+      "Olaf - Helping Hand",
+      22
+    ],
+    [
+      "Daisy Duck - Donald's Date",
+      23
+    ],
+    [
+      "Vision of the Future",
+      24
+    ],
+    [
+      "Captain Hook - Forceful Duelist",
+      25
+    ],
+    [
+      "Angel - Experiment 624",
+      26
+    ],
+    [
+      "Lilo - Escape Artist",
+      27
+    ],
+    [
+      "The Horseman Strikes!",
+      28
+    ],
+    [
+      "Ursula - Deceiver",
+      29
+    ],
+    [
+      "Hypnotic Strength",
+      30
+    ],
+    [
+      "Pete - Ghost of Christmas Future",
+      31
+    ],
+    [
+      "Develop Your Brain",
+      32
+    ],
+    [
+      "Go Go Tomago - Darting Dynamo",
+      33
+    ],
+    [
+      "Bobby Zimuruski - Spray Cheese Kid",
+      34
+    ],
+    [
+      "Nani - Stage Manager",
+      35
+    ],
+    [
+      "He Hurled His Thunderbolt",
+      36
+    ],
+    [
+      "Palace Guard - Spectral Sentry",
+      37
+    ],
+    [
+      "Lady - Decisive Dog",
+      38
+    ],
+    [
+      "Tramp - Enterprising Dog",
+      39
+    ],
+    [
+      "Belle - Accomplished Mystic",
+      40
+    ],
+    [
+      "Webby Vanderquack - Mystery Enthusiast",
+      41
+    ],
+    [
+      "Tramp - Street-Smart Dog",
+      42
+    ],
+    [
+      "Malicious, Mean, and Scary",
+      43
+    ],
+    [
+      "You're Welcome",
+      44
+    ],
+    [
+      "Giant Cobra - Ghostly Serpent",
+      45
+    ],
+    [
+      "Moana - Curious Explorer",
+      46
+    ],
+    [
+      "Clarabelle - Clumsy Guest",
+      47
+    ],
+    [
+      "Sven - Leaping Reindeer",
+      48
+    ],
+    [
+      "Calhoun - Marine Sergeant",
+      49
+    ],
+    [
+      "Christopher Robin - Joining the Fun",
+      50
+    ],
+    [
+      "Eilonwy - Princess of Llyr",
+      51
+    ],
+    [
+      "Lady - Miss Park Avenue",
+      52
+    ],
+    [
+      "Donald Duck - Perfect Gentleman",
+      53
+    ],
+    [
+      "Mulan - Disguised Soldier",
+      54
+    ],
+    [
+      "Ohana Means Family",
+      55
+    ],
+    [
+      "Prince Phillip - Royal Explorer",
+      56
+    ],
+    [
+      "Genie - Magical Researcher",
+      57
+    ],
+    [
+      "Clarabelle - Light on Her Hooves",
+      58
+    ],
+    [
+      "Lady - Family Dog",
+      59
+    ],
+    [
+      "Rafiki - Mystical Fighter",
+      60
+    ],
+    [
+      "Wasabi - Methodical Engineer",
+      61
+    ],
+    [
+      "World's Greatest Criminal Mind",
+      62
+    ],
+    [
+      "Prince Phillip - Vanquisher of Foes",
+      63
+    ],
+    [
+      "Emerald Chromicon",
+      64
+    ],
+    [
+      "Aurora - Holding Court",
+      65
+    ],
+    [
+      "Rhino - One-Sixteenth Wolf",
+      66
+    ],
+    [
+      "Scuttle - Birdbrained",
+      67
+    ],
+    [
+      "Yzma - Conniving Chemist",
+      68
+    ],
+    [
+      "Lexington - Small in Stature",
+      69
+    ],
+    [
+      "Stitch - Carefree Surfer",
+      70
+    ],
+    [
+      "John Silver - Alien Pirate",
+      71
+    ],
+    [
+      "Lady - Elegant Spaniel",
+      72
+    ],
+    [
+      "Della's Moon Lullaby",
+      73
+    ],
+    [
+      "Tiana - Restaurant Owner",
+      74
+    ],
+    [
+      "Inkrunner",
+      75
+    ],
+    [
+      "Second Star to the Right",
+      76
+    ],
+    [
+      "Basil - Undercover Detective",
+      77
+    ],
+    [
+      "Gigi - Best in Snow",
+      78
+    ],
+    [
+      "Magical Maneuvers",
+      79
+    ],
+    [
+      "Clarabelle - Contented Wallflower",
+      80
+    ],
+    [
+      "Rhino - Power Hamster",
+      81
+    ],
+    [
+      "Fire the Cannons!",
+      82
+    ],
+    [
+      "Pete - Games Referee",
+      83
+    ],
+    [
+      "Rajah - Devoted Protector",
+      84
+    ],
+    [
+      "Mother Knows Best",
+      85
+    ],
+    [
+      "Tinker Bell - Giant Fairy",
+      86
+    ],
+    [
+      "Pluto - Steel Champion",
+      87
+    ],
+    [
+      "Raging Storm",
+      88
+    ],
+    [
+      "Spooky Sight",
+      89
+    ],
+    [
+      "Bend to My Will",
+      90
+    ],
+    [
+      "Benja - Guardian of the Dragon Gem",
+      91
+    ],
+    [
+      "Vincenzo Santorini - The Explosives Expert",
+      92
+    ],
+    [
+      "Jasmine - Resourceful Infiltrator",
+      93
+    ],
+    [
+      "Jasmine - Steady Strategist",
+      94
+    ],
+    [
+      "Lantern",
+      95
+    ],
+    [
+      "Webby Vanderquack - Junior Prospector",
+      96
+    ],
+    [
+      "Goliath - Clan Leader",
+      97
+    ],
+    [
+      "Lilo - Bundled Up",
+      98
+    ],
+    [
+      "Penny - Bolt's Person",
+      99
+    ],
+    [
+      "Louis - Endearing Alligator",
+      100
+    ],
+    [
+      "Ink Geyser",
+      101
+    ],
+    [
+      "Flynn Rider - Spectral Scoundrel",
+      102
+    ],
+    [
+      "The Black Cauldron",
+      103
+    ],
+    [
+      "Belle - Snowfield Strategist",
+      104
+    ],
+    [
+      "David - Protective Snowboarder",
+      105
+    ],
+    [
+      "The Library - A Gift for Belle",
+      106
+    ],
+    [
+      "Nala - Undaunted Lioness",
+      107
+    ],
+    [
+      "Diablo - Watchful Raven",
+      108
+    ],
+    [
+      "Snow Fort",
+      109
+    ],
+    [
+      "Chief Powhatan - Protective Leader",
+      110
+    ],
+    [
+      "Lumiere - Fiery Friend",
+      111
+    ],
+    [
+      "Madam Mim - Elephant",
+      112
+    ],
+    [
+      "Pluto - Friendly Pooch",
+      113
+    ],
+    [
+      "Pocahontas - Following the Wind",
+      114
+    ],
+    [
+      "Ursula - Vanessa",
+      115
+    ],
+    [
+      "Circle of Life",
+      116
+    ],
+    [
+      "Tramp - Dapper Rascal",
+      117
+    ],
+    [
+      "Diablo - Obedient Raven",
+      118
+    ],
+    [
+      "Monstro - Infamous Whale",
+      119
+    ],
+    [
+      "Pluto - Guard Dog",
+      120
+    ],
+    [
+      "Iago - Stompin' Mad",
+      121
+    ],
+    [
+      "Ursula - Whisper of Vanessa",
+      122
+    ],
+    [
+      "The Headless Horseman - Terror of Sleepy Hollow",
+      123
+    ],
+    [
+      "Lilo - Snow Artist",
+      124
+    ],
+    [
+      "Lilo - Rock Star",
+      125
+    ],
+    [
+      "Black Heron - Real Bad Egg",
+      126
+    ],
+    [
+      "Pudge - Controls the Weather",
+      127
+    ],
+    [
+      "Rapunzel - Ready for Adventure",
+      128
+    ],
+    [
+      "Akood et Emuti",
+      129
+    ],
+    [
+      "Mickey Mouse - Amber Champion",
+      130
+    ],
+    [
+      "Jasmine - Fearless Princess",
+      131
+    ],
+    [
+      "But I'm Much Faster",
+      132
+    ],
+    [
+      "Pleakley - Scientific Expert",
+      133
+    ],
+    [
+      "Tinker Bell - Fancy Footwork",
+      134
+    ],
+    [
+      "Strike a Good Match",
+      135
+    ],
+    [
+      "Basil - Disguised Detective",
+      136
+    ],
+    [
+      "One Jump Ahead",
+      137
+    ],
+    [
+      "Kuzco - Selfish Emperor",
+      138
+    ],
+    [
+      "Kida - Creative Thinker",
+      139
+    ],
+    [
+      "Angel - Siren Singer",
+      140
+    ],
+    [
+      "Jim Dear - Beloved Husband",
+      141
+    ],
+    [
+      "Mulan - Resourceful Recruit",
+      142
+    ],
+    [
+      "Nakoma - Waiting Out the Storm",
+      143
+    ],
+    [
+      "The Troubadour - Musical Narrator",
+      144
+    ],
+    [
+      "Namaari - Single-Minded Rival",
+      145
+    ],
+    [
+      "Ariel - Sonic Warrior",
+      146
+    ],
+    [
+      "They Never Come Back",
+      147
+    ],
+    [
+      "Lawrence - Jealous Manservant",
+      148
+    ],
+    [
+      "Medallion Weights",
+      149
+    ],
+    [
+      "Chernabog - Unnatural Force",
+      150
+    ],
+    [
+      "Beyond the Horizon",
+      151
+    ],
+    [
+      "Bambi - Ethereal Fawn",
+      152
+    ],
+    [
+      "Madam Mim - Tiny Adversary",
+      153
+    ],
+    [
+      "Wisdom of the Willow",
+      154
+    ],
+    [
+      "Stitch - Carefree Snowboarder",
+      155
+    ],
+    [
+      "Ratigan - Greedy Genius",
+      156
+    ],
+    [
+      "The Prince - Vigilant Suitor",
+      157
+    ],
+    [
+      "Yzma - Exasperated Schemer",
+      158
+    ],
+    [
+      "Bagheera - Cautious Explorer",
+      159
+    ],
+    [
+      "Angela - Night Warrior",
+      160
+    ],
+    [
+      "Alan-a-Dale - Rockin' Rooster",
+      161
+    ],
+    [
+      "Ariel - Ethereal Voice",
+      162
+    ],
+    [
+      "Pegasus - Gift for Hercules",
+      163
+    ],
+    [
+      "White Rabbit - Late Again",
+      164
+    ],
+    [
+      "Pull the Lever!",
+      165
+    ],
+    [
+      "Wrong Lever!",
+      166
+    ],
+    [
+      "Seven Dwarfs' Mine - Secure Fortress",
+      167
+    ],
+    [
+      "Happy - Lively Knight",
+      168
+    ],
+    [
+      "Tinker Bell - Insistent Fairy",
+      169
+    ],
+    [
+      "Bronx - Ferocious Beast",
+      170
+    ],
+    [
+      "Liquidator - Iced Over",
+      171
+    ],
+    [
+      "Hercules - Mighty Leader",
+      172
+    ],
+    [
+      "Marshmallow - Cranky Climber",
+      173
+    ],
+    [
+      "Creeper - Loyal Lackey",
+      174
+    ],
+    [
+      "Minnie Mouse - Spinning Skater",
+      175
+    ],
+    [
+      "Bolt - Down but Not Out",
+      176
+    ],
+    [
+      "John Smith - Undaunted Protector",
+      177
+    ],
+    [
+      "Improvise",
+      178
+    ],
+    [
+      "Stitch - High Badness Level",
+      179
+    ],
+    [
+      "Donald Duck - Fred Honeywell",
+      180
+    ],
+    [
+      "Can't Hold It Back Anymore",
+      181
+    ],
+    [
+      "Look at This Family",
+      182
+    ],
+    [
+      "Colors of the Wind",
+      183
+    ],
+    [
+      "Stitch - Naughty Experiment",
+      184
+    ],
+    [
+      "Stitch - Rock Star",
+      185
+    ],
+    [
+      "Maui - Half-Shark",
+      186
+    ],
+    [
+      "Maleficent - Monstrous Dragon",
+      187
+    ],
+    [
+      "Marching Off to Battle",
+      188
+    ],
+    [
+      "Mr. Smee - Steadfast Mate",
+      189
+    ],
+    [
+      "Isis Vanderchill - Ice Queen of St. Canard",
+      190
+    ],
+    [
+      "Mulan - Injured Soldier",
+      191
+    ],
+    [
+      "Jafar - Royal Vizier",
+      192
+    ],
+    [
+      "Sisu - Emboldened Warrior",
+      193
+    ],
+    [
+      "Ludwig Von Drake - All-Around Expert",
+      194
+    ],
+    [
+      "Jasmine - Heir of Agrabah",
+      195
+    ],
+    [
+      "Genie - Satisfied Dragon",
+      196
+    ],
+    [
+      "Mirabel Madrigal - Curious Child",
+      197
+    ],
+    [
+      "I Won't Give In",
+      198
+    ],
+    [
+      "Or Rewrite History!",
+      199
+    ]
+  ],
+  "archetypeToIndex": [
+    [
+      "Aggro",
+      0
+    ],
+    [
+      "Allies",
+      1
+    ],
+    [
+      "Challengers",
+      2
+    ],
+    [
+      "Control",
+      3
+    ],
+    [
+      "Detectives",
+      4
+    ],
+    [
+      "Dumbo",
+      5
+    ],
+    [
+      "Evasive",
+      6
+    ],
+    [
+      "Midrange",
+      7
+    ],
+    [
+      "Princesses",
+      8
+    ],
+    [
+      "Songs",
+      9
+    ],
+    [
+      "Tempo",
+      10
+    ]
+  ]
+}

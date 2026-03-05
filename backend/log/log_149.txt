@@ -1,0 +1,26 @@
+PS S:\INKREC\lorcana_ai\backend> findstr /N /C:"eq('format'" services\archetype-ml.js
+43:      .eq('format', 'core')  // Filtrar apenas Core
+264:      .eq('format', 'core')  // Filtrar apenas Core
+
+[
+  {
+    "format": "core",
+    "unique_archetypes": 149
+  },
+  {
+    "format": "infinity",
+    "unique_archetypes": 2
+  }
+]
+
+
+[
+  {
+    "format": "core",
+    "total_decks": 1180
+  },
+  {
+    "format": "infinity",
+    "total_decks": 86
+  }
+]

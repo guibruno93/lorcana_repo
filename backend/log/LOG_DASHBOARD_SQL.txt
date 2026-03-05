@@ -1,0 +1,155 @@
+POST /api/meta-analysis/dashboard
+📊 Fetching dashboard data (30 days, format: core)
+GET /api/meta-analysis/tier-list
+🏆 Fetching tier list (30 days, format: core)
+GET /api/meta-analysis/trends
+📈 Fetching trends (30 days)
+❌ Trends error: {
+  code: '42703',
+  details: null,
+  hint: null,
+  message: 'column archetype_meta.trend_delta does not exist'
+}
+POST /api/meta-analysis/scrape
+🔍 Starting scrape with limit: 10
+🔍 Scraping tournaments from: https://inkdecks.com/lorcana-tournaments
+✅ Found 0 tournaments
+✅ Total decks scraped: 0
+✅ Found 0 decks
+✅ Saved 0 decks, 0 errors
+POST /api/meta-analysis/dashboard
+📊 Fetching dashboard data (30 days, format: core)
+GET /api/meta-analysis/tier-list
+🏆 Fetching tier list (30 days, format: core)
+POST /api/meta-analysis/analyze
+📊 Starting meta analysis (30 days)
+📊 Analyzing CORE format (last 30 days)
+✅ Found 1180 core decks
+❌ Meta analysis error: {
+  code: 'PGRST204',
+  details: null,
+  hint: null,
+  message: "Could not find the 'avg_placement' column of 'archetype_meta' in the schema cache"
+}
+POST /api/deck/analyze
+📊 /analyze request received
+🔍 Looking up 17 cards in database
+🤖 Identifying archetype with ML...
+✅ Archetype: evasive (100.0% confidence, method: rules)
+POST /api/ai/matchups
+   ⚠️  analyzeDeck returned invalid result, using fallback
+POST /api/ai/matchups
+   ⚠️  analyzeDeck returned invalid result, using fallback
+POST /api/ai/matchups
+   ⚠️  analyzeDeck returned invalid result, using fallback
+GET /api/meta-analysis/tier-list
+🏆 Fetching tier list (30 days, format: core)
+POST /api/meta-analysis/dashboard
+📊 Fetching dashboard data (30 days, format: core)
+GET /api/meta-analysis/trends
+📈 Fetching trends (30 days)
+POST /api/meta-analysis/dashboard
+📊 Fetching dashboard data (30 days, format: core)
+GET /api/meta-analysis/tier-list
+🏆 Fetching tier list (30 days, format: core)
+❌ Trends error: {
+  code: '42703',
+  details: null,
+  hint: null,
+  message: 'column archetype_meta.trend_delta does not exist'
+}
+GET /api/meta-analysis/trends
+📈 Fetching trends (30 days)
+❌ Trends error: {
+  code: '42703',
+  details: null,
+  hint: null,
+  message: 'column archetype_meta.trend_delta does not exist'
+  
+  
+  
+  
+  
+  
+  [
+  {
+    "archetype": "Evasive",
+    "meta_share": "23.50",
+    "deck_count": 280,
+    "tier": "S",
+    "win_rate": "54.50",
+    "power_level": "95.00"
+  },
+  {
+    "archetype": "Aggro",
+    "meta_share": "18.20",
+    "deck_count": 216,
+    "tier": "A",
+    "win_rate": "52.00",
+    "power_level": "85.00"
+  },
+  {
+    "archetype": "Control",
+    "meta_share": "15.80",
+    "deck_count": 188,
+    "tier": "A",
+    "win_rate": "52.00",
+    "power_level": "85.00"
+  },
+  {
+    "archetype": "Midrange",
+    "meta_share": "12.30",
+    "deck_count": 146,
+    "tier": "B",
+    "win_rate": "50.00",
+    "power_level": "75.00"
+  },
+  {
+    "archetype": "Dumbo",
+    "meta_share": "8.50",
+    "deck_count": 101,
+    "tier": "B",
+    "win_rate": "50.00",
+    "power_level": "75.00"
+  },
+  {
+    "archetype": "Songs",
+    "meta_share": "6.20",
+    "deck_count": 74,
+    "tier": "C",
+    "win_rate": "48.00",
+    "power_level": "65.00"
+  },
+  {
+    "archetype": "Ramp",
+    "meta_share": "5.80",
+    "deck_count": 69,
+    "tier": "C",
+    "win_rate": "48.00",
+    "power_level": "65.00"
+  },
+  {
+    "archetype": "Allies",
+    "meta_share": "4.10",
+    "deck_count": 49,
+    "tier": "C",
+    "win_rate": "48.00",
+    "power_level": "65.00"
+  },
+  {
+    "archetype": "Challengers",
+    "meta_share": "3.20",
+    "deck_count": 38,
+    "tier": "D",
+    "win_rate": "45.00",
+    "power_level": "55.00"
+  },
+  {
+    "archetype": "Unknown",
+    "meta_share": "2.40",
+    "deck_count": 29,
+    "tier": "D",
+    "win_rate": "45.00",
+    "power_level": "55.00"
+  }
+]

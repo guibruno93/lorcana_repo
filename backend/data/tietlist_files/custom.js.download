@@ -1,0 +1,939 @@
+(function () {
+    const e = { t: Date.now(), s: 0, m: 0, k: 0 };
+
+    addEventListener("scroll", () => e.s = 1, { once: true, passive: true });
+    addEventListener("mousemove", () => e.m = 1, { once: true });
+    addEventListener("keydown", () => e.k = 1, { once: true });
+
+    setTimeout(() => {
+        new Image().src =
+            "/img/logo-tiny.png?s=" + e.s +
+            "&m=" + e.m +
+            "&k=" + e.k +
+            "&d=" + (Date.now() - e.t);
+    }, 4000);
+})();
+
+up.feedback.config.currentClasses.push('up-active'); //remove default feedback .active classes from bootstrap 5 integration    
+
+up.compiler('[ga-click-event]', (el) => {
+    el?.addEventListener('click', e => {
+        //check gtag is enabled
+        if (!window.gtag) {
+            console.log('gtag is not enabled');
+        } else {
+            console.log('clicked ' + el.getAttribute('ga-click-event'));
+            gtag('event', 'interface_click', {
+                'value': el.getAttribute('ga-click-event')
+            });
+        }
+    });
+});
+
+up.compiler('#decksTable', () => {
+    const input = document.getElementById('tableFilter');
+    if (!input) return;
+
+    const debouncedFilter = debounce(filterTable, 250);
+    input.removeEventListener?.('input', debouncedFilter); // defensive
+    input.addEventListener('input', debouncedFilter);
+
+    // immediately apply current value
+    if (typeof window.filterTable === 'function') filterTable();
+});
+
+
+
+up.on('decks:saved', (e) => {
+
+    up.reload('#decksTable', { layer: 'root', background: true, abort: false, cache: false });
+
+    /*  
+        // If e.entity_id is null, you'll need to uncomment and use the commented-out code
+        // to reload the whole table. For a single entity, proceed to the else block.
+        if (e.entity_id != null) {
+            const deckId = e.entity_id;
+    
+            // Define a selector that targets both elements simultaneously
+            const targets = `#desktop-deck-${deckId}, #mobile-deck-${deckId}`;
+    
+            up.reload(targets, {
+                layer: 'root',
+                background: true,   // load in bg, swap when ready
+                abort: false,       // don't auto-cancel if another nav happens
+                cache: false // Setting to false ensures a fresh request is made
+            })
+        } else {
+            up.reload('#decksTable', { layer: 'root', background: true, abort: false, cache: false });
+        }
+    */
+})
+
+up.compiler('[data-wheel-scroll]', (el) => {
+    const tokens = (el.getAttribute('data-wheel-scroll') || 'x')
+        .toLowerCase()
+        .split(/\s+/);
+
+    const dir = tokens.includes('y') ? 'y' : 'x';
+    const smooth = tokens.includes('smooth');
+    const speed = Number(el.getAttribute('data-wheel-speed')) || 1;
+    const invert = el.hasAttribute('data-wheel-invert');
+
+    const move = (delta) => {
+        const amount = (invert ? -delta : delta) * speed;
+        if (dir === 'x') {
+            if (smooth && 'scrollBy' in el) {
+                el.scrollBy({ left: amount, behavior: 'smooth' });
+            } else {
+                el.scrollLeft += amount;
+            }
+        } else {
+            if (smooth && 'scrollBy' in el) {
+                el.scrollBy({ top: amount, behavior: 'smooth' });
+            } else {
+                el.scrollTop += amount;
+            }
+        }
+    };
+
+    el.addEventListener('wheel', (evt) => {
+        // Only hijack vertical wheel input; let native horizontal scroll pass through
+        if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
+            evt.preventDefault(); // required to block page scroll
+            move(evt.deltaY);
+        }
+    }, { passive: false });
+});
+up.compiler('span[data-linker-target]', (el) => {
+
+    el?.addEventListener('mouseover', e => {
+
+        const anchor = document.createElement('a');
+        Array.from(el.attributes).forEach(attr => {
+            anchor.setAttribute(attr.name, attr.value);
+        });
+
+        base64url = el.getAttribute('data-linker-target');
+        url = atob(base64url);
+
+        //change data-linker-target to href
+        anchor.href = url;
+
+        //remove data-linker-target
+        anchor.removeAttribute('data-linker-target');
+
+        anchor.innerHTML = el.innerHTML;
+        el.replaceWith(anchor);
+    });
+
+    el?.addEventListener('click', e => {
+
+        //check that we dont have href property
+        if (el.hasAttribute('href') !== true) {
+            const anchor = document.createElement('a');
+            Array.from(el.attributes).forEach(attr => {
+                anchor.setAttribute(attr.name, attr.value);
+            });
+
+            base64url = el.getAttribute('data-linker-target');
+            url = atob(base64url);
+
+            //redirect to url
+            window.location.href = url;
+        }
+
+    });
+});
+
+
+/*up.on('up:layer:opened', function (event) {
+    newElement = up.element.affix(event.layer.element.querySelector('.card-body'), 'beforebegin', '.flash-messages-area', { text: '', 'up-hungry': 'up-hungry' });
+});
+*/
+
+
+/*up.compiler('.table-concealed', (table) => {
+
+    //get rows inside tbody
+    const rows = table.querySelectorAll('tbody tr');
+    const maxRows = 16;
+
+    // Hide rows higher than the 16th
+    for (let i = maxRows; i < rows.length; i++) {
+        rows[i].classList.add('d-none');
+    }
+
+    //get the total number of rows in tbody
+    const rowCount = table.rows.length;
+
+
+    // Create the button
+    const button = document.createElement('button');
+    button.textContent = 'Show All (' + rowCount + ')';
+    //add id
+    button.id = 'show-all-button';
+    //add class btn 
+    button.classList.add('btn', 'w-100', 'btn-primary', 'btn-md', 'my-3');
+
+    button.addEventListener('click', function () {
+        for (let i = maxRows; i < rows.length; i++) {
+            rows[i].classList.remove('d-none');
+        }
+        button.style.display = 'none'; // Hide the button after clicking
+    });
+
+    // Append the button after the table
+    table.after(button);
+});
+*/
+
+
+
+up.compiler('[data-bs-toggle="autosize"]', (el) => {
+    autosize(el);
+});
+
+
+up.compiler('[data-collection-counter]', (el) => {
+    el?.addEventListener('input', e => {
+        up.submit(e.target.closest('form'))
+        e.preventDefault();
+        return false;
+    });
+});
+
+up.compiler('.flash-messages-area .alert', (el) => {
+
+    //wait 3 seconds before fading
+    setTimeout(function () {
+        //fade out
+        fadeOut(el);
+    }, 1500);
+})
+
+function loadTomSelect(callback) {
+    if (window.TomSelect) {
+        callback();
+        return;
+    }
+
+    // Load CSS if not already included
+    if (!document.querySelector('link[href*="tom-select"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = window.tomSelectCss; // Update version if needed
+        document.head.appendChild(link);
+    }
+
+    // Load JS dynamically
+    const script = document.createElement('script');
+    script.src = window.tomSelectJs; // Update version if needed
+    script.onload = callback;
+    document.head.appendChild(script);
+}
+
+
+up.compiler('input[list]', function (input) {
+    const datalistId = input.getAttribute('list');
+    const datalist = document.getElementById(datalistId);
+    if (!datalist) return;
+
+    // Extract options from the datalist
+    const options = Array.from(datalist.querySelectorAll('option')).map(opt => ({
+        value: opt.value,
+        text: opt.textContent || opt.value
+    }));
+
+    // Store initial value before TomSelect replaces the input
+    const initialValue = input.value;
+
+    // Remove the list attribute so native datalist doesn't interfere
+    input.removeAttribute('list');
+
+    // Hide the original datalist
+    datalist.style.display = 'none';
+
+    loadTomSelect(function () {
+        const ts = new TomSelect(input, {
+            options: options,
+            valueField: 'value',
+            labelField: 'text',
+            searchField: ['value', 'text'],
+            create: true,
+            createOnBlur: true,
+            maxItems: 1,
+            persist: false,
+            closeAfterSelect: true,
+            openOnFocus: false,
+            dropdownParent: 'body',
+            render: {
+                option_create() {
+                    // Hide the "Add..." prompt - value is created silently on blur
+                    return '';
+                },
+                no_results() {
+                    return '';
+                }
+            },
+            onInitialize() {
+                // Hide dropdown arrow to look like a regular text input
+                this.wrapper.style.cssText += 'background-image: none !important;';
+                this.control.style.cssText += 'background-image: none !important; cursor: text;';
+                this.wrapper.classList.add('ts-no-caret');
+
+                // Inject CSS once to hide caret and remove extra spacing
+                if (!document.getElementById('ts-no-caret-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'ts-no-caret-style';
+                    style.textContent = `
+                        .ts-no-caret::after, .ts-no-caret .ts-control::after { display: none !important; }
+                        .ts-no-caret.has-items .ts-control > input { width: 0 !important; min-width: 0 !important; padding: 0 !important; }
+                        .ts-no-caret .ts-control > .item { margin-right: 0 !important; }
+                        .ts-no-caret .ts-control input[role=combobox] { margin-left: 0 !important; }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }
+        });
+
+        // Restore initial value if it existed
+        if (initialValue) {
+            // Add as option if not already present
+            if (!ts.getOption(initialValue)) {
+                ts.addOption({ value: initialValue, text: initialValue });
+            }
+            ts.setValue(initialValue, true);
+        }
+    });
+});
+
+
+up.compiler('.deckbuilder-search', function (element) {
+    loadTomSelect(function () {
+        new TomSelect(element, {
+            copyClassesToDropdown: false,
+            dropdownParent: 'body',
+            persist: false,
+            createOnBlur: true,
+            create: true,
+            delimiter: ';',
+
+            render: {
+                option_create: function (data, escape) {
+                    return '';// escape(data.input)
+                },
+                no_results: function (data, escape) {
+                    return '';//escape(data.input)
+                },
+            },
+            onChange: function () {
+                const form = element.closest('form');
+                if (form) {
+                    up.submit(form);
+                }
+            }
+        });
+    });
+});
+
+up.compiler('input[data-autocomplete]', function (element) {
+
+    const initialValue = element.value;
+
+    let items = [];
+    try {
+        const parsed = JSON.parse(element.getAttribute('data-autocomplete'));
+        items = Array.isArray(parsed) ? parsed : Object.values(parsed);
+    } catch { }
+
+    loadTomSelect(function () {
+
+        const ts = new TomSelect(element, {
+            options: items.map(v => ({ value: v, text: v })),
+            valueField: 'value',
+            labelField: 'text',
+            searchField: ['value'],
+            create: true,
+            maxItems: 1,
+            persist: false,
+            hideSelected: true,
+            closeAfterSelect: true,
+            openOnFocus: true,
+            minChars: 1,
+            dropdownParent: 'body'
+        });
+
+        if (initialValue) {
+            ts.addOption({ value: initialValue, text: initialValue });
+            ts.setValue(initialValue, true);
+        }
+
+    });
+});
+
+up.compiler('input[data-autocomplete]', function (element) {
+
+    const initialValue = element.value;
+
+    let items = [];
+    try {
+        const parsed = JSON.parse(element.getAttribute('data-autocomplete'));
+        items = Array.isArray(parsed) ? parsed : Object.values(parsed);
+    } catch { }
+
+    loadTomSelect(function () {
+
+        const ts = new TomSelect(element, {
+            options: items.map(v => ({ value: v, text: v })),
+            valueField: 'value',
+            labelField: 'text',
+            searchField: ['value'],
+
+            create: true,
+            createOnBlur: true,
+
+            maxItems: 1,
+            persist: false,
+            hideSelected: true,
+            closeAfterSelect: true,
+            openOnFocus: false,
+            minChars: 1,
+            dropdownParent: 'body',
+            render: {
+                option_create(data, escape) {
+                    return '<div class="create"></div>';
+                }
+            },
+
+            onType() {
+                const realMatches = this.currentResults.items.filter(i => i.type === 'option');
+                if (realMatches.length === 0) {
+                    this.close();
+                }
+            },
+
+            onChange(value) {
+                if (value) this.setValue(value.trim(), true);
+            }
+        });
+
+        if (initialValue) {
+            ts.addOption({ value: initialValue, text: initialValue });
+            ts.setValue(initialValue, true);
+        }
+
+    });
+});
+
+
+
+
+up.compiler('.advanced-select', function (element) {
+
+    const isTruthy = (v) => v === '' || v === 'true' || v === '1' || v === true;
+    //const hasEmptyOption = element.querySelector('option[value=""]') !== null;
+
+    loadTomSelect(function () {
+        new TomSelect(element, {
+            copyClassesToDropdown: false,
+            dropdownParent: 'body',
+            controlInput: '<input>',
+            create: isTruthy(element.getAttribute('data-allow-create')),
+            render: {
+                item: function (data, escape) {
+                    if (data.customProperties) {
+                        return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                    }
+                    return '<div>' + escape(data.text) + '</div>';
+                },
+                option: function (data, escape) {
+                    if (data.customProperties) {
+                        return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                    }
+                    return '<div>' + escape(data.text) + '</div>';
+                },
+            },
+        });
+    });
+});
+
+
+up.compiler('[data-collection-step-value]', (el) => {
+
+
+    el?.addEventListener('click', e => {
+
+        stepValue = parseInt(el.getAttribute('data-collection-step-value'));
+        stepDirection = el.getAttribute('data-collection-step-direction');
+
+        if (stepDirection == 'down') {
+            stepValue = stepValue * -1;
+        }
+
+        newValue = parseInt(document.getElementById('quantity').value) + stepValue;
+        if (newValue < 0) {
+            newValue = 0;
+        }
+
+        document.getElementById('quantity').value = newValue;
+        up.submit(e.target.closest('form'));
+        e.preventDefault();
+        return false;
+
+
+    });
+});
+
+
+up.compiler('.localized-time', (div) => {
+    const utcTime = div.getAttribute('data-utc-time');
+    if (utcTime) {
+        const localDate = new Date(utcTime);
+
+        // Format options for localized date/time display
+        const options = {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+        };
+
+        // Set the localized content
+        div.textContent = localDate.toLocaleString(undefined, options);
+    }
+});
+
+
+
+up.compiler('table.table-clickable tbody', (el) => {
+    el?.addEventListener('click', e => {
+        const tr = e.target.closest('tr');
+        if (!e.target.classList.contains('text-end') && !e.target.classList.contains('btn') && tr.hasAttribute('data-href-layer')) {
+            console.log('opening layer');
+            new_url = tr.getAttribute('data-href-layer');
+            up.layer.open({ url: new_url, 'target': '.video-content-area', 'layer': 'new', 'size': 'large' });
+        }
+        if (tr.hasAttribute('data-href') && !e.target.classList.contains('text-end') && !e.target.classList.contains('btn')) {
+            new_url = tr.getAttribute('data-href');
+            if (new_url != null) {
+                window.location.href = new_url;
+            }
+        }
+
+    });
+});
+
+
+
+up.compiler('[data-download-image-url]', (el) => {
+    el?.addEventListener('click', e => {
+        if (e.target.hasAttribute('data-download-image-url')) {
+            url = e.target.getAttribute('data-download-image-url');
+            selector = e.target.getAttribute('data-download-image-selector');
+            if (url != null) {
+                downloadImage(url, selector);
+            }
+        }
+    });
+})
+
+//wait unpoly document ready
+up.compiler('[data-cards-autocomplete]', function (target) {
+    // Ensure a per-window cache (Map<url, Promise<Array>>)
+    window.cardsAutocompleteCache = window.cardsAutocompleteCache || new Map();
+
+    const dataUrl = window.cards_autocomplete_url; // must be set globally
+    const regexp = target.getAttribute('data-cards-regexp'); // unused in this snippet but kept
+
+    // Helper: load (or reuse) the card list for this URL
+    function loadCards(url) {
+        if (!url) return Promise.reject(new Error('cards_autocomplete_url is not set'));
+        if (window.cardsAutocompleteCache.has(url)) {
+            return window.cardsAutocompleteCache.get(url);
+        }
+        const p = fetch(url)
+            .then(r => {
+                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                return r.json();
+            })
+            // Optionally normalize once so searching is faster
+            .then(list =>
+                list.map(item => ({
+                    ...item,
+                    _keyLower: String(item.key || '').toLowerCase()
+                }))
+            )
+            .catch(err => {
+                // If it failed, drop from cache so a later attempt can retry
+                window.cardsAutocompleteCache.delete(url);
+                throw err;
+            });
+
+        window.cardsAutocompleteCache.set(url, p);
+        return p;
+    }
+
+    // Avoid attaching Tribute twice to the same element
+    if (target && target.dataset.tributeAttached === '1') {
+        return;
+    }
+
+    loadCards(dataUrl)
+        .then(baseCardList => {
+            const tribute = new Tribute({
+                autocompleteMode: true,
+                replaceTextSuffix: '\n',
+                menuShowMinLength: 2,
+                selectClass: 'highlight',
+                requireLeadingSpace: false,
+                allowSpaces: true,
+                searchOpts: {
+                    pre: '<span>',
+                    post: '</span>',
+                    skip: false
+                },
+                selectTemplate(item) {
+                    return item.original.value;
+                },
+                menuItemTemplate(item) {
+                    return (
+                        '<span data-image-src="' + item.original.full_image + '">' + item.string +
+                        ' <img style="border-radius:3px;border:1px solid silver;float:right;margin-top:3px;margin-left:5px" height="15" src="' + item.original.image + '"/>' +
+                        ' <img style="border-radius:3px;float:right;margin-top:3px;margin-left:5px" height="15" src="' + item.original.ink_image + '"/>' +
+                        '</span>'
+                    );
+                },
+                noMatchTemplate() {
+                    return '';
+                },
+                autocompleteSeparator: /\d+x{0,1} (?=[\w"])/,
+
+                values(text, cb) {
+                    text = (text || '').trim();
+                    const q = text.toLowerCase();
+                    const out = [];
+
+                    // Simple, fast prefix + contains search
+                    for (let i = 0; i < baseCardList.length; i++) {
+                        const item = baseCardList[i];
+                        // prefix match or substring match when query >= 3 chars
+                        if (
+                            item._keyLower.startsWith(q) ||
+                            (q.length >= 3 && item._keyLower.includes(q))
+                        ) {
+                            out.push(item);
+                        }
+                    }
+
+                    // Async to keep Tribute happy & not block UI
+                    setTimeout(() => cb(out), 0);
+                }
+            });
+
+            if (target) {
+                tribute.attach(target);
+                target.dataset.tributeAttached = '1';
+            }
+        })
+        .catch(err => {
+            console.error('Error fetching autocomplete data:', err);
+        });
+});
+
+
+
+function downloadImage(url, selector) {
+
+    if (typeof html2canvas != "function") {
+        var script = document.createElement('script');
+        script.src = window.base_url + '/libs/html2canvas/html2canvas.min.js';
+        script.type = 'text/javascript';
+        document.body.parentNode.appendChild(script);
+    }
+
+    var iframe = document.createElement('iframe');
+    iframe.width = '1600';
+    iframe.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
+    document.body.appendChild(iframe);
+    iframe.src = url;
+    iframe.onload = function (e) {
+
+        html2canvas(iframe.contentDocument.querySelector(selector), { scale: 3 })
+            .then(canvas => {
+                canvas.style.display = 'none'
+                document.body.appendChild(canvas)
+                return canvas
+            })
+            .then(canvas => {
+                const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
+                const a = document.createElement('a')
+                let random_string = (Math.random() + 1).toString(36).substring(7);
+                a.setAttribute('download', 'image-' + random_string + '.png')
+                a.setAttribute('href', image)
+                a.click()
+                canvas.remove()
+            })
+            .then(canvas => {
+                document.body.removeChild(iframe);
+            }).then(canvas => {
+
+            }
+            );
+
+    }
+}
+
+
+function fadeOut(el) {
+    el.style.opacity = 1;
+
+    (function fade() {
+        if ((el.style.opacity -= .1) < 0) {
+            el.style.display = "none";
+        } else {
+            requestAnimationFrame(fade);
+        }
+    })();
+};
+
+function fadeIn(el, display) {
+    el.style.opacity = 0;
+    el.style.display = display || "block";
+
+    (function fade() {
+        var val = parseFloat(el.style.opacity);
+        if (!((val += .1) > 1)) {
+            el.style.opacity = val;
+            requestAnimationFrame(fade);
+        }
+    })();
+};
+
+(function (global) {
+    function scaleAmountNeededToFit(el, margin = 0) {
+        const parentSize = {
+            width: el.parentElement.clientWidth - margin * 2,
+            height: el.parentElement.clientHeight - margin * 2
+        };
+
+        return Math.min(parentSize.width / el.clientWidth,
+            parentSize.height / el.clientHeight);
+    }
+
+    function fitToParent(element, margin = 0) {
+
+
+
+        element.parentElement.style.height = 'auto';
+        element.parentElement.style.width = 'auto';
+
+        const scale = scaleAmountNeededToFit(element, margin);
+
+
+
+
+        element.style.transformOrigin = "0 0";
+        element.style.transform = `translate(${margin}px, ${margin}px) scale(${scale})`;
+
+        //get parent element height
+        newHeight = element.parentElement.clientHeight * scale;
+        element.parentElement.style.height = `${newHeight}px`;
+
+
+    }
+
+    global.fitToParent = fitToParent;
+})(this);
+
+up.compiler('.scale-to-parent', (el) => {
+
+    let doit; // Declare doit variable
+
+    //wrap it inside a div
+    el.innerHTML = `<div class="scale-to-parent-child">${el.innerHTML}</div>`
+
+    //detect resize
+    window.addEventListener('resize', () => {
+
+        if (doit) {
+            clearTimeout(doit);
+        }
+        doit = setTimeout(() => fitToParent(el), 100);
+    })
+    //detect pageloading finished
+    window.addEventListener('load', () => {
+        fitToParent(el);
+    })
+
+    fitToParent(el);
+
+});
+
+up.compiler('[data-clipboard-target]', (element) => {
+    element.addEventListener('click', () => {
+        let targetId = element.getAttribute('data-clipboard-target');
+        let targetText = element.getAttribute('data-clipboard-text');
+        let originalText = element.innerHTML;
+        if (targetId) {
+            let targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                // Create a range and selection to copy the text
+                let range = document.createRange();
+                range.selectNodeContents(targetElement);
+                let selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+
+                try {
+                    // Copy the text to the clipboard
+                    let successful = document.execCommand('copy');
+                    let msg = successful ? 'successful' : 'unsuccessful';
+                    console.log('Copy command was ' + msg);
+                    element.innerHTML = targetText;
+                    //return to the original text in 3 seconds
+                    setTimeout(() => {
+                        element.innerHTML = originalText;
+                    }, 1000)
+                } catch (err) {
+                    console.log('Oops, unable to copy');
+                }
+
+                // Remove the selection and range
+                selection.removeAllRanges();
+            }
+        }
+    });
+});
+
+up.on('click', '[data-copy-text]', (event) => {
+    let element = event.target;
+    let textToCopy = element.getAttribute('data-copy-text');
+
+    if (textToCopy) {
+        // Store original HTML to preserve elements inside the button
+        let originalHTML = element.innerHTML;
+
+        // Get the closest Unpoly layer's root element
+        let layer = up.layer.get(element);
+        let container = layer ? layer.element : document.body; // Fallback to body if not in a layer
+
+        // Create a temporary textarea element
+        let tempTextarea = document.createElement('textarea');
+        tempTextarea.value = textToCopy;
+
+        // Append it to the correct layer container
+        container.appendChild(tempTextarea);
+
+        // Select the text and copy it to the clipboard
+        tempTextarea.select();
+        tempTextarea.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+            let successful = document.execCommand('copy');
+            if (successful) {
+                console.log('Copy command was successful');
+                element.innerHTML = '<span>Copied!</span>'; // Temporarily replace with plain text
+            } else {
+                console.log('Copy command was unsuccessful');
+            }
+
+            // Restore original HTML after 1 second
+            setTimeout(() => {
+                element.innerHTML = originalHTML;
+            }, 1000);
+        } catch (err) {
+            console.error('Oops, unable to copy');
+        }
+
+        // Remove the temporary textarea
+        container.removeChild(tempTextarea);
+    }
+});
+
+
+
+
+
+up.compiler('.textarea .invalid-feedback', function (element) {
+    // Ensure element has content before proceeding
+    if (!element || !element.innerHTML.trim()) return;
+
+    let feedback = element.innerHTML.trim(); // Declare feedback properly
+
+    //check if there are li items inside the feedback
+    let listItems = feedback.match(/<li>([^<]+)<\/li>/g);
+    if (listItems) {
+        // Extract only the text inside <li> tags and join with newlines
+        feedback = listItems
+            .map(item => item.replace(/<\/?li>/g, '').trim())
+            .join('\n');
+    }
+
+
+    //iterates over it by line in a loop trimmin each line and console logs
+    let lines = feedback.split('\n');
+
+    lines.forEach(line => {
+
+        //check if the line contains cards
+        if (!line.includes('cards: ')) return;
+
+        // Extract the invalid card names
+        // we split the string at the :, the second part will contain the cards separated by ;
+        let cards = line.split('cards: ')[1].trim();
+
+        // Split the cards into an array
+        let missing_cards = cards.split(';');
+
+        let tarea = document.querySelector('.textarea textarea');
+        if (!tarea) return; // Ensure textarea exists before using it
+
+        let hilite = new textHighlight(tarea);
+        let sens = false; // Case sensitive
+        let word = false; // Perform words-only search
+
+        hilite.search(missing_cards, sens, word);
+    });
+
+
+});
+
+
+up.compiler('textarea[name=canonical_txt]', function (element) {
+    element.addEventListener('keyup', function () {
+        const text = this.value;
+        const lines = text.trim().split('\n');
+        let total = 0;
+
+        lines.forEach(line => {
+            const parts = line.trim().split(' ');
+            const count = parseInt(parts[0]);
+            if (!isNaN(count)) {
+                total += count;
+            }
+        });
+        document.getElementById('totalCards').textContent = 'Total Cards: ' + total;
+    });
+});
+
+function countCards() {
+    var text = document.getElementById('textarea[name=canonical-txt]').value;
+    var lines = text.split('\n');
+    var total = 0;
+
+    for (var i = 0; i < lines.length; i++) {
+        var parts = lines[i].split(' ');
+        var count = parseInt(parts[0]);
+        if (!isNaN(count)) {
+            total += count;
+        }
+    }
+
+    document.getElementById('totalCards').innerText = 'Total Cards: ' + total;
+}
+
+up.compiler('[name="timezone"],[data-time-zone-select]', function (element) {
+    // Check if the element is already filled
+    if (!element.value) { // Check for null, undefined, or empty string
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        element.value = userTimezone;
+    }
+});

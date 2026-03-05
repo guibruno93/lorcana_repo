@@ -1,0 +1,17 @@
+[
+  {
+    "table_name": "matchup_matrix",
+    "row_count": 13,
+    "archetypes": "Aggro, Control, Evasive, Midrange"
+  },
+  {
+    "table_name": "archetype_meta",
+    "row_count": 10,
+    "archetypes": "Aggro, Allies, Challengers, Control, Dumbo, Evasive, Midrange, Ramp, Songs, Unknown"
+  },
+  {
+    "table_name": "mulligan_rules",
+    "row_count": 6,
+    "archetypes": "Aggro, Control, Evasive"
+  }
+]

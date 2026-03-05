@@ -23,6 +23,8 @@
   "license": "MIT",
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-cpu": "^4.22.0",
     "axios": "^1.13.5",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.6.2",
@@ -34,6 +36,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.9",
     "pdfkit": "^0.13.0",
+    "puppeteer": "^24.37.5",
     "sharp": "^0.32.0"
   },
   "devDependencies": {
