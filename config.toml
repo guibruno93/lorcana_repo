@@ -1,0 +1,2 @@
+[functions.import-json]
+verify_jwt = false

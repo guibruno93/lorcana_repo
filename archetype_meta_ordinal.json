@@ -1,0 +1,82 @@
+[
+  {
+    "column_name": "id",
+    "data_type": "uuid"
+  },
+  {
+    "column_name": "archetype",
+    "data_type": "text"
+  },
+  {
+    "column_name": "inks",
+    "data_type": "ARRAY"
+  },
+  {
+    "column_name": "total_decks",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "total_wins",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "total_losses",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "win_rate",
+    "data_type": "numeric"
+  },
+  {
+    "column_name": "top4_count",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "top8_count",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "top16_count",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "avg_placement",
+    "data_type": "numeric"
+  },
+  {
+    "column_name": "meta_share",
+    "data_type": "numeric"
+  },
+  {
+    "column_name": "tier",
+    "data_type": "text"
+  },
+  {
+    "column_name": "power_level",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "trend",
+    "data_type": "text"
+  },
+  {
+    "column_name": "trend_delta",
+    "data_type": "numeric"
+  },
+  {
+    "column_name": "matchups",
+    "data_type": "jsonb"
+  },
+  {
+    "column_name": "last_calculated",
+    "data_type": "timestamp with time zone"
+  },
+  {
+    "column_name": "created_at",
+    "data_type": "timestamp with time zone"
+  },
+  {
+    "column_name": "updated_at",
+    "data_type": "timestamp with time zone"
+  }
+]

@@ -1,0 +1,498 @@
+.strategy-view {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.strategy-view.loading,
+.strategy-view.error,
+.strategy-view.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.2rem;
+  color: #64748b;
+}
+
+.loader {
+  font-size: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Header */
+.strategy-header {
+  margin-bottom: 2rem;
+}
+
+.archetype-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+}
+
+.archetype-card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+}
+
+.archetype-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.archetype-type,
+.tempo-badge,
+.complexity-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.type-aggro { background: rgba(239, 68, 68, 0.3) !important; }
+.type-control { background: rgba(59, 130, 246, 0.3) !important; }
+.type-tempo { background: rgba(34, 197, 94, 0.3) !important; }
+.type-ramp { background: rgba(168, 85, 247, 0.3) !important; }
+.type-midrange { background: rgba(245, 158, 11, 0.3) !important; }
+
+.archetype-details p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.confidence-score {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* SWOT Grid */
+.swot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.swot-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.swot-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+}
+
+.strengths h3 { color: #10b981; }
+.weaknesses h3 { color: #ef4444; }
+
+.swot-item {
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.strengths .swot-item { 
+  background: #f0fdf4; 
+  border-color: #10b981; 
+}
+
+.weaknesses .swot-item { 
+  background: #fef2f2; 
+  border-color: #ef4444; 
+}
+
+.swot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.impact-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.impact-critical { background: #fee2e2; color: #dc2626; }
+.impact-high { background: #fed7aa; color: #ea580c; }
+.impact-medium { background: #fef3c7; color: #d97706; }
+
+.solution {
+  margin-top: 0.5rem;
+  font-style: italic;
+  color: #6366f1;
+}
+
+/* Consistency */
+.consistency-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.consistency-card h3 {
+  margin: 0 0 1.5rem 0;
+}
+
+.consistency-score {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.score-circle {
+  text-align: center;
+}
+
+.score-value {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-top: 0.5rem;
+}
+
+.consistency-breakdown {
+  display: flex;
+  gap: 2rem;
+  flex: 1;
+}
+
+.breakdown-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.breakdown-item span {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.breakdown-item strong {
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.consistency-recommendation {
+  padding: 1rem;
+  background: #f1f5f9;
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* Key Cards */
+.key-cards-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.key-cards-section h3 {
+  margin: 0 0 1.5rem 0;
+}
+
+.key-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.key-card-item {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid;
+  transition: transform 0.2s;
+}
+
+.key-card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.importance-critical { 
+  background: #fef2f2; 
+  border-color: #ef4444; 
+}
+
+.importance-high { 
+  background: #fef3c7; 
+  border-color: #f59e0b; 
+}
+
+.importance-medium { 
+  background: #f0f9ff; 
+  border-color: #3b82f6; 
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 0.5rem;
+}
+
+.card-header strong {
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.cost-badge {
+  background: #1e293b;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  min-width: 24px;
+  text-align: center;
+}
+
+.card-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.role-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.role-core { background: #dbeafe; color: #1e40af; }
+.role-curve { background: #d1fae5; color: #065f46; }
+.role-finisher { background: #fce7f3; color: #9f1239; }
+
+.quantity {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.card-reason {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+/* Game Plan */
+.gameplan-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.gameplan-section h3 {
+  margin: 0 0 1.5rem 0;
+}
+
+.gameplan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.gameplan-phase {
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.gameplan-phase h4 {
+  margin: 0 0 1rem 0;
+  color: #1e293b;
+}
+
+.gameplan-phase ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  list-style: none;
+}
+
+.gameplan-phase li {
+  margin-bottom: 0.75rem;
+  position: relative;
+  padding-left: 0.5rem;
+}
+
+.gameplan-phase li::before {
+  content: "•";
+  position: absolute;
+  left: -1rem;
+  color: #6366f1;
+  font-weight: 700;
+}
+
+.gameplan-guides {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.mulligan-guide,
+.key-decisions {
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.mulligan-guide h4,
+.key-decisions h4 {
+  margin: 0 0 1rem 0;
+  color: #6366f1;
+}
+
+.mulligan-guide ul,
+.key-decisions ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+
+.mulligan-guide li,
+.key-decisions li {
+  margin-bottom: 0.5rem;
+}
+
+/* Suggestions */
+.suggestions-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.suggestions-section h3 {
+  margin: 0 0 1rem 0;
+}
+
+.suggestions-intro {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.suggestion-group {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.priority-critical { 
+  background: #fef2f2; 
+  border-color: #dc2626; 
+}
+
+.priority-high { 
+  background: #fef3c7; 
+  border-color: #d97706; 
+}
+
+.priority-medium { 
+  background: #f0f9ff; 
+  border-color: #0284c7; 
+}
+
+.suggestion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.suggestion-header h4 {
+  margin: 0;
+  color: #1e293b;
+}
+
+.suggested-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.suggested-card {
+  padding: 1rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.suggested-card strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+}
+
+.suggested-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .strategy-view {
+    padding: 1rem;
+  }
+
+  .swot-grid,
+  .gameplan-grid,
+  .gameplan-guides {
+    grid-template-columns: 1fr;
+  }
+
+  .key-cards-grid,
+  .suggested-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .consistency-score {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .consistency-breakdown {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

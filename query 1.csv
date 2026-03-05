@@ -1,0 +1,66 @@
+table_schema,table_name,ordinal_position,column_name,data_type,udt_name,is_nullable,column_default
+public,cards,1,id,text,text,NO,null
+public,cards,2,code,text,text,YES,null
+public,cards,3,name,text,text,NO,null
+public,cards,4,full_name,text,text,YES,null
+public,cards,5,simple_name,text,text,YES,null
+public,cards,6,ink,text,text,YES,null
+public,cards,7,type,text,text,YES,null
+public,cards,8,cost,integer,int4,YES,null
+public,cards,9,inkable,boolean,bool,YES,false
+public,cards,10,lore,integer,int4,YES,0
+public,cards,11,strength,integer,int4,YES,null
+public,cards,12,willpower,integer,int4,YES,null
+public,cards,13,set_code,text,text,YES,null
+public,cards,14,set_name,text,text,YES,null
+public,cards,15,rarity,text,text,YES,null
+public,cards,16,abilities,jsonb,jsonb,YES,null
+public,cards,17,image_url,text,text,YES,null
+public,cards,18,source,text,text,YES,'dreamborn'::text
+public,cards,19,created_at,timestamp with time zone,timestamptz,YES,now()
+public,cards,20,updated_at,timestamp with time zone,timestamptz,YES,now()
+public,deck_cards,1,id,uuid,uuid,NO,gen_random_uuid()
+public,deck_cards,2,deck_id,uuid,uuid,NO,null
+public,deck_cards,3,card_name,text,text,NO,null
+public,deck_cards,4,quantity,integer,int4,NO,null
+public,deck_cards,5,card_url,text,text,YES,null
+public,deck_cards,6,created_at,timestamp with time zone,timestamptz,YES,now()
+public,deck_cards,7,updated_at,timestamp with time zone,timestamptz,YES,now()
+public,deck_cards,8,card_id,text,text,YES,null
+public,decks,1,id,uuid,uuid,NO,uuid_generate_v4()
+public,decks,2,tournament_id,text,text,YES,null
+public,decks,3,name,text,text,YES,null
+public,decks,4,author,text,text,YES,null
+public,decks,5,placement,integer,int4,YES,null
+public,decks,6,cards,jsonb,jsonb,NO,'[]'::jsonb
+public,decks,7,inks,ARRAY,_text,YES,null
+public,decks,8,fingerprint,text,text,YES,null
+public,decks,9,url,text,text,YES,null
+public,decks,10,tournament_url,text,text,YES,null
+public,decks,11,source,text,text,YES,'inkdecks'::text
+public,decks,12,scraped_at,timestamp with time zone,timestamptz,YES,now()
+public,decks,13,created_at,timestamp with time zone,timestamptz,YES,now()
+public,decks,14,decklist_text,text,text,YES,null
+public,decks,15,total_cards,integer,int4,YES,null
+public,decks,16,updated_at,timestamp with time zone,timestamptz,YES,now()
+public,decks,17,source_url,text,text,YES,null
+public,decks,18,tournament_id_uuid,uuid,uuid,YES,null
+public,decks,19,archetype,text,text,YES,null
+public,decks,20,record_text,text,text,YES,null
+public,decks,21,wins,integer,int4,YES,null
+public,decks,22,losses,integer,int4,YES,null
+public,decks,23,draws,integer,int4,YES,null
+public,decks,24,win_rate,numeric,numeric,YES,null
+public,decks,25,record,text,text,YES,null
+public,tournaments,1,id,text,text,NO,gen_random_uuid()
+public,tournaments,2,name,text,text,NO,null
+public,tournaments,3,url,text,text,YES,null
+public,tournaments,4,format,text,text,YES,'core'::text
+public,tournaments,5,date,date,date,YES,null
+public,tournaments,6,location,text,text,YES,null
+public,tournaments,7,source,text,text,YES,'inkdecks'::text
+public,tournaments,8,scraped_at,timestamp with time zone,timestamptz,YES,now()
+public,tournaments,9,created_at,timestamp with time zone,timestamptz,YES,now()
+public,tournaments,10,player_count,integer,int4,YES,null
+public,tournaments,11,source_url,text,text,YES,null
+public,tournaments,12,updated_at,timestamp with time zone,timestamptz,YES,now()

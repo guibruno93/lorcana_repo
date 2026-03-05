@@ -187,12 +187,20 @@ export default function DeckAnalyzerTab({ deckText, setDeckText }) {
           </div>
         ) : (
           <>
-            {/* Summary */}
+            {/* Summary com ML*/}
             <div className="panel">
               <div className="panel-header">
                 <span className="panel-title">
                   <span className="icon">📊</span> Resumo
                 </span>
+                {analysis.archetypeMethod && (
+                  <span 
+                    className={`badge ${analysis.archetypeMethod === 'rules' ? 'badge-green' : 'badge-blue'}`}
+                    title={analysis.archetypeMethod === 'rules' ? 'Identificado por regras' : 'Identificado por ML'}
+                  >
+                    {analysis.archetypeMethod === 'rules' ? '🎯 Regras' : '🤖 ML'}
+                  </span>
+                )}
               </div>
               <div className="panel-body">
                 <div className="stat-grid">
@@ -200,6 +208,16 @@ export default function DeckAnalyzerTab({ deckText, setDeckText }) {
                     <div className="stat-label">Arquétipo</div>
                     <div className="stat-value" style={{ fontSize: 14 }}>
                       {analysis.archetype || 'Unknown'}
+                      {analysis.archetypeConfidence && (
+                        <span style={{ 
+                          fontSize: 11, 
+                          marginLeft: 8, 
+                          opacity: 0.7,
+                          fontWeight: 'normal'
+                        }}>
+                          ({(analysis.archetypeConfidence * 100).toFixed(0)}%)
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="stat-item">

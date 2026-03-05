@@ -1,0 +1,30 @@
+[2026-02-19T19:03:41.119Z] [INFO] ============================================================
+[2026-02-19T19:03:41.122Z] [INFO] INKDECKS SCRAPER v2.0 - Starting
+[2026-02-19T19:03:41.122Z] [INFO] ============================================================
+[2026-02-19T19:03:41.124Z] [WARN] No existing decks found, starting fresh
+[2026-02-19T19:03:41.124Z] [INFO] Fetching: https://inkdecks.com/lorcana-decks/core (attempt 1/3)
+[2026-02-19T19:03:41.124Z] [INFO] Scraping deck listing...
+[2026-02-19T19:03:42.677Z] [SUCCESS] Success: https://inkdecks.com/lorcana-decks/core
+[2026-02-19T19:03:42.720Z] [INFO] Scraping 5 deck details...
+[2026-02-19T19:03:42.720Z] [SUCCESS] Found 5 decks in listing
+[2026-02-19T19:03:44.722Z] [INFO] Fetching: https://inkdecks.comhttps://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994 (attempt 1/3)
+[2026-02-19T19:03:44.739Z] [ERROR] Error fetching https://inkdecks.comhttps://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994: getaddrinfo ENOTFOUND inkdecks.comhttps
+[2026-02-19T19:03:44.739Z] [WARN] Retrying in 5000ms...
+[2026-02-19T19:03:49.740Z] [INFO] Fetching: https://inkdecks.comhttps://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994 (attempt 2/3)
+[2026-02-19T19:03:49.751Z] [ERROR] Error fetching https://inkdecks.comhttps://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994: getaddrinfo ENOTFOUND inkdecks.comhttps
+[2026-02-19T19:03:49.751Z] [WARN] Retrying in 10000ms...
+[2026-02-19T19:05:00.024Z] [INFO] ============================================================
+[2026-02-19T19:05:00.027Z] [INFO] INKDECKS SCRAPER v2.0 - Starting
+[2026-02-19T19:05:00.027Z] [INFO] ============================================================
+[2026-02-19T19:05:00.029Z] [WARN] No existing decks found, starting fresh
+[2026-02-19T19:05:00.030Z] [INFO] Fetching: https://inkdecks.com/lorcana-decks/core (attempt 1/3)
+[2026-02-19T19:05:00.029Z] [INFO] Scraping deck listing...
+[2026-02-19T19:05:01.545Z] [SUCCESS] Success: https://inkdecks.com/lorcana-decks/core
+[2026-02-19T19:05:01.588Z] [SUCCESS] Found 5 decks in listing
+[2026-02-19T19:05:01.588Z] [INFO] Scraping 5 deck details...
+[2026-02-19T19:05:03.598Z] [INFO] Fetching: https://inkdecks.comhttps://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994 (attempt 1/3)
+[2026-02-19T19:05:03.611Z] [ERROR] Error fetching https://inkdecks.comhttps://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994: getaddrinfo ENOTFOUND inkdecks.comhttps
+[2026-02-19T19:05:03.612Z] [WARN] Retrying in 5000ms...
+[2026-02-19T19:05:08.618Z] [INFO] Fetching: https://inkdecks.comhttps://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994 (attempt 2/3)
+[2026-02-19T19:05:08.622Z] [ERROR] Error fetching https://inkdecks.comhttps://inkdecks.com/lorcana-metagame/deck-ps-tempo-499994: getaddrinfo ENOTFOUND inkdecks.comhttps
+[2026-02-19T19:05:08.622Z] [WARN] Retrying in 10000ms...

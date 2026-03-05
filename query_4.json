@@ -1,0 +1,188 @@
+[
+  {
+    "schemaname": "public",
+    "tablename": "archetype_meta",
+    "indexname": "archetype_meta_archetype_key",
+    "indexdef": "CREATE UNIQUE INDEX archetype_meta_archetype_key ON public.archetype_meta USING btree (archetype)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "archetype_meta",
+    "indexname": "archetype_meta_pkey",
+    "indexdef": "CREATE UNIQUE INDEX archetype_meta_pkey ON public.archetype_meta USING btree (id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "archetype_meta",
+    "indexname": "idx_archetype_meta_power",
+    "indexdef": "CREATE INDEX idx_archetype_meta_power ON public.archetype_meta USING btree (power_level DESC)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "archetype_meta",
+    "indexname": "idx_archetype_meta_share",
+    "indexdef": "CREATE INDEX idx_archetype_meta_share ON public.archetype_meta USING btree (meta_share DESC)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "archetype_meta",
+    "indexname": "idx_archetype_meta_tier",
+    "indexdef": "CREATE INDEX idx_archetype_meta_tier ON public.archetype_meta USING btree (tier)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "archetype_meta",
+    "indexname": "idx_archetype_meta_win_rate",
+    "indexdef": "CREATE INDEX idx_archetype_meta_win_rate ON public.archetype_meta USING btree (win_rate DESC)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "cards_meta",
+    "indexname": "cards_meta_card_name_key",
+    "indexdef": "CREATE UNIQUE INDEX cards_meta_card_name_key ON public.cards_meta USING btree (card_name)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "cards_meta",
+    "indexname": "cards_meta_pkey",
+    "indexdef": "CREATE UNIQUE INDEX cards_meta_pkey ON public.cards_meta USING btree (id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "cards_meta",
+    "indexname": "idx_cards_meta_share",
+    "indexdef": "CREATE INDEX idx_cards_meta_share ON public.cards_meta USING btree (meta_share DESC)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "cards_meta",
+    "indexname": "idx_cards_meta_trend",
+    "indexdef": "CREATE INDEX idx_cards_meta_trend ON public.cards_meta USING btree (trend)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "cards_meta",
+    "indexname": "idx_cards_meta_win_rate",
+    "indexdef": "CREATE INDEX idx_cards_meta_win_rate ON public.cards_meta USING btree (win_rate DESC)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "decks_fingerprint_key",
+    "indexdef": "CREATE UNIQUE INDEX decks_fingerprint_key ON public.decks USING btree (fingerprint)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "decks_pkey",
+    "indexdef": "CREATE UNIQUE INDEX decks_pkey ON public.decks USING btree (id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "decks_source_url_uidx",
+    "indexdef": "CREATE UNIQUE INDEX decks_source_url_uidx ON public.decks USING btree (source_url)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "decks_source_url_unique",
+    "indexdef": "CREATE UNIQUE INDEX decks_source_url_unique ON public.decks USING btree (url)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "decks_url_unique",
+    "indexdef": "CREATE UNIQUE INDEX decks_url_unique ON public.decks USING btree (url)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "idx_decks_archetype",
+    "indexdef": "CREATE INDEX idx_decks_archetype ON public.decks USING btree (archetype)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "idx_decks_fingerprint",
+    "indexdef": "CREATE INDEX idx_decks_fingerprint ON public.decks USING btree (fingerprint)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "idx_decks_inks",
+    "indexdef": "CREATE INDEX idx_decks_inks ON public.decks USING gin (inks)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "idx_decks_placement",
+    "indexdef": "CREATE INDEX idx_decks_placement ON public.decks USING btree (placement)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "idx_decks_scraped_at",
+    "indexdef": "CREATE INDEX idx_decks_scraped_at ON public.decks USING btree (scraped_at DESC)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "decks",
+    "indexname": "idx_decks_tournament",
+    "indexdef": "CREATE INDEX idx_decks_tournament ON public.decks USING btree (tournament_id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tier_list_history",
+    "indexname": "idx_tier_history_archetype",
+    "indexdef": "CREATE INDEX idx_tier_history_archetype ON public.tier_list_history USING btree (archetype)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tier_list_history",
+    "indexname": "idx_tier_history_date",
+    "indexdef": "CREATE INDEX idx_tier_history_date ON public.tier_list_history USING btree (snapshot_date DESC)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tier_list_history",
+    "indexname": "tier_list_history_pkey",
+    "indexdef": "CREATE UNIQUE INDEX tier_list_history_pkey ON public.tier_list_history USING btree (id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tournaments",
+    "indexname": "idx_tournaments_date",
+    "indexdef": "CREATE INDEX idx_tournaments_date ON public.tournaments USING btree (date DESC)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tournaments",
+    "indexname": "idx_tournaments_format",
+    "indexdef": "CREATE INDEX idx_tournaments_format ON public.tournaments USING btree (format)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tournaments",
+    "indexname": "tournaments_id_unique",
+    "indexdef": "CREATE UNIQUE INDEX tournaments_id_unique ON public.tournaments USING btree (id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tournaments",
+    "indexname": "tournaments_pkey",
+    "indexdef": "CREATE UNIQUE INDEX tournaments_pkey ON public.tournaments USING btree (id)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tournaments",
+    "indexname": "tournaments_source_url_uidx",
+    "indexdef": "CREATE UNIQUE INDEX tournaments_source_url_uidx ON public.tournaments USING btree (source_url)"
+  },
+  {
+    "schemaname": "public",
+    "tablename": "tournaments",
+    "indexname": "tournaments_url_unique",
+    "indexdef": "CREATE UNIQUE INDEX tournaments_url_unique ON public.tournaments USING btree (url)"
+  }
+]

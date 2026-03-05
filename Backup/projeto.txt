@@ -1,0 +1,163 @@
+Sprint 2 — Base pública e estável (MVP “confiável”)
+A) Congelar contrato da API (não pode quebrar o front)
+
+Crie um “contrato” do /api/analyzeDeck e siga isso sempre:
+
+deck: { cards, summary, curve, inks, archetype }
+
+meta: { enabled, available, filters, aggregate, similarDecks, notes }
+
+diagnostics: { version, metaVersion, cardsVersion }
+
+✅ Mesmo quando o meta estiver off, devolve meta.available=false e não dá erro.
+
+B) “Coerência” determinística (zero AI)
+
+Aqui é onde o usuário sente valor imediato:
+
+Distribuição por tipo (Character/Action/Item/Song)
+
+% inkable e lista dos não-inkable acima de X cópias
+
+Curva e “alertas”:
+
+“curva muito alta” (muitos 6+)
+
+“poucos 1–2 drops”
+
+“muito não-inkable”
+
+Consistência de inks:
+
+deck com 2 inks → quantas cartas fora do par? (se existir dual-ink no dataset, tratar certo)
+
+Entrega: painel de saúde do deck.
+
+Sprint 2 — Base pública e estável (MVP “confiável”)
+A) Congelar contrato da API (não pode quebrar o front)
+
+Crie um “contrato” do /api/analyzeDeck e siga isso sempre:
+
+deck: { cards, summary, curve, inks, archetype }
+
+meta: { enabled, available, filters, aggregate, similarDecks, notes }
+
+diagnostics: { version, metaVersion, cardsVersion }
+
+✅ Mesmo quando o meta estiver off, devolve meta.available=false e não dá erro.
+
+B) “Coerência” determinística (zero AI)
+
+Aqui é onde o usuário sente valor imediato:
+
+Distribuição por tipo (Character/Action/Item/Song)
+
+% inkable e lista dos não-inkable acima de X cópias
+
+Curva e “alertas”:
+
+“curva muito alta” (muitos 6+)
+
+“poucos 1–2 drops”
+
+“muito não-inkable”
+
+Consistência de inks:
+
+deck com 2 inks → quantas cartas fora do par? (se existir dual-ink no dataset, tratar certo)
+
+Entrega: painel de saúde do deck.
+
+Sprint 4 — Comparação com top tier “de verdade”
+
+Aqui o produto vira “competitivo”.
+
+A) Similar Decks com score explicável
+
+Score recomendado (simples e bom):
+
+overlapQty = sum(min(qDeck, qMeta)) / 60
+
+bônus leve para cartas “assinatura” do arquétipo (opcional depois)
+
+Retorne por deck similar:
+
+score
+
+sharedTopCards (top 8 cartas em comum)
+
+missingStaples (staples do meta que seu deck não tem)
+
+extraCards (cartas que seu deck tem e são raras no meta)
+
+B) “Meta fingerprint” do seu deck
+
+Um bloco que mostra:
+
+“Você parece X% com o arquétipo Y”
+
+“Sua curva é mais alta/baixa que a média do top”
+
+“Seu % inkable está acima/abaixo do top”
+
+Tudo determinístico, sem AI.
+
+
+Sprint 5 — AI como camada de “coach”
+
+Agora sim vale AI, porque você já tem base de dados e sinais:
+
+Entrada:
+
+deck analisado
+
+top 10 similar decks (cards + placings)
+
+staples do arquétipo
+
+alertas de coerência
+
+Saída:
+
+5 sugestões de cuts/adds justificadas e ancoradas no meta:
+
+“Corta X porque é underplayed no top e piora sua curva”
+
+“Adiciona Y porque aparece em 68% dos decks top desse arquétipo”
+
+✅ Isso vira a parte “uau”, mas sem inventar.
+
+
+
+
+
+lorcana-ai/
+  apps/
+    api/                      # Express/Node
+      src/
+        routes/
+        parser/
+        services/
+      db/
+        cards.json
+        tournamentMeta.json   # cache local (opcional)
+      package.json
+      Dockerfile
+    web/                      # React
+      src/
+      package.json
+      Dockerfile
+  packages/
+    shared/                   # normalizers, parseDecklist, similarity utils
+      src/
+      package.json
+  scripts/
+    update-meta/              # runner do scraper (playwright)
+  .github/
+    workflows/
+      ci.yml
+      update_meta.yml
+  docker-compose.yml
+  package.json                # workspace root
+
+
