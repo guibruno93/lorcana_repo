@@ -160,7 +160,7 @@ const server = app.listen(PORT, () => {
   
   // Initialize cron jobs DEPOIS do servidor iniciar
   if (process.env.ENABLE_CRON !== 'false') {
-    metaCron.init();
+    //metaCron.init();
   } else {
     console.log('⚠️  Cron jobs desabilitados');
   }
