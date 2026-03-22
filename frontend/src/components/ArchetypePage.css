@@ -1,0 +1,222 @@
+/* ArchetypePage.css */
+
+.archetype-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.archetype-loading,
+.archetype-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(139, 92, 246, 0.2);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.breadcrumb-link {
+  background: none;
+  border: none;
+  color: #8b5cf6;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.breadcrumb-link:hover {
+  color: #a78bfa;
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  color: #4b5563;
+}
+
+.breadcrumb-current {
+  color: #f3f4f6;
+  font-weight: 500;
+}
+
+/* Content sections */
+.archetype-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.archetype-section {
+  background: rgba(31, 41, 55, 0.6);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f3f4f6;
+  margin: 0 0 20px 0;
+}
+
+.section-icon {
+  font-size: 24px;
+}
+
+/* Two column layout */
+.two-column-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .two-column-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Strengths & Weaknesses */
+.strength-list,
+.weakness-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.strength-item,
+.weakness-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(55, 65, 81, 0.4);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #d1d5db;
+}
+
+.strength-bullet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.weakness-bullet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Tips Grid */
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.tip-card {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(55, 65, 81, 0.4);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.tip-card:hover {
+  background: rgba(55, 65, 81, 0.6);
+  border-color: rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+.tip-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  margin: 0;
+  color: #d1d5db;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .archetype-page {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .archetype-page {
+    padding: 12px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+  }
+  
+  .tips-grid {
+    grid-template-columns: 1fr;
+  }
+}

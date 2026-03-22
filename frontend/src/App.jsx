@@ -1,12 +1,24 @@
-import React, { useEffect, useMemo, useState } from "react";
-import "./styles.css";
-import Login from './Login';
-import DeckAnalyzer from './DeckAnalyzer';
-import MetaDashboard from "./MetaDashboard";
+import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import './styles.css';
+import './DesignSystem.css';
+import './LoadingSpinner.css';
 
-function countLines(text) {
-  return String(text || "").split(/\r?\n/).filter((l) => l.trim().length).length;
-}
+// Componentes sempre carregados
+import Login from './Login';
+import LanguageSelector from './components/LanguageSelector';
+import Logo from './components/Logo';
+
+// Lazy load de rotas pesadas
+const DeckAnalyzer = lazy(() => import('./DeckAnalyzer'));
+const HandAnalyzer = lazy(() => import('./HandAnalyzer'));
+const Matchups = lazy(() => import('./Matchups'));
+const MetaDashboard = lazy(() => import('./MetaDashboard'));
+const ArchetypePage = lazy(() => import('./components/ArchetypePage'));
+const CardDatabase = lazy(() => import('./CardDatabase'));
+const DeckBuilder = lazy(() => import('./DeckBuilder/DeckBuilder'));
+const UserProfile = lazy(() => import('./UserProfile'));
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
@@ -21,290 +33,28 @@ async function apiFetch(endpoint, body) {
   return data;
 }
 
+// Loading component
+const LoadingSpinner = () => (
+  <div className="loading-spinner">
+    <div className="spinner"></div>
+  </div>
+);
+
 const api = {
   analyze: (text, opts) => apiFetch("/api/deck/analyze", { decklist: text, ...opts }),
-  matchups: (text) => apiFetch("/api/ai/matchups", { decklist: text }),
+  matchups: (text) => apiFetch("/api/deck/matchups", { deckText: text }),
   shuffle: (text) => apiFetch("/api/ai/shuffle", { decklist: text }),
   mulligan: (hand, text) => apiFetch("/api/ai/mulligan", { hand, decklist: text }),
   simMulligan: (hand, indices, text) =>
     apiFetch("/api/ai/simulate-mulligan", { hand, mulligan: indices, decklist: text }),
 };
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  HAND ANALYZER TAB
-// ═══════════════════════════════════════════════════════════════════════════
-
-function HandAnalyzerTab({ deckText }) {
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState('');
-  const [hand, setHand] = useState([]);
-  const [advice, setAdvice] = useState(null);
-  const [simulated, setSimulated] = useState(null);
-
-  async function shuffle() {
-    if (!deckText.trim()) {
-      setErr('Cole uma decklist primeiro');
-      return;
-    }
-    setLoading(true);
-    setErr('');
-    try {
-      const data = await api.shuffle(deckText);
-      setHand(data.hand || []);
-      setAdvice(null);
-      setSimulated(null);
-    } catch (e) {
-      setErr(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function analyze() {
-    if (hand.length === 0) return;
-    setLoading(true);
-    setErr('');
-    try {
-      const data = await api.mulligan(hand, deckText);
-      setAdvice(data);
-    } catch (e) {
-      setErr(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function simulateMulligan() {
-    if (!advice || !advice.mulligan) return;
-    setLoading(true);
-    setErr('');
-    try {
-      const data = await api.simMulligan(hand, advice.mulligan, deckText);
-      setSimulated(data.newHand || []);
-    } catch (e) {
-      setErr(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <div className="tab-layout">
-      <div className="panel">
-        <div className="panel-header">
-          <span className="panel-title">🎴 Hand Analyzer</span>
-        </div>
-        <div className="panel-body">
-          <button onClick={shuffle} disabled={loading} className="btn btn-primary">
-            {loading ? '⏳ Embaralhando…' : '🔀 Embaralhar e Sacar 7'}
-          </button>
-
-          {err && <div className="err-box">{err}</div>}
-
-          {hand.length > 0 && (
-            <>
-              <div className="hand-grid">
-                {hand.map((card, i) => {
-                  const shouldMull = advice?.mulligan?.includes(i);
-                  return (
-                    <div key={i} className={`hand-card ${shouldMull ? 'mull-card' : ''}`}>
-                      <span className="card-name">{card}</span>
-                      {advice && (
-                        <span className={shouldMull ? 'mull-badge' : 'keep-badge'}>
-                          {shouldMull ? 'MULL' : 'KEEP'}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {!advice && (
-                <button onClick={analyze} disabled={loading} className="btn btn-primary">
-                  {loading ? '⏳ Analisando…' : '🤖 Analisar Mulligan'}
-                </button>
-              )}
-
-              {advice && (
-                <>
-                  <div className="mulligan-advice">
-                    <strong>Recomendação:</strong> {advice.decision}
-                    <br />
-                    <em>{advice.reason}</em>
-                  </div>
-
-                  {advice.mulligan && advice.mulligan.length > 0 && !simulated && (
-                    <button onClick={simulateMulligan} disabled={loading} className="btn btn-primary">
-                      {loading ? '⏳ Simulando…' : '🔄 Simular Mulligan'}
-                    </button>
-                  )}
-
-                  {simulated && (
-                    <>
-                      <h4>Nova Mão (após mulligan):</h4>
-                      <div className="hand-grid">
-                        {simulated.map((card, i) => (
-                          <div key={i} className="hand-card">
-                            <span className="card-name">{card}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-
-          {!deckText.trim() && (
-            <div className="panel">
-              <div className="empty-state">
-                <div className="empty-icon">📋</div>
-                Cole uma decklist na aba Deck Analyzer para usar o simulador
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  MATCHUPS TAB
-// ═══════════════════════════════════════════════════════════════════════════
-
-function MatchupsTab({ deckText }) {
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
-  const [data, setData] = useState(null);
-
-  async function run() {
-    if (!deckText.trim()) return setErr("Cole uma decklist primeiro.");
-    setLoading(true);
-    setErr("");
-    try {
-      const d = await api.matchups(deckText);
-      setData(d);
-    } catch (e) {
-      setErr(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (deckText.trim()) run();
-  }, []);
-
-  const matchups = data?.matchups || [];
-
-  return (
-    <div className="tab-layout">
-      <div className="panel">
-        <div className="panel-header">
-          <span className="panel-title">⚔️ Matchups vs. Meta</span>
-          <button className="btn btn-primary btn-sm" onClick={run} disabled={loading}>
-            {loading ? "⏳ Calculando…" : "🔄 Recalcular"}
-          </button>
-        </div>
-
-        {err && <div className="err-box">{err}</div>}
-
-        {data?.summary && (
-          <div className="panel-body">
-            <div className="aggregate-row">
-              <div className="agg-item">
-                <span className="agg-label">WR Médio</span>
-                <span className="agg-val">{data.summary.avgWinRate}%</span>
-              </div>
-              <div className="agg-item">
-                <span className="agg-label">Tier</span>
-                <span className="agg-val">{data.summary.tier}</span>
-              </div>
-              <div className="agg-item">
-                <span className="agg-label">Favorável</span>
-                <span className="agg-val" style={{ color: "#4ade80" }}>
-                  {data.summary.favored}
-                </span>
-              </div>
-              <div className="agg-item">
-                <span className="agg-label">Equilibrado</span>
-                <span className="agg-val" style={{ color: "#f59e0b" }}>
-                  {data.summary.even}
-                </span>
-              </div>
-              <div className="agg-item">
-                <span className="agg-label">Desfavorável</span>
-                <span className="agg-val" style={{ color: "#f87171" }}>
-                  {data.summary.unfavored}
-                </span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {matchups.length === 0 && !loading && !err && (
-          <div className="panel-body">
-            <div className="empty-state">
-              <div className="empty-icon">⚔️</div>
-              {deckText.trim()
-                ? "Clique em Recalcular para ver os matchups"
-                : "Cole uma decklist para ver os matchups"}
-            </div>
-          </div>
-        )}
-
-        {matchups.length > 0 && (
-          <div className="panel-body">
-            <div className="matchup-grid">
-              {matchups.map((m, i) => {
-                const wrClass =
-                  m.winRate >= 55
-                    ? "wr-favored"
-                    : m.winRate >= 45
-                    ? "wr-even"
-                    : m.winRate >= 37
-                    ? "wr-unfavored"
-                    : "wr-heavy";
-                const barClass =
-                  m.winRate >= 55
-                    ? "bar-favored"
-                    : m.winRate >= 45
-                    ? "bar-even"
-                    : m.winRate >= 37
-                    ? "bar-unfavored"
-                    : "bar-heavy";
-
-                return (
-                  <div key={i} className="matchup-row">
-                    <div className="matchup-opponent">{m.opponent}</div>
-                    <div className="matchup-bar-wrap">
-                      <div
-                        className={`matchup-bar ${barClass}`}
-                        style={{ width: `${m.winRate}%` }}
-                      />
-                    </div>
-                    <div className={`matchup-wr ${wrClass}`}>{m.winRate}%</div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════
-//  ROOT APP
-// ═══════════════════════════════════════════════════════════
-
 export default function App() {
-  const [tab, setTab] = useState("deck");
+  const { t } = useTranslation();
   const [deckText, setDeckText] = useState("");
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -323,47 +73,116 @@ export default function App() {
     return <Login onLoginSuccess={setUser} />;
   }
 
-  const tabs = [
-    { id: "deck", label: "Deck Analyzer", icon: "🃏" },
-    { id: "hand", label: "Hand Analyzer", icon: "🎴" },
-    { id: "matchups", label: "Matchups", icon: "⚔️" },
-    { id: "meta", label: "Meta Dashboard", icon: "📊" },
-  ];
+  const activeTab = location.pathname.split('/')[1] || 'deck';
 
   return (
-    <div className="App">
-      <header className="app-header">
-        <h1>🃏 Lorcana AI</h1>
-        <div className="user-info">
-          <span>
-            Olá, <strong>{user.username || user.email}</strong>
+    <div className="app-container">
+      <header className="app-header glass">
+        <div className="header-left">
+          <Logo size="medium" animated />
+        </div>
+        <div className="header-right">
+          <LanguageSelector />
+          <span 
+            className="user-greeting"
+            onClick={() => navigate('/profile')}
+            style={{ cursor: 'pointer' }}
+            title={t('userProfile.viewProfile')}
+          >
+            👤 {user.username || user.name}
           </span>
-          <button onClick={handleLogout} className="btn-logout">
-            Sair
+          <button onClick={handleLogout} className="btn btn-ghost">
+            {t('auth.logout')}
           </button>
         </div>
       </header>
 
-      <div className="app-main">
-        <div className="tabs">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              className={`tab-btn ${tab === t.id ? "active" : ""}`}
-              onClick={() => setTab(t.id)}
-            >
-              {t.icon} {t.label}
-            </button>
-          ))}
-        </div>
+      <nav className="tabs">
+        <button 
+          onClick={() => navigate('/deck')}
+          className={`tab ${activeTab === 'deck' ? 'tab-active' : ''}`}
+        >
+          📋 {t('tabs.deck')}
+        </button>
 
-        <div className="tab-content">
-          {tab === "deck" && <DeckAnalyzer deckText={deckText} setDeckText={setDeckText} />}
-          {tab === "hand" && <HandAnalyzerTab deckText={deckText} />}
-          {tab === "matchups" && <MatchupsTab deckText={deckText} />}
-          {tab === "meta" && <MetaDashboard />}
-        </div>
-      </div>
+        <button 
+          onClick={() => navigate('/hand')}
+          className={`tab ${activeTab === 'hand' ? 'tab-active' : ''}`}
+        >
+          🎴 {t('tabs.hand')}
+        </button>
+        
+        <button 
+          onClick={() => navigate('/cards')} 
+          className={`tab ${activeTab === 'cards' ? 'tab-active' : ''}`}
+        >
+          🃏 {t('tabs.cards')}
+        </button>
+
+        <button 
+          onClick={() => navigate('/deck-builder')} 
+          className={`tab ${activeTab === 'deck-builder' ? 'tab-active' : ''}`}
+        >
+          🎨 {t('tabs.deckBuilder')}
+        </button>
+
+        <button 
+          onClick={() => navigate('/matchups')}
+          className={`tab ${activeTab === 'matchups' ? 'tab-active' : ''}`}
+        >
+          ⚔️ {t('tabs.matchups')}
+        </button>
+
+        <button 
+          onClick={() => navigate('/meta')}
+          className={`tab ${activeTab === 'meta' ? 'tab-active' : ''}`}
+        >
+          📊 {t('tabs.meta')}
+        </button>
+      </nav>
+
+      <main className="app-main">
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/deck" replace />} />
+            
+            <Route 
+              path="/deck" 
+              element={<DeckAnalyzer deckText={deckText} setDeckText={setDeckText} />} 
+            />
+            <Route 
+              path="/hand" 
+              element={<HandAnalyzer deckText={deckText} />} 
+            />
+            <Route 
+              path="/cards" 
+              element={<CardDatabase />} 
+            />
+            <Route 
+              path="/deck-builder" 
+              element={<DeckBuilder />} 
+            />
+            <Route 
+              path="/profile" 
+              element={<UserProfile user={user} setUser={setUser} />} 
+            />
+            <Route 
+              path="/matchups" 
+              element={<Matchups deckText={deckText} />} 
+            />
+            <Route 
+              path="/meta" 
+              element={<MetaDashboard />} 
+            />
+            <Route 
+              path="/archetype/:archetypeId" 
+              element={<ArchetypePage />} 
+            />
+            
+            <Route path="*" element={<Navigate to="/deck" replace />} />
+          </Routes>
+        </Suspense>
+      </main>
     </div>
   );
 }

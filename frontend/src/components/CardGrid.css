@@ -1,0 +1,341 @@
+/* CardGrid.css */
+
+.card-grid-container {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+}
+
+/* Controls */
+.grid-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort-controls label {
+  font-size: 14px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.sort-select {
+  padding: 8px 12px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* Card Grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.card-item {
+  background: rgba(15, 23, 42, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card-item:hover {
+  transform: translateY(-8px);
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+}
+
+/* Rarity borders */
+.card-item.rarity-common:hover { border-color: #94a3b8; }
+.card-item.rarity-uncommon:hover { border-color: #3b82f6; }
+.card-item.rarity-rare:hover { border-color: #8b5cf6; }
+.card-item.rarity-super-rare:hover { border-color: #f59e0b; }
+.card-item.rarity-legendary:hover { border-color: #ef4444; }
+.card-item.rarity-enchanted:hover { 
+  border-color: #fbbf24;
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.3);
+}
+
+.card-image-wrapper {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card-item:hover .card-image {
+  transform: scale(1.05);
+}
+
+.card-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  text-align: center;
+  color: #64748b;
+}
+
+.card-image-placeholder span:first-child {
+  font-size: 48px;
+}
+
+.card-image-placeholder span:last-child {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.card-cost-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(139, 92, 246, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-info {
+  padding: 12px;
+}
+
+.card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-type,
+.card-rarity {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.card-type {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
+.card-rarity {
+  background: rgba(139, 92, 246, 0.2);
+  color: #c4b5fd;
+}
+
+.card-rarity.rarity-common { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
+.card-rarity.rarity-uncommon { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+.card-rarity.rarity-rare { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+.card-rarity.rarity-super-rare { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.card-rarity.rarity-legendary { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+.card-rarity.rarity-enchanted { background: rgba(251, 191, 36, 0.2); color: #fde047; }
+
+/* Loading */
+.card-grid-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: #94a3b8;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(139, 92, 246, 0.2);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.card-grid-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #94a3b8;
+}
+
+.empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.card-grid-empty h3 {
+  font-size: 20px;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+}
+
+.card-grid-empty p {
+  font-size: 14px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pagination-btn,
+.pagination-page {
+  padding: 8px 16px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled),
+.pagination-page:hover:not(:disabled):not(.active) {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.pagination-pages {
+  display: flex;
+  gap: 4px;
+}
+
+.pagination-page.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.pagination-page:disabled {
+  background: transparent;
+  border: none;
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-grid-container {
+    padding: 16px;
+  }
+
+  .grid-controls {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .sort-controls {
+    width: 100%;
+  }
+
+  .pagination-info {
+    text-align: center;
+  }
+
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .pagination-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .pagination-pages {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,176 @@
+/* Logo.css - Estilos profissionais do logo */
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-container:hover {
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SVG ICON
+   ═══════════════════════════════════════════════════════════════════ */
+
+.logo-icon {
+  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.2));
+  transition: all 0.3s ease;
+}
+
+.logo-container:hover .logo-icon {
+  filter: drop-shadow(0 6px 16px rgba(102, 126, 234, 0.4));
+}
+
+/* Inkwell base animation */
+.inkwell-base {
+  transition: all 0.3s ease;
+}
+
+.logo-container.animated .inkwell-base {
+  animation: inkwell-pulse 2s ease-in-out infinite;
+}
+
+@keyframes inkwell-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Ink liquid animation */
+.ink-liquid {
+  transition: all 0.3s ease;
+}
+
+.logo-container.animated .ink-liquid {
+  animation: ink-wave 1.5s ease-in-out infinite;
+}
+
+@keyframes ink-wave {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(-2px); opacity: 0.8; }
+}
+
+/* Feather animation */
+.feather {
+  transform-origin: bottom left;
+  transition: all 0.3s ease;
+}
+
+.logo-container:hover .feather {
+  transform: rotate(-5deg);
+}
+
+.logo-container.animated .feather {
+  animation: feather-write 3s ease-in-out infinite;
+}
+
+@keyframes feather-write {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg) translateY(-2px); }
+  50% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+}
+
+/* Feather details */
+.feather-detail {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  transition: all 0.3s ease;
+}
+
+.logo-container.animated .feather-detail {
+  animation: feather-draw 2s ease-in-out infinite;
+}
+
+@keyframes feather-draw {
+  0%, 100% { stroke-dashoffset: 20; }
+  50% { stroke-dashoffset: 0; }
+}
+
+/* Shine effect */
+.shine {
+  opacity: 0.2;
+  transition: all 0.3s ease;
+}
+
+.logo-container:hover .shine {
+  opacity: 0.4;
+  transform: translateX(2px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TEXT
+   ═══════════════════════════════════════════════════════════════════ */
+
+.logo-text {
+  display: flex;
+  gap: 4px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+.logo-brand {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+.logo-labs {
+  color: #a0aec0;
+  font-weight: 600;
+}
+
+.logo-container:hover .logo-brand {
+  background: linear-gradient(135deg, #764ba2 0%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SIZES
+   ═══════════════════════════════════════════════════════════════════ */
+
+.logo-container.size-small {
+  gap: 8px;
+}
+
+.logo-container.size-large {
+  gap: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .logo-text {
+    font-size: 0.9rem !important;
+  }
+  
+  .logo-container {
+    gap: 8px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DARK MODE (já preparado)
+   ═══════════════════════════════════════════════════════════════════ */
+
+[data-theme="dark"] .logo-labs {
+  color: #cbd5e0;
+}
+
+[data-theme="dark"] .logo-icon {
+  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
+}
+
+[data-theme="dark"] .logo-container:hover .logo-icon {
+  filter: drop-shadow(0 6px 16px rgba(102, 126, 234, 0.5));
+}

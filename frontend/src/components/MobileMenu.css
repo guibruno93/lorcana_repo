@@ -1,0 +1,223 @@
+/**
+ * frontend/src/components/MobileMenu.css
+ * Estilos do menu mobile
+ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   HAMBURGER BUTTON
+   ═══════════════════════════════════════════════════════════════════ */
+
+.mobile-menu-button {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger {
+  width: 24px;
+  height: 18px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Animação X quando aberto */
+.hamburger.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   OVERLAY
+   ═══════════════════════════════════════════════════════════════════ */
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DRAWER
+   ═══════════════════════════════════════════════════════════════════ */
+
+.mobile-menu-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.mobile-menu-drawer.open {
+  transform: translateX(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   HEADER DO DRAWER
+   ═══════════════════════════════════════════════════════════════════ */
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid rgba(103, 126, 234, 0.2);
+}
+
+.mobile-menu-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 28px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.mobile-menu-close {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(103, 126, 234, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MENU ITEMS
+   ═══════════════════════════════════════════════════════════════════ */
+
+.mobile-menu-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 0;
+}
+
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  border-left: 3px solid transparent;
+}
+
+.mobile-menu-item:hover {
+  background: rgba(103, 126, 234, 0.1);
+  border-left-color: rgba(103, 126, 234, 0.5);
+}
+
+.mobile-menu-item.active {
+  background: rgba(103, 126, 234, 0.2);
+  border-left-color: #667eea;
+}
+
+.menu-item-icon {
+  font-size: 24px;
+  width: 32px;
+  text-align: center;
+}
+
+.menu-item-label {
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOOTER DO DRAWER
+   ═══════════════════════════════════════════════════════════════════ */
+
+.mobile-menu-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(103, 126, 234, 0.2);
+}
+
+.menu-footer-item {
+  padding: 8px 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DESKTOP - ESCONDER MENU MOBILE
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  .mobile-menu-button,
+  .mobile-menu-overlay,
+  .mobile-menu-drawer {
+    display: none !important;
+  }
+}

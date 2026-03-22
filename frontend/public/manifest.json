@@ -1,0 +1,83 @@
+{
+  "short_name": "Inkwell Labs",
+  "name": "Inkwell Labs - Lorcana AI Deck Analyzer",
+  "description": "Ferramenta profissional de análise de decks para Disney Lorcana TCG",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    },
+    {
+      "src": "favicon-16x16.png",
+      "type": "image/png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "favicon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#667eea",
+  "background_color": "#0f1419",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["games", "utilities", "productivity"],
+  "screenshots": [
+    {
+      "src": "screenshot-1.png",
+      "type": "image/png",
+      "sizes": "1280x720",
+      "form_factor": "wide"
+    },
+    {
+      "src": "screenshot-2.png",
+      "type": "image/png",
+      "sizes": "750x1334",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Deck Analyzer",
+      "short_name": "Analyzer",
+      "description": "Analisar novo deck",
+      "url": "/deck",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Deck Builder",
+      "short_name": "Builder",
+      "description": "Construir novo deck",
+      "url": "/deck-builder",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Card Database",
+      "short_name": "Cards",
+      "description": "Explorar cartas",
+      "url": "/cards",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

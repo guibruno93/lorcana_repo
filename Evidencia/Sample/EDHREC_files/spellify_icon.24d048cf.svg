@@ -1,0 +1,11 @@
+<svg width="330" height="330" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>Layer 1</title>
+  <rect stroke-width="30" rx="40" id="svg_1" height="300" width="300" y="15" x="15" stroke="#000" fill="none"/>
+  <path transform="rotate(90 112 163.5)" stroke="#000" id="svg_4" d="m-31.49999,163.5l286.99999,0" opacity="undefined" stroke-width="30" fill="none"/>
+  <path transform="rotate(90 217 164)" stroke="#000" id="svg_5" d="m75,164l284,0" opacity="undefined" stroke-width="30" fill="none"/>
+  <line stroke="#000" id="svg_6" y2="214.5" x2="212" y1="214.5" x1="21" stroke-width="30" fill="none"/>
+  <line stroke="#000" id="svg_9" y2="114.5" x2="307" y1="114.5" x1="116" stroke-width="30" fill="none"/>
+ </g>
+</svg>

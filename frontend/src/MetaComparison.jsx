@@ -1,4 +1,5 @@
 import React from "react";
+import { CardImage } from '../components/CardImage';
 
 export default function MetaComparison({ meta }) {
   if (!meta) return null;
@@ -8,8 +9,9 @@ export default function MetaComparison({ meta }) {
   const sameFormat = meta.filters?.sameFormat;
 
   return (
+
     <div className="card">
-      <h3 style={{ marginTop: 0 }}>Meta Comparison</h3>
+      <h3 style={{ marginTop: 0 }}>Comparação com o meta</h3>
 
       {!enabled ? (
         <div className="muted">Desligado</div>
@@ -33,15 +35,23 @@ export default function MetaComparison({ meta }) {
           ) : (
             <div className="muted" style={{ marginTop: 10 }}>Sem agregado</div>
           )}
+		  
+		  	<div className="test-section">
+  <h3>🧪 Teste Lorcast API</h3>
+  
+  <CardImage cardName="Elsa - Spirit of Winter" size="normal" />
+  <CardImage cardName="Mickey Mouse - Brave Little Tailor" size="small" />
+</div>
 
           <div style={{ marginTop: 14 }}>
-            <h4 style={{ margin: "10px 0" }}>Similar decks</h4>
+            <h4 style={{ margin: "10px 0" }}>Decks similares</h4>
             {Array.isArray(meta.similarDecks) && meta.similarDecks.length ? (
               <table>
                 <thead>
                   <tr>
-                    <th>Score</th>
-                    <th>Archetype</th>
+                    <th>Pontuação</th>
+                    <th>Arquétipo
+					</th>
                     <th>Inks</th>
                     <th>Finish</th>
                     <th>Link</th>

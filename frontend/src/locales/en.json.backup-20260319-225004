@@ -1,0 +1,177 @@
+{
+  "app": {
+    "title": "Lorcana AI",
+    "subtitle": "Intelligent deck analysis"
+  },
+  
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "greeting": "Hello",
+    "loginButton": "Sign In",
+    "loginTitle": "Welcome to Lorcana AI",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "Your password",
+    "loggingIn": "Signing in...",
+    "invalidCredentials": "Invalid email or password"
+  },
+
+  "tabs": {
+    "deck": "Deck Analyzer",
+    "hand": "Hand Analyzer",
+    "matchups": "Matchups",
+    "meta": "Meta Dashboard"
+  },
+
+  "deckAnalyzer": {
+    "title": "Deck Analyzer",
+    "decklistTitle": "Decklist",
+    "paste": "Paste your decklist",
+    "analyze": "Analyze Deck",
+    "analyzing": "Analyzing…",
+    "clear": "Clear",
+    "example": "See Example",
+    "placeholder": "4 Card Name\n4 Another Card\n...",
+    "emptyState": "Paste your decklist and click Analyze",
+    "lineCount": "line",
+    "lineCount_plural": "lines",
+    "compareMeta": "Compare meta",
+    "summary": "Summary",
+    "rules": "Rules",
+    "ml": "ML",
+    "identifiedByRules": "Identified by rules",
+    "identifiedByML": "Identified by ML",
+    "archetype": "Archetype",
+    "cards": "Cards",
+    "inkable": "Inkable",
+    "manaCurve": "Mana Curve",
+    "average": "Average",
+    "statistics": "Statistics",
+    "avgCost": "Avg Cost",
+    "earlyGame": "Early Game",
+    "inkCost": "ink",
+    "results": {
+      "title": "Analysis Results",
+      "archetype": "Archetype",
+      "tier": "Tier",
+      "colors": "Colors",
+      "cards": "Cards",
+      "totalCards": "Total Cards",
+      "curve": "Mana Curve",
+      "suggestions": "Suggestions",
+      "strengths": "Strengths",
+      "weaknesses": "Weaknesses",
+      "synergies": "Synergies"
+    },
+    "errors": {
+      "emptyDeck": "Paste a decklist first",
+      "invalidFormat": "Invalid decklist format",
+      "tooFewCards": "Deck too small (minimum 60 cards)",
+      "tooManyCards": "Deck too large (maximum 60 cards)"
+    }
+  },
+
+  "handAnalyzer": {
+    "title": "Hand Analyzer",
+    "shuffle": "Shuffle and Draw 7",
+    "shuffling": "Shuffling...",
+    "analyze": "Analyze Mulligan",
+    "analyzing": "Analyzing...",
+    "simulate": "Simulate Mulligan",
+    "simulating": "Simulating...",
+    "keep": "KEEP",
+    "mulligan": "MULLIGAN",
+    "recommendation": "Recommendation",
+    "newHand": "New Hand (after mulligan)",
+    "emptyState": "Paste a decklist in the Deck Analyzer tab to use the simulator"
+  },
+
+  "matchups": {
+    "title": "Matchups vs. Meta",
+    "recalculate": "Recalculate",
+    "calculating": "Calculating...",
+    "archetype": "Archetype",
+    "tier": "Tier",
+    "expectedWR": "Expected WR",
+    "avgWinRate": "Avg Win Rate",
+    "favorable": "Favorable",
+    "even": "Even",
+    "unfavorable": "Unfavorable",
+    "emptyState": "Paste a decklist to see matchups",
+    "clickToRecalculate": "Click Recalculate to see matchups",
+    "count": "matchups"
+  },
+
+  "metaDashboard": {
+    "title": "Meta Dashboard",
+    "subtitle": "Current Meta Overview",
+    "loading": "Loading meta...",
+    "lastUpdate": "Last update",
+    "filters": {
+      "title": "Filter by Tier",
+      "all": "All Tiers",
+      "tier1": "Tier 1",
+      "tier2": "Tier 2",
+      "tier3": "Tier 3"
+    },
+    "stats": {
+      "winRate": "Win Rate",
+      "popularity": "Popularity",
+      "metaShare": "Meta Share",
+      "avgWinRate": "Avg WR"
+    },
+    "deckInfo": {
+      "cards": "cards",
+      "colors": "Colors",
+      "viewDetails": "View Details",
+      "playRate": "Play Rate",
+      "tierRank": "Tier Rank"
+    },
+    "emptyState": {
+      "title": "No data available",
+      "subtitle": "Unable to load meta data",
+      "retry": "Try Again"
+    }
+  },
+
+  "mobileMenu": {
+    "menu": "Menu",
+    "close": "Close"
+  },
+
+  "language": {
+    "select": "Language",
+    "pt-BR": "Português (BR)",
+    "en": "English"
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "previous": "Previous",
+    "next": "Next",
+    "retry": "Try Again"
+  },
+
+  "errors": {
+    "generic": "An error occurred. Please try again.",
+    "network": "Connection error. Check your internet.",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized",
+    "invalidDeck": "Invalid decklist",
+    "serverError": "Server error",
+    "timeout": "Request timed out"
+  }
+}

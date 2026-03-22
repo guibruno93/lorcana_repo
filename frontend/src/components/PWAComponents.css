@@ -1,0 +1,560 @@
+/* ==========================================
+   PWA COMPONENTS STYLES
+   ========================================== */
+
+/* ==========================================
+   INSTALL PROMPT
+   ========================================== */
+
+.install-prompt {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: slideInUp 0.4s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.install-prompt-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.install-prompt-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.install-prompt-text {
+  flex: 1;
+}
+
+.install-prompt-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.install-prompt-description {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.install-prompt-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.install-prompt-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.install-btn {
+  background: white;
+  color: #667eea;
+}
+
+.install-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+.install-btn:active {
+  transform: translateY(0);
+}
+
+.dismiss-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 40px;
+  padding: 10px;
+}
+
+.dismiss-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+  .install-prompt {
+    padding: 12px;
+  }
+  
+  .install-prompt-content {
+    gap: 12px;
+  }
+  
+  .install-prompt-icon {
+    font-size: 28px;
+  }
+  
+  .install-prompt-title {
+    font-size: 14px;
+  }
+  
+  .install-prompt-description {
+    font-size: 12px;
+  }
+  
+  .install-prompt-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .install-prompt-content {
+    flex-wrap: wrap;
+  }
+  
+  .install-prompt-actions {
+    width: 100%;
+    margin-top: 8px;
+  }
+  
+  .install-btn {
+    flex: 1;
+  }
+}
+
+/* ==========================================
+   OFFLINE BANNER
+   ========================================== */
+
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  text-align: center;
+  z-index: 1001;
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.offline-banner.offline {
+  background: #ff4757;
+  color: white;
+}
+
+.offline-banner.online {
+  background: #2ecc71;
+  color: white;
+}
+
+.offline-banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.offline-icon,
+.online-icon {
+  font-size: 18px;
+}
+
+@media (max-width: 480px) {
+  .offline-banner {
+    padding: 10px 12px;
+  }
+  
+  .offline-banner-content {
+    font-size: 12px;
+  }
+  
+  .offline-icon,
+  .online-icon {
+    font-size: 16px;
+  }
+}
+
+/* ==========================================
+   UPDATE NOTIFICATION
+   ========================================== */
+
+.update-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  max-width: 360px;
+  z-index: 1002;
+  animation: slideInRight 0.4s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.update-notification-content {
+  display: flex;
+  gap: 12px;
+}
+
+.update-notification-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.update-notification-text {
+  flex: 1;
+}
+
+.update-notification-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.update-notification-description {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.update-notification-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.update-notification-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.update-btn {
+  background: #667eea;
+  color: white;
+  flex: 1;
+}
+
+.update-btn:hover {
+  background: #5568d3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.update-notification-actions .dismiss-btn {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.update-notification-actions .dismiss-btn:hover {
+  background: #e0e0e0;
+}
+
+@media (max-width: 768px) {
+  .update-notification {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .update-notification {
+    padding: 12px;
+  }
+  
+  .update-notification-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .update-notification-icon {
+    font-size: 32px;
+  }
+  
+  .update-notification-actions {
+    width: 100%;
+  }
+  
+  .update-btn {
+    flex: 1;
+  }
+}
+
+/* ==========================================
+   CONNECTION STATUS
+   ========================================== */
+
+.connection-status {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 999;
+  animation: fadeIn 0.3s ease-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.connection-status.online {
+  background: #2ecc71;
+  color: white;
+}
+
+.connection-status.offline {
+  background: #ff4757;
+  color: white;
+}
+
+.connection-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+@media (max-width: 480px) {
+  .connection-status {
+    top: 12px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   INSTALL BUTTON (para menu/settings)
+   ========================================== */
+
+.install-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.install-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.install-button:active {
+  transform: translateY(0);
+}
+
+.install-button-icon {
+  font-size: 18px;
+}
+
+.install-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.install-status-icon {
+  font-size: 18px;
+}
+
+/* ==========================================
+   CACHE INDICATOR
+   ========================================== */
+
+.cache-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(255, 165, 2, 0.1);
+  border: 1px solid rgba(255, 165, 2, 0.3);
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffa502;
+}
+
+.cache-indicator-icon {
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .cache-indicator {
+    font-size: 10px;
+    padding: 3px 10px;
+  }
+  
+  .cache-indicator-icon {
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   PWA STANDALONE MODE ADJUSTMENTS
+   ========================================== */
+
+/* Quando rodando como PWA instalado */
+@media (display-mode: standalone) {
+  /* Ajustar padding top para compensar falta da barra de navegação */
+  body {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  /* Ocultar install prompt se já instalado */
+  .install-prompt {
+    display: none;
+  }
+}
+
+/* ==========================================
+   LOADING SKELETON PARA OFFLINE
+   ========================================== */
+
+.offline-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 71, 87, 0.1) 0%,
+    rgba(255, 71, 87, 0.2) 50%,
+    rgba(255, 71, 87, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-offline 1.5s infinite;
+}
+
+@keyframes shimmer-offline {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY
+   ========================================== */
+
+.install-prompt-btn:focus-visible,
+.update-notification-btn:focus-visible,
+.install-button:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .install-prompt,
+  .offline-banner,
+  .update-notification,
+  .connection-status {
+    animation: none !important;
+  }
+  
+  .connection-status-dot {
+    animation: none !important;
+  }
+}
+
+/* ==========================================
+   DARK MODE (futuro)
+   ========================================== */
+
+@media (prefers-color-scheme: dark) {
+  .update-notification {
+    background: #2a2a3e;
+    color: white;
+  }
+  
+  .update-notification-title {
+    color: white;
+  }
+  
+  .update-notification-description {
+    color: #aaa;
+  }
+  
+  .update-notification-actions .dismiss-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+  
+  .update-notification-actions .dismiss-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}

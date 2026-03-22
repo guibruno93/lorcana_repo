@@ -1,48 +1,33 @@
 {
-  "name": "lorcana-ai-backend",
+  "name": "inkwell-labs-backend",
   "version": "4.0.0",
-  "description": "Lorcana AI - Premium deck analyzer with tournament manager",
+  "description": "Inkwell Labs - Premium deck analyzer",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "update-cards": "node scripts/update-cards.js",
-    "sync-tournaments": "node scripts/sync-tournaments.js",
-    "analyze-meta": "node scripts/analyze-meta.js",
-    "scheduler": "node scripts/scheduler.js",
-    "test": "node test/test-backend.js"
-  },
-  "keywords": [
-    "lorcana",
-    "deck-analyzer",
-    "tournament-manager",
-    "ai",
-    "tcg"
-  ],
-  "author": "Lorcana AI Team",
-  "license": "MIT",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.97.0",
-    "@tensorflow/tfjs": "^4.22.0",
-    "@tensorflow/tfjs-backend-cpu": "^4.22.0",
-    "axios": "^1.13.5",
-    "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^12.6.2",
-    "cheerio": "^1.2.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^4.22.1",
-    "jsonwebtoken": "^9.0.3",
-    "node-cron": "^3.0.3",
-    "nodemailer": "^6.9.9",
-    "pdfkit": "^0.13.0",
-    "puppeteer": "^24.37.5",
-    "sharp": "^0.32.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+    "dev": "nodemon server.js"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": "20.x",
+    "npm": ">=10.0.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-cpu": "^4.22.0",
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.15",
+    "pdfkit": "^0.15.0",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }

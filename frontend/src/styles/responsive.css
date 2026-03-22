@@ -1,0 +1,297 @@
+/**
+ * frontend/src/styles/responsive.css
+ * Sistema de Breakpoints e Design Responsivo
+ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   BREAKPOINTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Breakpoints */
+  --breakpoint-mobile: 480px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1440px;
+  
+  /* Spacing responsivo */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  
+  /* Font sizes responsivos */
+  --font-xs: 10px;
+  --font-sm: 12px;
+  --font-md: 14px;
+  --font-lg: 16px;
+  --font-xl: 20px;
+  --font-2xl: 24px;
+  --font-3xl: 32px;
+  --font-4xl: 40px;
+  
+  /* Container widths */
+  --container-mobile: 100%;
+  --container-tablet: 720px;
+  --container-desktop: 960px;
+  --container-wide: 1200px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE FIRST BASE
+   ═══════════════════════════════════════════════════════════════════ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevenir scroll horizontal */
+}
+
+/* Container responsivo */
+.container {
+  width: 100%;
+  max-width: var(--container-mobile);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: var(--container-tablet);
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: var(--container-desktop);
+  }
+}
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: var(--container-wide);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   UTILITY CLASSES - VISIBILITY
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Mostrar apenas em mobile */
+.mobile-only {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Esconder em mobile */
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* Tablet e acima */
+.tablet-up {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .tablet-up {
+    display: block;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GRID RESPONSIVO
+   ═══════════════════════════════════════════════════════════════════ */
+
+.responsive-grid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: 1fr; /* Mobile: 1 coluna */
+}
+
+@media (min-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr); /* Tablet: 2 colunas */
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr); /* Desktop: 3 colunas */
+  }
+}
+
+@media (min-width: 1440px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr); /* Wide: 4 colunas */
+  }
+}
+
+/* Grid de 2 colunas */
+.responsive-grid-2 {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: 1fr; /* Mobile: 1 coluna */
+}
+
+@media (min-width: 768px) {
+  .responsive-grid-2 {
+    grid-template-columns: repeat(2, 1fr); /* Tablet+: 2 colunas */
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FLEX UTILITIES
+   ═══════════════════════════════════════════════════════════════════ */
+
+.flex-column-mobile {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .flex-column-mobile {
+    flex-direction: row;
+  }
+}
+
+.flex-wrap-mobile {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SPACING RESPONSIVO
+   ═══════════════════════════════════════════════════════════════════ */
+
+.padding-responsive {
+  padding: var(--spacing-md);
+}
+
+@media (min-width: 768px) {
+  .padding-responsive {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .padding-responsive {
+    padding: var(--spacing-xl);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TEXT RESPONSIVO
+   ═══════════════════════════════════════════════════════════════════ */
+
+.text-responsive-sm {
+  font-size: var(--font-sm);
+}
+
+@media (min-width: 768px) {
+  .text-responsive-sm {
+    font-size: var(--font-md);
+  }
+}
+
+.text-responsive-md {
+  font-size: var(--font-md);
+}
+
+@media (min-width: 768px) {
+  .text-responsive-md {
+    font-size: var(--font-lg);
+  }
+}
+
+.text-responsive-lg {
+  font-size: var(--font-lg);
+}
+
+@media (min-width: 768px) {
+  .text-responsive-lg {
+    font-size: var(--font-xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-responsive-lg {
+    font-size: var(--font-2xl);
+  }
+}
+
+.text-responsive-xl {
+  font-size: var(--font-xl);
+}
+
+@media (min-width: 768px) {
+  .text-responsive-xl {
+    font-size: var(--font-2xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-responsive-xl {
+    font-size: var(--font-3xl);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TOUCH TARGETS (mínimo 44px para mobile)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SCROLL HORIZONTAL (para tabs mobile)
+   ═══════════════════════════════════════════════════════════════════ */
+
+.scroll-horizontal-mobile {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scroll no iOS */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.scroll-horizontal-mobile::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ANIMATIONS OTIMIZADAS
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

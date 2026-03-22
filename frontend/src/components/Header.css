@@ -1,0 +1,157 @@
+/**
+ * frontend/src/components/Header.css
+ * Estilos do header responsivo
+ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   HEADER BASE
+   ═══════════════════════════════════════════════════════════════════ */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-bottom: 1px solid rgba(103, 126, 234, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.header-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LOGO
+   ═══════════════════════════════════════════════════════════════════ */
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.logo-icon {
+  font-size: 28px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Mobile: Logo menor */
+@media (max-width: 767px) {
+  .logo-icon {
+    font-size: 24px;
+  }
+  
+  .logo-text {
+    font-size: 16px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DESKTOP NAVIGATION
+   ═══════════════════════════════════════════════════════════════════ */
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.nav-item {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.nav-item:hover {
+  background: rgba(103, 126, 234, 0.1);
+  color: #fff;
+}
+
+.nav-item.active {
+  background: rgba(103, 126, 234, 0.2);
+  color: #fff;
+  border-bottom: 2px solid #667eea;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   HEADER ACTIONS
+   ═══════════════════════════════════════════════════════════════════ */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.header-action-button {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.header-action-button:hover {
+  background: rgba(103, 126, 234, 0.2);
+}
+
+/* Mobile: Botões menores */
+@media (max-width: 767px) {
+  .header-action-button {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESPONSIVE ADJUSTMENTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+  .header-container {
+    padding: 0 12px;
+    height: 56px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-container {
+    padding: 0 24px;
+  }
+}

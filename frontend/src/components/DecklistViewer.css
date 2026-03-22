@@ -1,0 +1,52 @@
+/* DecklistViewer.css */
+
+.decklist-viewer {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.decklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.decklist-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.decklist-copy-btn {
+  padding: 8px 16px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 6px;
+  color: #c4b5fd;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.decklist-copy-btn:hover {
+  background: rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.7);
+}
+
+.decklist-cards {
+  display: grid;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+}
+
+.decklist-card-line {
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  color: #cbd5e1;
+}

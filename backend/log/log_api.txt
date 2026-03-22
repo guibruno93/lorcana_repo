@@ -1,0 +1,77 @@
+PS S:\INKREC\lorcana_ai\backend> Write-Host "🔄 Acessando dashboard para forçar análise..." -ForegroundColor Cyan
+🔄 Acessando dashboard para forçar análise...
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> $dashboard = Invoke-RestMethod -Uri "http://localhost:3002/api/meta-analysis/dashboard?days=30"
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> Write-Host "✅ Dashboard acessado!" -ForegroundColor Green
+✅ Dashboard acessado!
+PS S:\INKREC\lorcana_ai\backend> Write-Host "   Total Decks: $($dashboard.stats.totalDecks)" -ForegroundColor White
+   Total Decks: 1180
+PS S:\INKREC\lorcana_ai\backend> Write-Host "   Arquétipos: $($dashboard.stats.uniqueArchetypes)" -ForegroundColor White
+
+   Arquétipos: 0
+PS S:\INKREC\lorcana_ai\backend> Write-Host ""
+
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> # 4.2 Aguardar 5 segundos (análise processa em background)
+PS S:\INKREC\lorcana_ai\backend> Write-Host "⏳ Aguardando análise processar..." -ForegroundColor Yellow
+⏳ Aguardando análise processar...
+PS S:\INKREC\lorcana_ai\backend> Start-Sleep -Seconds 5
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> # 4.3 Ver tier list ATUALIZADA
+PS S:\INKREC\lorcana_ai\backend> Write-Host "📊 Tier list NOVA:" -ForegroundColor Cyan
+📊 Tier list NOVA:
+PS S:\INKREC\lorcana_ai\backend> Write-Host ""
+
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> $tierlist = Invoke-RestMethod -Uri "http://localhost:3002/api/meta-analysis/tier-list"
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> $tierlist.tierList | Format-Table archetype, tier, power_level, deck_count, total_decks, meta_share -AutoSize
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> # 4.4 Verificar se corrigiu
+PS S:\INKREC\lorcana_ai\backend> Write-Host ""
+
+PS S:\INKREC\lorcana_ai\backend> Write-Host "🔍 VERIFICAÇÃO:" -ForegroundColor Cyan
+🔍 VERIFICAÇÃO:
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> $aggro = $tierlist.tierList | Where-Object { $_.archetype -eq "Aggro" } | Select-Object -First 1
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> if ($aggro) {
+>>     if ($aggro.deck_count -eq $aggro.total_decks) {
+>>         Write-Host "✅ SUCESSO! deck_count = total_decks" -ForegroundColor Green
+>>         Write-Host "   Aggro: $($aggro.deck_count) decks" -ForegroundColor White
+>>     } else {
+>>         Write-Host "⚠️  AINDA DESATUALIZADO!" -ForegroundColor Red
+>>         Write-Host "   Aggro deck_count: $($aggro.deck_count)" -ForegroundColor White
+>>         Write-Host "   Aggro total_decks: $($aggro.total_decks)" -ForegroundColor White
+>>         Write-Host ""
+>>         Write-Host "   → Meta analyzer NÃO rodou ainda" -ForegroundColor Yellow
+>>         Write-Host "   → Aguardar 30 segundos e tentar novamente" -ForegroundColor Yellow
+>>     }
+>> }
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> $unknown = $tierlist.tierList | Where-Object { $_.archetype -eq "Unknown" } | Select-Object -First 1
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> if ($unknown) {
+>>     $unknownPct = ($unknown.deck_count / ($tierlist.tierList | Measure-Object -Property deck_count -Sum).Sum) * 100
+>>
+>>     if ($unknownPct -gt 10) {
+>>         Write-Host ""
+>>         Write-Host "⚠️  Unknown ainda alto: $([math]::Round($unknownPct, 1))%" -ForegroundColor Red
+>>         Write-Host "   → ML não está classificando decks" -ForegroundColor Yellow
+>>     } else {
+>>         Write-Host ""
+>>         Write-Host "✅ Unknown OK: $([math]::Round($unknownPct, 1))%" -ForegroundColor Green
+>>     }
+>> }
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> $evasive = $tierlist.tierList | Where-Object { $_.archetype -eq "Evasive" } | Select-Object -First 1
+PS S:\INKREC\lorcana_ai\backend>
+PS S:\INKREC\lorcana_ai\backend> if ($evasive) {
+>>     if ($evasive.power_level -ge 85) {
+>>         Write-Host "✅ Power level OK: Evasive = $($evasive.power_level)" -ForegroundColor Green
+>>     } else {
+>>         Write-Host "⚠️  Power level baixo: Evasive = $($evasive.power_level) (esperado: ~88)" -ForegroundColor Yellow
+>>         Write-Host "   → Algoritmo antigo ainda sendo usado" -ForegroundColor Yellow
+>>     }
+>> }

@@ -1,0 +1,492 @@
+import React, { useEffect, useMemo, useState } from "react";
+import { PWAManager } from './components/PWAComponents';
+import './components/PWAComponents.css';
+import "./styles.css";
+import Login from './Login';
+import MobileMenu from './components/MobileMenu';
+import DeckAnalyzer from './DeckAnalyzer';
+import MetaDashboard from "./MetaDashboard";
+
+const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+
+async function apiFetch(endpoint, body) {
+  const res = await fetch(`${API}${endpoint}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+const api = {
+  analyze: (text, opts) => apiFetch("/api/deck/analyze", { decklist: text, ...opts }),
+  matchups: (text) => apiFetch("/api/deck/matchups", { deckText: text }),
+  shuffle: (text) => apiFetch("/api/ai/shuffle", { decklist: text }),
+  mulligan: (hand, text) => apiFetch("/api/ai/mulligan", { hand, decklist: text }),
+  simMulligan: (hand, indices, text) =>
+    apiFetch("/api/ai/simulate-mulligan", { hand, mulligan: indices, decklist: text }),
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  HAND ANALYZER TAB
+// ═══════════════════════════════════════════════════════════════════════════
+
+function HandAnalyzerTab({ deckText }) {
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState('');
+  const [hand, setHand] = useState([]);
+  const [advice, setAdvice] = useState(null);
+  const [simulated, setSimulated] = useState(null);
+
+  async function shuffle() {
+    if (!deckText.trim()) {
+      setErr('Cole uma decklist primeiro');
+      return;
+    }
+    setLoading(true);
+    setErr('');
+    try {
+      const data = await api.shuffle(deckText);
+      setHand(data.hand || []);
+      setAdvice(null);
+      setSimulated(null);
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function analyze() {
+    if (hand.length === 0) return;
+    setLoading(true);
+    setErr('');
+    try {
+      const data = await api.mulligan(hand, deckText);
+      setAdvice(data);
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function simulateMulligan() {
+    if (!advice || !advice.mulligan) return;
+    setLoading(true);
+    setErr('');
+    try {
+      const data = await api.simMulligan(hand, advice.mulligan, deckText);
+      setSimulated(data.newHand || []);
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="tab-layout">
+      <div className="panel">
+        <div className="panel-header">
+          <span className="panel-title">🎴 Hand Analyzer</span>
+        </div>
+        <div className="panel-body">
+          <button onClick={shuffle} disabled={loading} className="btn btn-primary">
+            {loading ? '⏳ Embaralhando…' : '🔀 Embaralhar e Sacar 7'}
+          </button>
+
+          {err && <div className="err-box">{err}</div>}
+
+          {hand.length > 0 && (
+            <>
+              <div className="hand-grid">
+                {hand.map((card, i) => {
+                  const shouldMull = advice?.mulligan?.includes(i);
+                  return (
+                    <div key={i} className={`hand-card ${shouldMull ? 'mull-card' : ''}`}>
+                      <span className="card-name">{card}</span>
+                      {advice && (
+                        <span className={shouldMull ? 'mull-badge' : 'keep-badge'}>
+                          {shouldMull ? 'MULL' : 'KEEP'}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {!advice && (
+                <button onClick={analyze} disabled={loading} className="btn btn-primary">
+                  {loading ? '⏳ Analisando…' : '🤖 Analisar Mulligan'}
+                </button>
+              )}
+
+              {advice && (
+                <>
+                  <div className="mulligan-advice">
+                    <strong>Recomendação:</strong> {advice.decision}
+                    <br />
+                    <em>{advice.reason || advice.reasoning}</em>
+                  </div>
+
+                  {advice.mulligan && advice.mulligan.length > 0 && !simulated && (
+                    <button onClick={simulateMulligan} disabled={loading} className="btn btn-primary">
+                      {loading ? '⏳ Simulando…' : '🔄 Simular Mulligan'}
+                    </button>
+                  )}
+
+                  {simulated && (
+                    <>
+                      <h4>Nova Mão (após mulligan):</h4>
+                      <div className="hand-grid">
+                        {simulated.map((card, i) => (
+                          <div key={i} className="hand-card">
+                            <span className="card-name">{card}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </>
+          )}
+
+          {!deckText.trim() && (
+            <div className="panel">
+              <div className="empty-state">
+                <div className="empty-icon">📋</div>
+                Cole uma decklist na aba Deck Analyzer para usar o simulador
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  MATCHUPS TAB
+// ═══════════════════════════════════════════════════════════════════════════
+
+function MatchupsTab({ deckText }) {
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+  const [data, setData] = useState(null);
+
+  async function run() {
+    if (!deckText.trim()) return setErr("Cole uma decklist primeiro.");
+    setLoading(true);
+    setErr("");
+    try {
+      const d = await api.matchups(deckText);
+      
+      console.log('📊 Backend response:', d);
+      console.log('📊 matchups field:', d?.matchups);
+      console.log('📊 matchups type:', typeof d?.matchups);
+      console.log('📊 is array?:', Array.isArray(d?.matchups));
+      
+      setData(d);
+    } catch (e) {
+      setErr(e.message);
+      console.error('❌ Matchups error:', e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (deckText.trim()) run();
+  }, []);
+
+  let matchups = data?.matchups || [];
+  
+  if (typeof matchups === 'string') {
+    try {
+      matchups = JSON.parse(matchups);
+      console.log('🔧 Parsed matchups from string');
+    } catch (e) {
+      console.error('❌ Failed to parse matchups string:', e);
+      matchups = [];
+    }
+  }
+  
+  if (matchups && typeof matchups === 'object' && !Array.isArray(matchups)) {
+    console.log('🔧 matchups is object, extracting array...');
+    matchups = matchups.data || matchups.items || matchups.list || matchups.matchups || [];
+  }
+  
+  if (!Array.isArray(matchups)) {
+    console.warn('⚠️ matchups is not an array, using empty array. Type:', typeof matchups);
+    matchups = [];
+  }
+  
+  console.log('✅ Final matchups array:', matchups);
+  
+  const normalizedMatchups = matchups.map((m, idx) => {
+    if (!m || typeof m !== 'object') {
+      console.warn(`⚠️ Invalid matchup at index ${idx}:`, m);
+      return null;
+    }
+    
+    return {
+      opponent: m.opponent || m.name || m.archetype || 'Unknown',
+      winrate: Number(m.winrate || m.winRate || m.win_rate || 50),
+      difficulty: m.difficulty || m.rating || 'unknown'
+    };
+  }).filter(Boolean);
+
+  const summary = data?.summary || {};
+  const deckInfo = {
+    archetype: data?.archetype || data?.deckArchetype || 'Desconhecido',
+    tier: data?.tier || '-',
+    expectedWinrate: data?.expectedWinrate || data?.expected_winrate || null
+  };
+
+  return (
+    <div className="tab-layout">
+      <div className="panel">
+        <div className="panel-header">
+          <span className="panel-title">⚔️ Matchups vs. Meta</span>
+          <button className="btn btn-primary btn-sm" onClick={run} disabled={loading}>
+            {loading ? "⏳ Calculando…" : "🔄 Recalcular"}
+          </button>
+        </div>
+
+        {err && <div className="err-box">{err}</div>}
+
+        {data && (
+          <div className="panel-body">
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              gap: '12px',
+              padding: '12px',
+              background: 'rgba(255,255,255,0.05)',
+              borderRadius: '8px',
+              marginBottom: '16px'
+            }}>
+              <div>
+                <div style={{ fontSize: '11px', opacity: 0.6, marginBottom: '4px' }}>
+                  Arquétipo
+                </div>
+                <div style={{ fontSize: '16px', fontWeight: '600' }}>
+                  {deckInfo.archetype}
+                </div>
+              </div>
+              
+              <div>
+                <div style={{ fontSize: '11px', opacity: 0.6, marginBottom: '4px' }}>
+                  Tier
+                </div>
+                <div style={{ fontSize: '16px', fontWeight: '600' }}>
+                  {deckInfo.tier}
+                </div>
+              </div>
+
+              {deckInfo.expectedWinrate && (
+                <div>
+                  <div style={{ fontSize: '11px', opacity: 0.6, marginBottom: '4px' }}>
+                    WR Esperado
+                  </div>
+                  <div style={{ fontSize: '16px', fontWeight: '600' }}>
+                    {deckInfo.expectedWinrate}%
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {summary && (
+          <div className="panel-body">
+            <div className="aggregate-row">
+              {summary.avgWinRate != null && (
+                <div className="agg-item">
+                  <span className="agg-label">WR Médio</span>
+                  <span className="agg-val">{summary.avgWinRate}%</span>
+                </div>
+              )}
+              {summary.tier && (
+                <div className="agg-item">
+                  <span className="agg-label">Tier</span>
+                  <span className="agg-val">{summary.tier}</span>
+                </div>
+              )}
+              {(summary.favorable != null || summary.favored != null) && (
+                <div className="agg-item">
+                  <span className="agg-label">Favorável</span>
+                  <span className="agg-val" style={{ color: "#4ade80" }}>
+                    {summary.favorable || summary.favored || 0}
+                  </span>
+                </div>
+              )}
+              {summary.even != null && (
+                <div className="agg-item">
+                  <span className="agg-label">Equilibrado</span>
+                  <span className="agg-val" style={{ color: "#f59e0b" }}>
+                    {summary.even || 0}
+                  </span>
+                </div>
+              )}
+              {(summary.unfavorable != null || summary.unfavored != null) && (
+                <div className="agg-item">
+                  <span className="agg-label">Desfavorável</span>
+                  <span className="agg-val" style={{ color: "#f87171" }}>
+                    {summary.unfavorable || summary.unfavored || 0}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {normalizedMatchups.length === 0 && !loading && !err && (
+          <div className="panel-body">
+            <div className="empty-state">
+              <div className="empty-icon">⚔️</div>
+              {deckText.trim()
+                ? "Clique em Recalcular para ver os matchups"
+                : "Cole uma decklist para ver os matchups"}
+            </div>
+          </div>
+        )}
+
+        {normalizedMatchups.length > 0 && (
+          <div className="panel-body">
+            <h4 style={{ 
+              fontSize: '14px', 
+              fontWeight: '600', 
+              marginBottom: '12px',
+              opacity: 0.8
+            }}>
+              Matchups ({normalizedMatchups.length})
+            </h4>
+            
+            <div className="matchup-grid">
+              {normalizedMatchups.map((m, i) => {
+                const wr = Number(m.winrate) || 50;
+                
+                const wrClass =
+                  wr >= 55 ? "wr-favored" :
+                  wr >= 45 ? "wr-even" :
+                  wr >= 37 ? "wr-unfavored" : "wr-heavy";
+                  
+                const barClass =
+                  wr >= 55 ? "bar-favored" :
+                  wr >= 45 ? "bar-even" :
+                  wr >= 37 ? "bar-unfavored" : "bar-heavy";
+
+                return (
+                  <div key={i} className="matchup-row">
+                    <div className="matchup-opponent">{m.opponent}</div>
+                    <div className="matchup-bar-wrap">
+                      <div
+                        className={`matchup-bar ${barClass}`}
+                        style={{ width: `${wr}%` }}
+                      />
+                    </div>
+                    <div className={`matchup-wr ${wrClass}`}>{wr}%</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ROOT APP - ✅ CORRIGIDO
+// ═══════════════════════════════════════════════════════════
+
+export default function App() {
+  // ✅ HOOKS PRIMEIRO (antes do return)
+  const [tab, setTab] = useState("deck");
+  const [deckText, setDeckText] = useState("");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
+  if (!user) {
+    return <Login onLoginSuccess={setUser} />;
+  }
+
+  const tabs = [
+    { id: "deck", label: "Deck Analyzer", icon: "🃏" },
+    { id: "hand", label: "Hand Analyzer", icon: "🎴" },
+    { id: "matchups", label: "Matchups", icon: "⚔️" },
+    { id: "meta", label: "Meta Dashboard", icon: "📊" },
+  ];
+
+  // ✅ RETURN DEPOIS DOS HOOKS
+  return (
+    <PWAManager>
+      <div className="App">
+        <header className="app-header">
+          <div className="header-container">
+            {/* Mobile Menu */}
+            <MobileMenu tabs={tabs} activeTab={tab} onTabChange={setTab} />
+            
+            {/* Logo */}
+            <h1 className="app-logo">
+              <span className="logo-icon">🃏</span>
+              <span className="logo-text">Lorcana AI</span>
+            </h1>
+            
+            {/* User Info */}
+            <div className="user-info">
+              <span className="user-greeting desktop-only">
+                Olá, <strong>{user.username || user.email}</strong>
+              </span>
+              <span className="user-greeting mobile-only">
+                <strong>{user.username?.charAt(0) || user.email?.charAt(0)}</strong>
+              </span>
+              <button onClick={handleLogout} className="btn-logout">
+                Sair
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div className="app-main">
+          <div className="tabs">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                className={`tab-btn ${tab === t.id ? "active" : ""}`}
+                onClick={() => setTab(t.id)}
+              >
+                {t.icon} {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="tab-content">
+            {tab === "deck" && <DeckAnalyzer deckText={deckText} setDeckText={setDeckText} />}
+            {tab === "hand" && <HandAnalyzerTab deckText={deckText} />}
+            {tab === "matchups" && <MatchupsTab deckText={deckText} />}
+            {tab === "meta" && <MetaDashboard />}
+          </div>
+        </div>
+      </div>
+    </PWAManager>
+  );
+}

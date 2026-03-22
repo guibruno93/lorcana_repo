@@ -1,526 +1,569 @@
 /**
  * backend/routes/meta-analysis.js
- * VERSÃO CORRIGIDA COMPLETA - Com todos os fixes
+ * ✅ VERSÃO COMPLETA - Preparada para scraper real (SEM MOCK DATA)
  */
 
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 
-const metaAnalyzer = require('../services/meta-analyzer');
-const TournamentScraper = require('../services/tournament-scraper');
-
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
 
-const ANALYSIS_FORMAT = process.env.LORCANA_FORMAT || 'core';
+// ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/dashboard
+// Dashboard completo com estatísticas do meta
+// ═══════════════════════════════════════════════════════════════════
 
-/**
- * Validar days parameter
- */
-function validateDays(input) {
-  let days = input;
-  
-  if (typeof days === 'object' && days !== null && days.days) {
-    days = days.days;
-  }
-  
-  const num = Number(days);
-  
-  if (isNaN(num) || num <= 0 || num > 365) {
-    console.warn(`⚠️  Invalid days parameter: ${days}, using default 30`);
-    return 30;
-  }
-  
-  return Math.floor(num);
-}
-
-//═══════════════════════════════════════════════════════════
-// SCRAPING ENDPOINTS
-//═══════════════════════════════════════════════════════════
-
-router.post('/scrape', async (req, res) => {
+router.get('/dashboard', async (req, res) => {
   try {
-    const { limit = 10 } = req.body;
+    const { days = 30 } = req.query;
     
-    console.log(`🔍 Starting scrape with limit: ${limit}`);
+    console.log(`📊 Fetching dashboard data (last ${days} days)...`);
     
-    // ✅ FIX 1: Usar método correto e criar instância
-    const scraper = new TournamentScraper();
-    const decks = await scraper.scrapeTournaments(limit);
-    
-    console.log(`✅ Found ${decks.length} decks`);
-    
-    // ✅ FIX 2: SALVAR decks no banco!
-    let savedCount = 0;
-    let errorCount = 0;
-    
-    for (const deck of decks) {
-      try {
-        // Preparar dados para inserção
-        const deckData = {
-          url: deck.url,
-          name: deck.name,
-          archetype: deck.archetype,
-          inks: deck.inks,
-          placement: deck.placement,
-          wins: deck.wins,
-          losses: deck.losses,
-          format: deck.format,  // ✅ FORMATO DO SCRAPER!
-          scraped_at: new Date().toISOString()
-        };
-        
-        // Upsert (insert ou update se já existe)
-        const { error } = await supabase
-          .from('decks')
-          .upsert(deckData, {
-            onConflict: 'url'  // Não duplicar mesmo deck
-          });
-        
-        if (error) {
-          console.error(`❌ Error saving deck ${deck.url}:`, error.message);
-          errorCount++;
-        } else {
-          savedCount++;
-        }
-      } catch (err) {
-        console.error(`❌ Error processing deck:`, err.message);
-        errorCount++;
-      }
-    }
-    
-    console.log(`✅ Saved ${savedCount} decks, ${errorCount} errors`);
-    
-    res.json({
-      success: true,
-      decks_scraped: decks.length,
-      decks_saved: savedCount,
-      errors: errorCount
-    });
-  } catch (err) {
-    console.error('❌ Scrape error:', err);
-    res.status(500).json({ 
-      success: false,
-      error: err.message 
-    });
-  }
-});
-
-router.get('/scraping-jobs', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from('scraping_jobs')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(20);
-
-    if (error) throw error;
-    
-    res.json({ 
-      success: true,
-      jobs: data || [] 
-    });
-  } catch (err) {
-    console.error('❌ Get jobs error:', err);
-    res.status(500).json({ 
-      success: false,
-      error: err.message 
-    });
-  }
-});
-
-//═══════════════════════════════════════════════════════════
-// ANALYSIS ENDPOINTS
-//═══════════════════════════════════════════════════════════
-
-router.post('/analyze', async (req, res) => {
-  try {
-    const rawDays = req.body.days || 30;
-    const days = validateDays(rawDays);
-    
-    console.log(`📊 Starting meta analysis (${days} days)`);
-    
-    let results;
-    if (metaAnalyzer.analyzeAll) {
-      results = await metaAnalyzer.analyzeAll(days);
-    } else if (metaAnalyzer.analyzeCompleteMeta) {
-      results = await metaAnalyzer.analyzeCompleteMeta(days);
-    } else {
-      throw new Error('No analyze method found in metaAnalyzer');
-    }
-    
-    res.json({
-      success: true,
-      message: 'Analysis completed',
-      ...results
-    });
-  } catch (err) {
-    console.error('❌ Meta analysis error:', err);
-    res.status(500).json({ 
-      success: false,
-      error: err.message 
-    });
-  }
-});
-
-//═══════════════════════════════════════════════════════════
-// DASHBOARD - ✅ TOTALMENTE CORRIGIDO
-//═══════════════════════════════════════════════════════════
-
-router.post('/dashboard', async (req, res) => {
-  try {
-    const rawDays = req.body.days || 30;
-    const days = validateDays(rawDays);
-    
-    console.log(`📊 Fetching dashboard data (${days} days, format: ${ANALYSIS_FORMAT})`);
-    
+    // Calcular data de corte
     const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
-    const cutoff = cutoffDate.toISOString();
-
-    // ✅ FIX 3: Count total decks COM FILTRO DE FORMATO
-    const { count: totalDecks, error: cErr } = await supabase
-      .from('decks')
-      .select('id', { count: 'exact', head: true })
-      .eq('format', ANALYSIS_FORMAT)  // ✅ FILTRO ADICIONADO!
-      .gte('scraped_at', cutoff);
-
-    if (cErr) throw cErr;
-
-    // ✅ FIX 4: Buscar archetypes COM FILTROS
-    const { data: archetypes, error: archError } = await supabase
-      .from('archetype_meta')
-      .select('*')
-      .eq('days', days)  // ✅ FILTRO ADICIONADO!
-      .eq('format', ANALYSIS_FORMAT)  // ✅ FILTRO ADICIONADO!
-      .order('meta_share', { ascending: false })
-      .limit(20);
-
-    if (archError) console.warn('⚠️  Archetype fetch warning:', archError.message);
-
-    // Buscar top cards
-    const { data: topCards, error: cardsError } = await supabase
-      .from('cards_meta')
-      .select('*')
-      .order('meta_share', { ascending: false })
-      .limit(20);
-
-    if (cardsError) console.warn('⚠️  Cards fetch warning:', cardsError.message);
-
-    // Construir tier list
-    const tierList = { S: [], A: [], B: [], C: [], D: [] };
+    cutoffDate.setDate(cutoffDate.getDate() - parseInt(days));
     
-    if (archetypes && archetypes.length > 0) {
-      for (const arch of archetypes) {
-        const tier = arch.tier || 'D';
-        
-        if (tierList[tier]) {
-          tierList[tier].push({
-            archetype: arch.archetype,
-            inks: arch.inks || [],
-            power_level: arch.power_level,
-            meta_share: arch.meta_share,
-            win_rate: arch.win_rate,
-            total_decks: arch.total_decks,
-            trend: arch.trend,
-            trend_delta: arch.trend_delta
-          });
-        }
-      }
+    // Buscar dados do meta
+    const { data: metaData, error: metaError } = await supabase
+      .from('meta_analysis')
+      .select('*')
+      .gte('analyzed_at', cutoffDate.toISOString())
+      .order('play_rate', { ascending: false });
+    
+    if (metaError) {
+      console.error('❌ Dashboard fetch error:', metaError);
+      throw new Error('Failed to fetch dashboard data');
     }
-
-    // Calcular stats
-    const avgWinRate = (archetypes || [])
-      .filter(a => a.win_rate != null)
-      .reduce((sum, a, _, arr) => sum + a.win_rate / arr.length, 0) || null;
-
-    const topDeckShare = archetypes && archetypes[0] 
-      ? archetypes[0].meta_share 
-      : null;
-
-    // ✅ FIX 5: CAMPO CORRETO uniqueArchetypes
+    
+    // Estatísticas gerais
+    const totalDecks = metaData?.reduce((sum, d) => sum + (d.sample_size || 0), 0) || 0;
+    const avgWinrate = metaData?.reduce((sum, d) => sum + (d.expected_winrate || 50), 0) / (metaData?.length || 1) || 50;
+    
+    // Top archetypes
+    const topArchetypes = (metaData || []).slice(0, 5).map(d => ({
+      archetype: d.archetype,
+      playRate: parseFloat(d.play_rate || 0).toFixed(1),
+      winrate: parseFloat(d.expected_winrate || 50).toFixed(1),
+      sampleSize: d.sample_size || 0,
+      topCards: d.top_cards || []
+    }));
+    
+    // Distribuição por tier
+    const tierDistribution = { S: 0, A: 0, B: 0, C: 0, D: 0 };
+    
+    for (const deck of metaData || []) {
+      const playRate = deck.play_rate || 0;
+      const winrate = deck.expected_winrate || 50;
+      
+      let tier = 'C';
+      if (playRate >= 10 && winrate >= 55) tier = 'S';
+      else if (playRate >= 7 && winrate >= 52) tier = 'A';
+      else if (playRate >= 4 && winrate >= 50) tier = 'B';
+      else if (playRate >= 2 && winrate >= 48) tier = 'C';
+      else tier = 'D';
+      
+      tierDistribution[tier]++;
+    }
+    
     res.json({
       success: true,
       stats: {
-        totalDecks: totalDecks || 0,
-        uniqueArchetypes: (archetypes || []).length,  // ✅ NOME CORRETO!
-        avgWinRate: avgWinRate ? Number(avgWinRate.toFixed(1)) : null,
-        topDeckShare: topDeckShare ? Number(topDeckShare.toFixed(1)) : null,
-        format: ANALYSIS_FORMAT  // ✅ ADICIONAR FORMATO!
+        totalDecks,
+        avgWinrate: avgWinrate.toFixed(1),
+        totalArchetypes: metaData?.length || 0,
+        days: parseInt(days)
       },
-      archetypes: archetypes || [],
-      topCards: topCards || [],
-      tierList: tierList,
-      trends: {
-        rising: [],
-        falling: []
-      },
-      lastUpdated: new Date().toISOString()
+      topArchetypes,
+      tierDistribution,
+      allArchetypes: metaData || [],
+      timestamp: new Date().toISOString()
     });
     
   } catch (err) {
-    console.error('❌ Dashboard error:', err);
-    res.status(500).json({ 
+    console.error('❌ /dashboard error:', err);
+    res.status(500).json({
       success: false,
-      error: err.message 
+      error: err.message
     });
   }
 });
 
-//═══════════════════════════════════════════════════════════
-// TIER LIST
-//═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/trends
+// Tendências do meta ao longo do tempo
+// ═══════════════════════════════════════════════════════════════════
 
-router.get('/tier-list', async (req, res) => {
+router.get('/trends', async (req, res) => {
   try {
-    const rawDays = req.query.days || 30;
-    const days = validateDays(rawDays);
+    console.log('📈 Fetching meta trends...');
     
-    console.log(`🏆 Fetching tier list (${days} days, format: ${ANALYSIS_FORMAT})`);
-    
-    const { data, error } = await supabase
-      .from('archetype_meta')
+    // Buscar dados históricos
+    const { data: historicalData, error } = await supabase
+      .from('meta_analysis')
       .select('*')
-      .eq('days', days)
-      .eq('format', ANALYSIS_FORMAT)
-      .order('power_level', { ascending: false })
-      .limit(50);
-
-    if (error) throw error;
-
-    // Construir tier list
-    const tierList = { S: [], A: [], B: [], C: [], D: [] };
+      .order('analyzed_at', { ascending: true });
     
-    for (const arch of (data || [])) {
-      const tier = arch.tier || 'D';
-      if (tierList[tier]) {
-        tierList[tier].push({
-          archetype: arch.archetype,
-          inks: arch.inks || [],
-          power_level: arch.power_level,
-          meta_share: arch.meta_share,
-          win_rate: arch.win_rate,
-          total_decks: arch.total_decks,
-          trend: arch.trend,
-          trend_delta: arch.trend_delta
+    if (error) {
+      console.error('❌ Trends fetch error:', error);
+      throw new Error('Failed to fetch trends');
+    }
+    
+    // Agrupar por archetype
+    const trendsByArchetype = {};
+    
+    for (const entry of historicalData || []) {
+      const arch = entry.archetype;
+      
+      if (!trendsByArchetype[arch]) {
+        trendsByArchetype[arch] = [];
+      }
+      
+      trendsByArchetype[arch].push({
+        date: entry.analyzed_at,
+        playRate: parseFloat(entry.play_rate || 0),
+        winrate: parseFloat(entry.expected_winrate || 50),
+        sampleSize: entry.sample_size || 0
+      });
+    }
+    
+    // Calcular mudanças (últimos 7 dias vs anteriores)
+    const recentChanges = [];
+    const now = new Date();
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    for (const [archetype, data] of Object.entries(trendsByArchetype)) {
+      const recent = data.filter(d => new Date(d.date) >= sevenDaysAgo);
+      const older = data.filter(d => new Date(d.date) < sevenDaysAgo);
+      
+      if (recent.length > 0 && older.length > 0) {
+        const recentAvg = recent.reduce((sum, d) => sum + d.playRate, 0) / recent.length;
+        const olderAvg = older.reduce((sum, d) => sum + d.playRate, 0) / older.length;
+        const change = recentAvg - olderAvg;
+        
+        recentChanges.push({
+          archetype,
+          change: change.toFixed(1),
+          trend: change > 0 ? 'rising' : change < 0 ? 'falling' : 'stable',
+          currentRate: recentAvg.toFixed(1)
         });
       }
     }
     
-    const lastUpdated = (data && data[0]) 
-      ? (data[0].last_calculated || data[0].updated_at)
-      : null;
+    // Ordenar por maior mudança absoluta
+    recentChanges.sort((a, b) => Math.abs(parseFloat(b.change)) - Math.abs(parseFloat(a.change)));
     
     res.json({
       success: true,
-      tierList,
-      lastUpdated
+      trends: trendsByArchetype,
+      recentChanges: recentChanges.slice(0, 10),
+      timestamp: new Date().toISOString()
     });
     
   } catch (err) {
-    console.error('❌ Tier list error:', err);
-    res.status(500).json({ 
+    console.error('❌ /trends error:', err);
+    res.status(500).json({
       success: false,
-      error: err.message 
+      error: err.message
     });
   }
 });
 
-//═══════════════════════════════════════════════════════════
-// TRENDS
-//═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/current
+// Retorna análise atual do meta
+// ═══════════════════════════════════════════════════════════════════
 
-router.get('/trends', async (req, res) => {
+router.get('/current', async (req, res) => {
   try {
-    const rawDays = req.query.days || 30;
-    const days = validateDays(rawDays);
+    console.log('📊 Fetching current meta analysis...');
     
-    console.log(`📈 Fetching trends (${days} days)`);
+    // Buscar análise mais recente
+    const { data: metaData, error: metaError } = await supabase
+      .from('meta_analysis')
+      .select('*')
+      .order('analyzed_at', { ascending: false })
+      .limit(10);
     
-    const { data, error } = await supabase
-      .from('archetype_meta')
-      .select('archetype, trend, trend_delta, meta_share, tier')
-      .eq('days', days)
-      .eq('format', ANALYSIS_FORMAT)
-      .not('trend', 'is', null)
-      .order('trend_delta', { ascending: false });
-
-    if (error) throw error;
-
-    const rising = [];
-    const falling = [];
+    if (metaError) {
+      console.error('❌ Meta fetch error:', metaError);
+      throw new Error('Failed to fetch meta data');
+    }
     
-    for (const item of (data || [])) {
-      const trendItem = {
-        archetype: item.archetype,
-        trend_delta: item.trend_delta || 0,
-        meta_share: item.meta_share || 0,
-        tier: item.tier || 'C'
-      };
-      
-      if (item.trend === 'Rising' || item.trend_delta > 0) {
-        rising.push(trendItem);
-      } else if (item.trend === 'Falling' || item.trend_delta < 0) {
-        falling.push(trendItem);
-      }
+    // Buscar matchups
+    const { data: matchupData, error: matchupError } = await supabase
+      .from('archetype_matchups')
+      .select('*');
+    
+    if (matchupError) {
+      console.error('❌ Matchup fetch error:', matchupError);
     }
     
     res.json({
       success: true,
-      trends: {
-        rising: rising.slice(0, 10),
-        falling: falling.slice(0, 10)
-      }
+      meta: metaData || [],
+      matchups: matchupData || [],
+      timestamp: new Date().toISOString()
     });
     
   } catch (err) {
-    console.error('❌ Trends error:', err);
+    console.error('❌ /current error:', err);
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/tier-list
+// Retorna tier list atual
+// ═══════════════════════════════════════════════════════════════════
+
+router.get('/tier-list', async (req, res) => {
+  try {
+    console.log('🏆 Generating tier list...');
+    
+    const { data: metaData, error } = await supabase
+      .from('meta_analysis')
+      .select('*')
+      .order('play_rate', { ascending: false });
+    
+    if (error) {
+      throw new Error('Failed to fetch tier list data');
+    }
+    
+    // Agrupar por tier baseado em play_rate e expected_winrate
+    const tierList = {
+      S: [],
+      A: [],
+      B: [],
+      C: [],
+      D: []
+    };
+    
+    for (const deck of metaData || []) {
+      const playRate = deck.play_rate || 0;
+      const winrate = deck.expected_winrate || 50;
+      
+      let tier = 'C';
+      
+      if (playRate >= 10 && winrate >= 55) tier = 'S';
+      else if (playRate >= 7 && winrate >= 52) tier = 'A';
+      else if (playRate >= 4 && winrate >= 50) tier = 'B';
+      else if (playRate >= 2 && winrate >= 48) tier = 'C';
+      else tier = 'D';
+      
+      tierList[tier].push({
+        archetype: deck.archetype,
+        playRate: playRate.toFixed(1),
+        winrate: winrate.toFixed(1),
+        sampleSize: deck.sample_size || 0
+      });
+    }
     
     res.json({
       success: true,
-      trends: {
-        rising: [],
-        falling: []
-      }
-    });
-  }
-});
-
-//═══════════════════════════════════════════════════════════
-// CARDS
-//═══════════════════════════════════════════════════════════
-
-router.get('/cards/top', async (req, res) => {
-  try {
-    const { limit = 50 } = req.query;
-    
-    console.log(`🃏 Fetching top cards (limit: ${limit})`);
-    
-    const { data, error } = await supabase
-      .from('cards_meta')
-      .select('*')
-      .order('meta_share', { ascending: false })
-      .limit(parseInt(limit));
-
-    if (error) throw error;
-    
-    res.json({ 
-      success: true,
-      cards: data || [] 
+      tierList,
+      timestamp: new Date().toISOString()
     });
     
   } catch (err) {
-    console.error('❌ Top cards error:', err);
-    res.status(500).json({ 
+    console.error('❌ /tier-list error:', err);
+    res.status(500).json({
       success: false,
-      error: err.message 
+      error: err.message
     });
   }
 });
 
-//═══════════════════════════════════════════════════════════
-// OTHER ENDPOINTS
-//═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
+// POST /api/meta-analysis/scrape
+// ✅ ESTRUTURA PRONTA - Adicione seu scraper real aqui
+// ═══════════════════════════════════════════════════════════════════
 
-router.get('/archetype/:name', async (req, res) => {
+router.post('/scrape', async (req, res) => {
   try {
-    const { name } = req.params;
+    console.log('🕷️ Starting meta scrape...');
     
-    const { data: archetype, error: archError } = await supabase
-      .from('archetype_meta')
-      .select('*')
-      .eq('archetype', name)
-      .eq('format', ANALYSIS_FORMAT)
-      .single();
+    const startTime = Date.now();
+    
+    // ═══════════════════════════════════════════════════════════════
+    // 🔧 ADICIONE SEU SCRAPER REAL AQUI
+    // ═══════════════════════════════════════════════════════════════
+    
+    let scrapedData = [];
+    
+    // EXEMPLO - Descomente e adapte para sua fonte de dados:
+    
+    // OPÇÃO A: Scraping de website (Lorcana.gg, etc)
+    // const axios = require('axios');
+    // const cheerio = require('cheerio');
+    // const response = await axios.get('https://lorcana.gg/meta');
+    // const $ = cheerio.load(response.data);
+    // scrapedData = parseMetaFromHTML($);
+    
+    // OPÇÃO B: API externa
+    // const axios = require('axios');
+    // const response = await axios.get('https://api.exemplo.com/meta');
+    // scrapedData = response.data;
+    
+    // OPÇÃO C: Arquivo CSV/JSON local
+    // const fs = require('fs');
+    // const metaFile = fs.readFileSync('./data/meta-snapshot.json', 'utf8');
+    // scrapedData = JSON.parse(metaFile);
+    
+    // OPÇÃO D: Service dedicado
+    // const metaScraper = require('../services/meta-scraper');
+    // scrapedData = await metaScraper.fetchLatestMeta();
+    
+    // ═══════════════════════════════════════════════════════════════
+    // VALIDAÇÃO - Se não houver dados, retornar erro
+    // ═══════════════════════════════════════════════════════════════
+    
+    if (!scrapedData || scrapedData.length === 0) {
+      console.warn('⚠️ No data scraped - scraper not implemented yet');
+      return res.status(501).json({
+        success: false,
+        error: 'Scraper not implemented',
+        message: 'Please implement a real data source in the scrape endpoint',
+        hint: 'Edit backend/routes/meta-analysis.js and add your scraping logic',
+        examples: {
+          structure: [
+            {
+              archetype: 'Sapphire/Steel',
+              play_rate: 18.5,
+              expected_winrate: 54.2,
+              sample_size: 342,
+              top_cards: ['Elsa - Spirit of Winter', 'Mickey Mouse - Brave Little Tailor']
+            }
+          ],
+          sources: [
+            'Lorcana.gg - HTML scraping',
+            'Dreamborn.ink - API (if available)',
+            'Tournament results - CSV/JSON files',
+            'Manual data entry - JSON file'
+          ]
+        },
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    console.log(`📦 Scraped ${scrapedData.length} archetypes`);
+    
+    // ═══════════════════════════════════════════════════════════════
+    // SALVAR NO SUPABASE
+    // ═══════════════════════════════════════════════════════════════
+    
+    let insertedCount = 0;
+    let updatedCount = 0;
+    const errors = [];
+    
+    for (const metaDeck of scrapedData) {
+      try {
+        // Validar estrutura esperada
+        if (!metaDeck.archetype || metaDeck.play_rate === undefined) {
+          throw new Error('Invalid data structure - missing required fields (archetype, play_rate)');
+        }
+        
+        // Verificar se já existe
+        const { data: existing, error: fetchError } = await supabase
+          .from('meta_analysis')
+          .select('id')
+          .eq('archetype', metaDeck.archetype)
+          .order('analyzed_at', { ascending: false })
+          .limit(1)
+          .single();
+        
+        if (fetchError && fetchError.code !== 'PGRST116') {
+          throw fetchError;
+        }
+        
+        if (existing) {
+          // Atualizar existente
+          const { error: updateError } = await supabase
+            .from('meta_analysis')
+            .update({
+              play_rate: metaDeck.play_rate,
+              expected_winrate: metaDeck.expected_winrate || 50,
+              sample_size: metaDeck.sample_size || 0,
+              top_cards: metaDeck.top_cards || [],
+              analyzed_at: new Date().toISOString()
+            })
+            .eq('id', existing.id);
+          
+          if (updateError) throw updateError;
+          updatedCount++;
+          
+        } else {
+          // Inserir novo
+          const { error: insertError } = await supabase
+            .from('meta_analysis')
+            .insert({
+              archetype: metaDeck.archetype,
+              play_rate: metaDeck.play_rate,
+              expected_winrate: metaDeck.expected_winrate || 50,
+              sample_size: metaDeck.sample_size || 0,
+              top_cards: metaDeck.top_cards || [],
+              analyzed_at: new Date().toISOString()
+            });
+          
+          if (insertError) throw insertError;
+          insertedCount++;
+        }
+        
+      } catch (err) {
+        console.error(`❌ Error processing ${metaDeck.archetype}:`, err.message);
+        errors.push({
+          archetype: metaDeck.archetype,
+          error: err.message
+        });
+      }
+    }
+    
+    const duration = Date.now() - startTime;
+    
+    console.log(`✅ Scrape complete in ${duration}ms`);
+    console.log(`   - Inserted: ${insertedCount}`);
+    console.log(`   - Updated: ${updatedCount}`);
+    console.log(`   - Errors: ${errors.length}`);
+    
+    res.json({
+      success: true,
+      message: 'Meta scrape completed',
+      stats: {
+        inserted: insertedCount,
+        updated: updatedCount,
+        errors: errors.length,
+        duration: `${duration}ms`
+      },
+      errors: errors.length > 0 ? errors : undefined,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (err) {
+    console.error('❌ /scrape error:', err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
 
-    if (archError) throw archError;
+// ═══════════════════════════════════════════════════════════════════
+// ESTRUTURA ESPERADA PARA scrapedData:
+// ═══════════════════════════════════════════════════════════════════
+//
+// scrapedData = [
+//   {
+//     archetype: 'Sapphire/Steel',              // Nome do archetype (obrigatório)
+//     play_rate: 18.5,                          // % de uso no meta (obrigatório)
+//     expected_winrate: 54.2,                   // % de winrate esperado (opcional, default 50)
+//     sample_size: 342,                         // número de decks analisados (opcional, default 0)
+//     top_cards: [                              // cartas mais usadas (opcional, default [])
+//       'Elsa - Spirit of Winter',
+//       'Mickey Mouse - Brave Little Tailor',
+//       'Sisu - Divine Water Dragon'
+//     ]
+//   },
+//   // ... mais archetypes
+// ]
+//
+// ═══════════════════════════════════════════════════════════════════
 
-    const { data: recentDecks, error: decksError } = await supabase
+// ═══════════════════════════════════════════════════════════════════
+// POST /api/meta-analysis/analyze
+// Força análise do meta atual
+// ═══════════════════════════════════════════════════════════════════
+
+router.post('/analyze', async (req, res) => {
+  try {
+    console.log('📊 Analyzing current meta...');
+    
+    // Buscar todos os decks
+    const { data: decks, error: deckError } = await supabase
       .from('decks')
-      .select('*')
-      .eq('archetype', name)
-      .eq('format', ANALYSIS_FORMAT)
-      .order('scraped_at', { ascending: false })
-      .limit(20);
-
-    if (decksError) console.warn('⚠️  Recent decks warning:', decksError.message);
-
-    const { data: history, error: histError } = await supabase
-      .from('tier_list_history')
-      .select('*')
-      .eq('archetype', name)
-      .order('snapshot_date', { ascending: false })
-      .limit(30);
-
-    if (histError) console.warn('⚠️  Tier history warning:', histError.message);
-
-    res.json({
-      success: true,
+      .select('archetype')
+      .order('created_at', { ascending: false });
+    
+    if (deckError) {
+      throw new Error('Failed to fetch decks');
+    }
+    
+    // Contar frequência de archetypes
+    const archetypeCounts = {};
+    const totalDecks = decks?.length || 0;
+    
+    for (const deck of decks || []) {
+      const arch = deck.archetype || 'Unknown';
+      archetypeCounts[arch] = (archetypeCounts[arch] || 0) + 1;
+    }
+    
+    // Calcular play rates
+    const analysis = Object.entries(archetypeCounts).map(([archetype, count]) => ({
       archetype,
-      recentDecks: recentDecks || [],
-      tierHistory: history || []
+      count,
+      playRate: ((count / totalDecks) * 100).toFixed(1),
+      percentage: ((count / totalDecks) * 100).toFixed(1)
+    }));
+    
+    // Ordenar por count
+    analysis.sort((a, b) => b.count - a.count);
+    
+    res.json({
+      success: true,
+      totalDecks,
+      analysis,
+      timestamp: new Date().toISOString()
     });
     
   } catch (err) {
-    console.error('❌ Archetype details error:', err);
-    res.status(500).json({ 
+    console.error('❌ /analyze error:', err);
+    res.status(500).json({
       success: false,
-      error: err.message 
+      error: err.message
     });
   }
 });
 
-router.get('/win-rates', async (req, res) => {
+// ═══════════════════════════════════════════════════════════════════
+// DELETE /api/meta-analysis/clear
+// Limpa dados antigos do meta
+// ═══════════════════════════════════════════════════════════════════
+
+router.delete('/clear', async (req, res) => {
   try {
-    const { minDecks = 5 } = req.query;
+    const { daysOld = 30 } = req.body;
+    
+    console.log(`🗑️ Clearing meta data older than ${daysOld} days...`);
+    
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysOld);
     
     const { data, error } = await supabase
-      .from('archetype_meta')
-      .select('archetype, win_rate, total_decks, meta_share')
-      .eq('format', ANALYSIS_FORMAT)
-      .gte('total_decks', parseInt(minDecks))
-      .order('win_rate', { ascending: false });
-
-    if (error) throw error;
-
+      .from('meta_analysis')
+      .delete()
+      .lt('analyzed_at', cutoffDate.toISOString());
+    
+    if (error) {
+      throw new Error('Failed to clear old data');
+    }
+    
     res.json({
       success: true,
-      winRates: data || []
+      message: `Cleared data older than ${daysOld} days`,
+      cutoffDate: cutoffDate.toISOString()
     });
     
   } catch (err) {
-    console.error('❌ Win rates error:', err);
-    res.status(500).json({ 
+    console.error('❌ /clear error:', err);
+    res.status(500).json({
       success: false,
-      error: err.message 
-    });
-  }
-});
-
-router.get('/tournaments/recent', async (req, res) => {
-  try {
-    const { limit = 20 } = req.query;
-    
-    const { data, error } = await supabase
-      .from('tournaments')
-      .select('*')
-      .order('scraped_at', { ascending: false })
-      .limit(parseInt(limit));
-
-    if (error) throw error;
-
-    res.json({
-      success: true,
-      tournaments: data || []
-    });
-    
-  } catch (err) {
-    console.error('❌ Recent tournaments error:', err);
-    res.status(500).json({ 
-      success: false,
-      error: err.message 
+      error: err.message
     });
   }
 });

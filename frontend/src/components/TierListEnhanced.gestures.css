@@ -1,0 +1,411 @@
+/* ==========================================
+   TOUCH GESTURES & FEEDBACK
+   ========================================== */
+
+/* Touch Active State - Feedback visual ao tocar */
+.touch-active {
+  background: rgba(103, 126, 234, 0.15) !important;
+  transform: scale(0.98);
+  transition: all 0.1s ease-out !important;
+}
+
+/* Expanded Row Highlight */
+.expanded-row {
+  box-shadow: 0 0 0 2px rgba(103, 126, 234, 0.3);
+  border-radius: 8px;
+  margin: 4px 0;
+  transition: all 0.3s ease;
+}
+
+/* ==========================================
+   SWIPE INDICATORS
+   ========================================== */
+
+/* Sutil indicador visual de que pode fazer swipe */
+.archetype-header {
+  position: relative;
+  overflow: hidden;
+}
+
+.archetype-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, 
+    transparent 0%, 
+    rgba(103, 126, 234, 0.3) 50%, 
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.archetype-header:active::before {
+  opacity: 1;
+}
+
+/* Swipe hint animation (aparece ao tocar e segurar) */
+@keyframes swipe-hint {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(8px);
+    opacity: 1;
+  }
+}
+
+.archetype-header.show-hint .expand-icon {
+  animation: swipe-hint 1s ease-in-out infinite;
+}
+
+/* ==========================================
+   SMOOTH SCROLLING
+   ========================================== */
+
+/* Scroll suave global */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scroll snap para mobile (opcional) */
+@media (max-width: 768px) {
+  .tier-list-container {
+    scroll-snap-type: y proximity;
+  }
+  
+  .tier-section {
+    scroll-snap-align: start;
+  }
+}
+
+/* Ocultar scrollbar mas manter funcionalidade */
+.tier-list-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(103, 126, 234, 0.3) transparent;
+}
+
+.tier-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tier-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tier-list-container::-webkit-scrollbar-thumb {
+  background: rgba(103, 126, 234, 0.3);
+  border-radius: 4px;
+}
+
+.tier-list-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(103, 126, 234, 0.5);
+}
+
+@media (max-width: 768px) {
+  /* Scrollbar muito fina em mobile */
+  .tier-list-container::-webkit-scrollbar {
+    width: 4px;
+  }
+}
+
+/* ==========================================
+   CARD TOUCH FEEDBACK
+   ========================================== */
+
+.card-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ripple effect ao tocar */
+.card-item::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(103, 126, 234, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-item:active::after {
+  width: 200%;
+  height: 200%;
+  opacity: 1;
+}
+
+/* Card image loading state */
+.card-image-wrapper {
+  position: relative;
+  aspect-ratio: 3/4;
+  background: rgba(103, 126, 234, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-image-wrapper.loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(103, 126, 234, 0.05) 0%,
+    rgba(103, 126, 234, 0.15) 50%,
+    rgba(103, 126, 234, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ==========================================
+   LOADING INDICATOR IN HEADER
+   ========================================== */
+
+.loading-indicator {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.loading-indicator .pulse-loader {
+  padding: 0;
+  scale: 0.6;
+}
+
+/* ==========================================
+   BOUNCE ANIMATIONS
+   ========================================== */
+
+/* Bounce ao expandir */
+.archetype-header.expanded {
+  animation: bounce-in 0.4s ease-out;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Bounce no expand icon */
+.expand-icon {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.expand-icon.rotated {
+  animation: rotate-bounce 0.5s ease-out;
+}
+
+@keyframes rotate-bounce {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(180deg) scale(1);
+  }
+}
+
+/* ==========================================
+   PULL TO REFRESH (opcional)
+   ========================================== */
+
+.pull-to-refresh-indicator {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  background: rgba(103, 126, 234, 0.9);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 0 0 12px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.pull-to-refresh-indicator.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================
+   HAPTIC FEEDBACK VISUAL (para devices sem haptic)
+   ========================================== */
+
+.haptic-flash {
+  animation: haptic-pulse 0.2s ease-out;
+}
+
+@keyframes haptic-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(103, 126, 234, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(103, 126, 234, 0);
+  }
+}
+
+/* ==========================================
+   ELASTIC SCROLL (overscroll bounce effect)
+   ========================================== */
+
+@media (max-width: 768px) {
+  .tier-list-container {
+    /* Permite overscroll bounce nativo no iOS */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* ==========================================
+   SAFE AREAS (para devices com notch)
+   ========================================== */
+
+@supports (padding: max(0px)) {
+  .tier-list-container {
+    padding-left: max(1.25rem, env(safe-area-inset-left));
+    padding-right: max(1.25rem, env(safe-area-inset-right));
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION (acessibilidade)
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .expand-icon {
+    transition: transform 0.01ms !important;
+  }
+  
+  .card-item:hover {
+    transform: none !important;
+  }
+}
+
+/* ==========================================
+   FOCUS STATES (acessibilidade)
+   ========================================== */
+
+.archetype-header:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.card-item:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* ==========================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================== */
+
+/* Hardware acceleration */
+.archetype-header,
+.card-item,
+.expand-icon {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Containment para melhor performance */
+.archetype-row {
+  contain: layout style paint;
+}
+
+.card-item {
+  contain: layout style paint;
+}
+
+/* ==========================================
+   LANDSCAPE ORIENTATION ADJUSTMENTS
+   ========================================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Em landscape mobile, otimizar espaço vertical */
+  .tier-header {
+    padding: 0.625rem 1rem;
+  }
+  
+  .tier-title {
+    font-size: 1.125rem;
+  }
+  
+  .archetype-header {
+    padding: 0.875rem 1rem;
+  }
+  
+  .cards-expanded-section {
+    padding: 1rem;
+  }
+  
+  /* Mais colunas em landscape */
+  .cards-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* ==========================================
+   HIGH DPI DISPLAYS
+   ========================================== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Bordas mais finas em displays retina */
+  .card-item {
+    border-width: 0.5px;
+  }
+  
+  .archetype-row.bordered {
+    border-bottom-width: 0.5px;
+  }
+}
+
+/* ==========================================
+   DARK MODE SUPPORT (futuro)
+   ========================================== */
+
+@media (prefers-color-scheme: dark) {
+  /* Já está dark por padrão, mas podemos adicionar variações */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(103, 126, 234, 0.05) 0%,
+      rgba(103, 126, 234, 0.15) 50%,
+      rgba(103, 126, 234, 0.05) 100%
+    );
+  }
+}

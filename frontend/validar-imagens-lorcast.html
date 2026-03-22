@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação de Imagens Lorcast</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #818cf8;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .controls {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        label {
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input, select {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 200px;
+        }
+        
+        button {
+            background: #818cf8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #6366f1;
+            transform: translateY(-1px);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .card-image-container {
+            width: 100%;
+            aspect-ratio: 5/7;
+            background: #0f172a;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .card-placeholder {
+            color: #475569;
+            font-size: 48px;
+        }
+        
+        .card-info {
+            padding: 15px;
+        }
+        
+        .card-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .card-set {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+        
+        .card-url {
+            font-size: 11px;
+            color: #64748b;
+            word-break: break-all;
+            font-family: monospace;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #0f172a;
+            border-radius: 6px;
+        }
+        
+        .card-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background: #10b98120;
+            color: #10b981;
+        }
+        
+        .status-error {
+            background: #ef444420;
+            color: #ef4444;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Validação de Imagens Lorcast</h1>
+        <p class="subtitle">Testa diferentes formatos de URL para encontrar as imagens corretas</p>
+        
+        <div class="controls">
+            <div class="control-group">
+                <div>
+                    <label>Set Code</label>
+                    <select id="setCode">
+                        <option value="LOR1">LOR1 - The First Chapter</option>
+                        <option value="LOR2">LOR2 - Rise of the Floodborn</option>
+                        <option value="LOR3">LOR3 - Into the Inklands</option>
+                        <option value="LOR4">LOR4 - Ursula's Return</option>
+                        <option value="LOR5">LOR5 - Shimmering Skies</option>
+                        <option value="LOR6">LOR6 - Azurite Sea</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label>Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="001" value="001">
+                </div>
+                
+                <div>
+                    <label>Formato</label>
+                    <select id="format">
+                        <option value="{set}/{num}.jpg">{set}/{num}.jpg</option>
+                        <option value="{set}/{num}.png">{set}/{num}.png</option>
+                        <option value="{set}_{num}.jpg">{set}_{num}.jpg</option>
+                        <option value="{set}-{num}.jpg">{set}-{num}.jpg</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button onclick="testSingleCard()">🔍 Testar Carta Individual</button>
+            <button onclick="testMultipleCards()">🔍 Testar Várias Cartas</button>
+            <button onclick="testAllMockCards()">🔍 Testar Todas as Cartas MOCK</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value success" id="successCount">0</div>
+                <div class="stat-label">Carregadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value error" id="errorCount">0</div>
+                <div class="stat-label">Erro 404</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalCount">0</div>
+                <div class="stat-label">Total Testadas</div>
+            </div>
+        </div>
+        
+        <div id="results" class="grid"></div>
+    </div>
+    
+    <script>
+        const BASE_URL = 'https://api.lorcast.com/v0/images/cards';
+        
+        let successCount = 0;
+        let errorCount = 0;
+        let totalCount = 0;
+        
+        // Cartas MOCK do cardService.js
+        const MOCK_CARDS = [
+            { set: 'LOR1', number: '001', name: 'Elsa - Spirit of Winter' },
+            { set: 'LOR1', number: '002', name: 'Mickey Mouse - Brave Little Tailor' },
+            { set: 'LOR2', number: '003', name: 'Sisu - Divine Water Dragon' },
+            { set: 'LOR3', number: '004', name: 'Aurora - Dreaming Guardian' },
+            { set: 'LOR4', number: '005', name: 'Maleficent - Uninvited' },
+            { set: 'LOR5', number: '006', name: 'Rapunzel - Gifted with Healing' },
+            { set: 'LOR6', number: '007', name: 'Tiana - Celebrating Princess' },
+            { set: 'LOR7', number: '008', name: 'Mulan - Imperial Soldier' },
+            { set: 'LOR8', number: '009', name: 'Jafar - Keeper of Secrets' },
+            { set: 'LOR1', number: '010', name: 'Beast - Hardheaded' },
+            { set: 'LOR1', number: '011', name: 'A Whole New World' },
+            { set: 'LOR2', number: '012', name: 'Fishbone Quill' },
+            { set: 'LOR1', number: '013', name: 'Ursula - Trickster' },
+            { set: 'LOR3', number: '014', name: 'Cinderella - Ballroom Sensation' },
+            { set: 'LOR1', number: '015', name: 'Simba - Protective Cub' },
+            { set: 'LOR2', number: '016', name: 'Ariel - Spectral Songstress' },
+            { set: 'LOR3', number: '017', name: 'Moana - Of Motunui' },
+            { set: 'LOR4', number: '018', name: 'Stitch - Rock Star' },
+            { set: 'LOR1', number: '019', name: 'Be Prepared' },
+            { set: 'LOR2', number: '020', name: 'Let It Go' },
+            { set: 'LOR3', number: '021', name: 'Hakuna Matata' },
+            { set: 'LOR4', number: '022', name: 'Poisoned Apple' },
+            { set: 'Q1', number: '023', name: 'Merlin - Crab' },
+            { set: 'D23', number: '024', name: 'Mickey Mouse - Detective' }
+        ];
+        
+        function updateStats() {
+            document.getElementById('successCount').textContent = successCount;
+            document.getElementById('errorCount').textContent = errorCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+        
+        function buildURL(set, number, format) {
+            const template = format || document.getElementById('format').value;
+            return `${BASE_URL}/${template.replace('{set}', set).replace('{num}', number)}`;
+        }
+        
+        function testImage(url, cardInfo) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const timeout = setTimeout(() => {
+                    resolve({ success: false, url, error: 'Timeout', ...cardInfo });
+                }, 5000);
+                
+                img.onload = () => {
+                    clearTimeout(timeout);
+                    resolve({ success: true, url, ...cardInfo });
+                };
+                
+                img.onerror = () => {
+                    clearTimeout(timeout);
+                    resolve({ success: false, url, error: '404', ...cardInfo });
+                };
+                
+                img.src = url;
+            });
+        }
+        
+        function renderCard(result) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const statusClass = result.success ? 'status-success' : 'status-error';
+            const statusText = result.success ? '✓ Carregou' : `✗ ${result.error || '404'}`;
+            
+            card.innerHTML = `
+                <div class="card-image-container">
+                    ${result.success 
+                        ? `<img src="${result.url}" class="card-image" alt="${result.name}">` 
+                        : '<div class="card-placeholder">🃏</div>'}
+                </div>
+                <div class="card-info">
+                    <div class="card-name">${result.name || 'Carta de Teste'}</div>
+                    <div class="card-set">${result.set} - #${result.number}</div>
+                    <div class="card-url">${result.url}</div>
+                    <span class="card-status ${statusClass}">${statusText}</span>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        async function testSingleCard() {
+            const set = document.getElementById('setCode').value;
+            const number = document.getElementById('cardNumber').value.padStart(3, '0');
+            const url = buildURL(set, number);
+            
+            successCount = 0;
+            errorCount = 0;
+            totalCount = 1;
+            
+            document.getElementById('results').innerHTML = '<div class="loading">🔍 Testando...</div>';
+            
+            const result = await testImage(url, { set, number });
+            
+            if (result.success) successCount++;
+            else errorCount++;
+            
+            updateStats();
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            resultsDiv.appendChild(renderCard(result));
+        }
+        
+        async function testMultipleCards() {
+            const set = document.getElementById('setCode').value;
+            const numbers = ['001', '002', '003', '004', '005', '010', '015', '020'];
+            
+            successCount = 0;
+            errorCount = 0;
+            totalCount = numbers.length;
+            
+            document.getElementById('results').innerHTML = '<div class="loading">🔍 Testando várias cartas...</div>';
+            updateStats();
+            
+            const promises = numbers.map(num => {
+                const url = buildURL(set, num);
+                return testImage(url, { set, number: num });
+            });
+            
+            const results = await Promise.all(promises);
+            
+            results.forEach(result => {
+                if (result.success) successCount++;
+                else errorCount++;
+            });
+            
+            updateStats();
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            results.forEach(result => resultsDiv.appendChild(renderCard(result)));
+        }
+        
+        async function testAllMockCards() {
+            successCount = 0;
+            errorCount = 0;
+            totalCount = MOCK_CARDS.length;
+            
+            document.getElementById('results').innerHTML = '<div class="loading">🔍 Testando todas as 24 cartas MOCK...</div>';
+            updateStats();
+            
+            const promises = MOCK_CARDS.map(card => {
+                const url = buildURL(card.set, card.number);
+                return testImage(url, card);
+            });
+            
+            const results = await Promise.all(promises);
+            
+            results.forEach(result => {
+                if (result.success) successCount++;
+                else errorCount++;
+            });
+            
+            updateStats();
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            results.forEach(result => resultsDiv.appendChild(renderCard(result)));
+        }
+    </script>
+</body>
+</html>

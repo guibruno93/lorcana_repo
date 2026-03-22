@@ -1,0 +1,177 @@
+{
+  "app": {
+    "title": "Lorcana AI",
+    "subtitle": "Análise inteligente de decks"
+  },
+  
+  "auth": {
+    "login": "Entrar",
+    "logout": "Sair",
+    "email": "Email",
+    "password": "Senha",
+    "greeting": "Olá",
+    "loginButton": "Fazer Login",
+    "loginTitle": "Bem-vindo ao Lorcana AI",
+    "emailPlaceholder": "seu@email.com",
+    "passwordPlaceholder": "Sua senha",
+    "loggingIn": "Entrando...",
+    "invalidCredentials": "Email ou senha inválidos"
+  },
+
+  "tabs": {
+    "deck": "Deck Analyzer",
+    "hand": "Hand Analyzer",
+    "matchups": "Matchups",
+    "meta": "Meta Dashboard"
+  },
+
+  "deckAnalyzer": {
+    "title": "Analisador de Deck",
+    "decklistTitle": "Decklist",
+    "paste": "Cole sua decklist",
+    "analyze": "Analisar Deck",
+    "analyzing": "Analisando…",
+    "clear": "Limpar",
+    "example": "Ver Exemplo",
+    "placeholder": "4 Nome da Carta\n4 Outra Carta\n...",
+    "emptyState": "Cole sua decklist e clique em Analisar",
+    "lineCount": "linha",
+    "lineCount_plural": "linhas",
+    "compareMeta": "Comparar meta",
+    "summary": "Resumo",
+    "rules": "Regras",
+    "ml": "ML",
+    "identifiedByRules": "Identificado por regras",
+    "identifiedByML": "Identificado por ML",
+    "archetype": "Arquétipo",
+    "cards": "Cartas",
+    "inkable": "Inkable",
+    "manaCurve": "Curva de Mana",
+    "average": "Média",
+    "statistics": "Estatísticas",
+    "avgCost": "Custo Médio",
+    "earlyGame": "Early Game",
+    "inkCost": "tinta",
+    "results": {
+      "title": "Resultados da Análise",
+      "archetype": "Arquétipo",
+      "tier": "Tier",
+      "colors": "Cores",
+      "cards": "Cartas",
+      "totalCards": "Total de Cartas",
+      "curve": "Curva de Mana",
+      "suggestions": "Sugestões",
+      "strengths": "Pontos Fortes",
+      "weaknesses": "Pontos Fracos",
+      "synergies": "Sinergias"
+    },
+    "errors": {
+      "emptyDeck": "Cole uma decklist primeiro",
+      "invalidFormat": "Formato de decklist inválido",
+      "tooFewCards": "Deck muito pequeno (mínimo 60 cartas)",
+      "tooManyCards": "Deck muito grande (máximo 60 cartas)"
+    }
+  },
+
+  "handAnalyzer": {
+    "title": "Analisador de Mão",
+    "shuffle": "Embaralhar e Sacar 7",
+    "shuffling": "Embaralhando...",
+    "analyze": "Analisar Mulligan",
+    "analyzing": "Analisando...",
+    "simulate": "Simular Mulligan",
+    "simulating": "Simulando...",
+    "keep": "MANTER",
+    "mulligan": "MULLIGAN",
+    "recommendation": "Recomendação",
+    "newHand": "Nova Mão (após mulligan)",
+    "emptyState": "Cole uma decklist na aba Deck Analyzer para usar o simulador"
+  },
+
+  "matchups": {
+    "title": "Matchups vs. Meta",
+    "recalculate": "Recalcular",
+    "calculating": "Calculando...",
+    "archetype": "Arquétipo",
+    "tier": "Tier",
+    "expectedWR": "WR Esperado",
+    "avgWinRate": "WR Médio",
+    "favorable": "Favorável",
+    "even": "Equilibrado",
+    "unfavorable": "Desfavorável",
+    "emptyState": "Cole uma decklist para ver os matchups",
+    "clickToRecalculate": "Clique em Recalcular para ver os matchups",
+    "count": "matchups"
+  },
+
+  "metaDashboard": {
+    "title": "Meta Dashboard",
+    "subtitle": "Panorama do Meta Atual",
+    "loading": "Carregando meta...",
+    "lastUpdate": "Última atualização",
+    "filters": {
+      "title": "Filtrar por Tier",
+      "all": "Todos os Tiers",
+      "tier1": "Tier 1",
+      "tier2": "Tier 2",
+      "tier3": "Tier 3"
+    },
+    "stats": {
+      "winRate": "Taxa de Vitória",
+      "popularity": "Popularidade",
+      "metaShare": "Share do Meta",
+      "avgWinRate": "WR Médio"
+    },
+    "deckInfo": {
+      "cards": "cartas",
+      "colors": "Cores",
+      "viewDetails": "Ver Detalhes",
+      "playRate": "Taxa de Uso",
+      "tierRank": "Rank no Tier"
+    },
+    "emptyState": {
+      "title": "Sem dados disponíveis",
+      "subtitle": "Não foi possível carregar os dados do meta",
+      "retry": "Tentar Novamente"
+    }
+  },
+
+  "mobileMenu": {
+    "menu": "Menu",
+    "close": "Fechar"
+  },
+
+  "language": {
+    "select": "Idioma",
+    "pt-BR": "Português (BR)",
+    "en": "English"
+  },
+
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "delete": "Deletar",
+    "edit": "Editar",
+    "close": "Fechar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "retry": "Tentar Novamente"
+  },
+
+  "errors": {
+    "generic": "Ocorreu um erro. Tente novamente.",
+    "network": "Erro de conexão. Verifique sua internet.",
+    "notFound": "Não encontrado",
+    "unauthorized": "Não autorizado",
+    "invalidDeck": "Decklist inválida",
+    "serverError": "Erro no servidor",
+    "timeout": "Tempo esgotado"
+  }
+}

@@ -1,0 +1,119 @@
+[
+  {
+    "archetype": "Evasive",
+    "tier": "A",
+    "power_level": "77.00",
+    "meta_share": "23.7",
+    "win_rate": "64.3",
+    "top8_pct": "22.0",
+    "deck_count": 280
+  },
+  {
+    "archetype": "Unknown",
+    "tier": "B",
+    "power_level": "71.00",
+    "meta_share": "49.0",
+    "win_rate": "56.8",
+    "top8_pct": "15.0",
+    "deck_count": 29
+  },
+  {
+    "archetype": "Aggro",
+    "tier": "B",
+    "power_level": "66.00",
+    "meta_share": "9.2",
+    "win_rate": "67.3",
+    "top8_pct": "15.0",
+    "deck_count": 216
+  },
+  {
+    "archetype": "Challengers",
+    "tier": "B",
+    "power_level": "62.00",
+    "meta_share": "2.8",
+    "win_rate": "72.0",
+    "top8_pct": "15.0",
+    "deck_count": 38
+  },
+  {
+    "archetype": "Dumbo",
+    "tier": "B",
+    "power_level": "61.00",
+    "meta_share": "2.0",
+    "win_rate": "63.5",
+    "top8_pct": "15.0",
+    "deck_count": 101
+  },
+  {
+    "archetype": "Control",
+    "tier": "B",
+    "power_level": "60.00",
+    "meta_share": "6.6",
+    "win_rate": "59.1",
+    "top8_pct": "15.0",
+    "deck_count": 188
+  },
+  {
+    "archetype": "Midrange",
+    "tier": "C",
+    "power_level": "59.00",
+    "meta_share": "2.1",
+    "win_rate": "70.2",
+    "top8_pct": "15.0",
+    "deck_count": 146
+  },
+  {
+    "archetype": "Allies",
+    "tier": "C",
+    "power_level": "53.00",
+    "meta_share": "3.1",
+    "win_rate": "59.1",
+    "top8_pct": "8.0",
+    "deck_count": 49
+  },
+  {
+    "archetype": "Songs",
+    "tier": "C",
+    "power_level": "52.00",
+    "meta_share": "1.2",
+    "win_rate": "66.7",
+    "top8_pct": "8.0",
+    "deck_count": 74
+  },
+  {
+    "archetype": "Princesses",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.1",
+    "win_rate": null,
+    "top8_pct": "8.0",
+    "deck_count": 0
+  },
+  {
+    "archetype": "Detectives",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.2",
+    "win_rate": null,
+    "top8_pct": "8.0",
+    "deck_count": 0
+  },
+  {
+    "archetype": "Tempo",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.2",
+    "win_rate": null,
+    "top8_pct": "8.0",
+    "deck_count": 0
+  },
+  {
+    "archetype": "Ramp",
+    "tier": "D",
+    "power_level": "40.00",
+    "meta_share": "5.8",
+    "win_rate": "48.0",
+    "top8_pct": "3.0",
+    "deck_count": 69
+  }
+]

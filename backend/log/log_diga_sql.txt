@@ -1,0 +1,464 @@
+query 1
+[
+  {
+    "format": "core",
+    "total_decks": 1180,
+    "unique_archetypes": 12,
+    "oldest_deck": "2026-02-20 16:35:33.757+00",
+    "newest_deck": "2026-03-05 05:03:46.656+00"
+  },
+  {
+    "format": "infinity",
+    "total_decks": 86,
+    "unique_archetypes": 3,
+    "oldest_deck": "2026-02-20 16:35:31.535+00",
+    "newest_deck": "2026-02-26 06:12:36.737+00"
+  }
+]
+query 2
+
+[
+  {
+    "archetype": "Unknown",
+    "deck_count": 578,
+    "meta_share_real": "49.0",
+    "decks_with_record": 25,
+    "avg_win_rate": "55.8"
+  },
+  {
+    "archetype": "Evasive",
+    "deck_count": 280,
+    "meta_share_real": "23.7",
+    "decks_with_record": 126,
+    "avg_win_rate": "62.1"
+  },
+  {
+    "archetype": "Aggro",
+    "deck_count": 108,
+    "meta_share_real": "9.2",
+    "decks_with_record": 56,
+    "avg_win_rate": "65.1"
+  },
+  {
+    "archetype": "Control",
+    "deck_count": 78,
+    "meta_share_real": "6.6",
+    "decks_with_record": 33,
+    "avg_win_rate": "57.7"
+  },
+  {
+    "archetype": "Allies",
+    "deck_count": 36,
+    "meta_share_real": "3.1",
+    "decks_with_record": 14,
+    "avg_win_rate": "57.2"
+  },
+  {
+    "archetype": "Challengers",
+    "deck_count": 33,
+    "meta_share_real": "2.8",
+    "decks_with_record": 24,
+    "avg_win_rate": "71.5"
+  },
+  {
+    "archetype": "Midrange",
+    "deck_count": 25,
+    "meta_share_real": "2.1",
+    "decks_with_record": 11,
+    "avg_win_rate": "69.3"
+  },
+  {
+    "archetype": "Dumbo",
+    "deck_count": 23,
+    "meta_share_real": "1.9",
+    "decks_with_record": 13,
+    "avg_win_rate": "58.4"
+  },
+  {
+    "archetype": "Songs",
+    "deck_count": 14,
+    "meta_share_real": "1.2",
+    "decks_with_record": 7,
+    "avg_win_rate": "65.3"
+  },
+  {
+    "archetype": "Detectives",
+    "deck_count": 2,
+    "meta_share_real": "0.2",
+    "decks_with_record": 0,
+    "avg_win_rate": null
+  },
+  {
+    "archetype": "Tempo",
+    "deck_count": 2,
+    "meta_share_real": "0.2",
+    "decks_with_record": 0,
+    "avg_win_rate": null
+  },
+  {
+    "archetype": "Princesses",
+    "deck_count": 1,
+    "meta_share_real": "0.1",
+    "decks_with_record": 0,
+    "avg_win_rate": null
+  }
+]
+
+query 3
+
+[
+  {
+    "archetype": "Evasive",
+    "tier": "A",
+    "power_level": "77.00",
+    "meta_share": "23.7",
+    "win_rate": "64.3",
+    "deck_count": 280,
+    "top8_pct": "22.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Unknown",
+    "tier": "B",
+    "power_level": "71.00",
+    "meta_share": "49.0",
+    "win_rate": "56.8",
+    "deck_count": 29,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Aggro",
+    "tier": "B",
+    "power_level": "66.00",
+    "meta_share": "9.2",
+    "win_rate": "67.3",
+    "deck_count": 216,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Challengers",
+    "tier": "B",
+    "power_level": "62.00",
+    "meta_share": "2.8",
+    "win_rate": "72.0",
+    "deck_count": 38,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Dumbo",
+    "tier": "B",
+    "power_level": "61.00",
+    "meta_share": "2.0",
+    "win_rate": "63.5",
+    "deck_count": 101,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Control",
+    "tier": "B",
+    "power_level": "60.00",
+    "meta_share": "6.6",
+    "win_rate": "59.1",
+    "deck_count": 188,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Midrange",
+    "tier": "C",
+    "power_level": "59.00",
+    "meta_share": "2.1",
+    "win_rate": "70.2",
+    "deck_count": 146,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Allies",
+    "tier": "C",
+    "power_level": "53.00",
+    "meta_share": "3.1",
+    "win_rate": "59.1",
+    "deck_count": 49,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Songs",
+    "tier": "C",
+    "power_level": "52.00",
+    "meta_share": "1.2",
+    "win_rate": "66.7",
+    "deck_count": 74,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Princesses",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.1",
+    "win_rate": null,
+    "deck_count": 0,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Detectives",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.2",
+    "win_rate": null,
+    "deck_count": 0,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Tempo",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.2",
+    "win_rate": null,
+    "deck_count": 0,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Ramp",
+    "tier": "D",
+    "power_level": "40.00",
+    "meta_share": "5.8",
+    "win_rate": "48.0",
+    "deck_count": 69,
+    "top8_pct": "3.0",
+    "last_calculated": "2026-03-05 19:26:34.789414+00"
+  }
+]
+
+query 4
+
+[
+  {
+    "archetype": "Evasive",
+    "tier": "A",
+    "power_level": "77.00",
+    "meta_share": "23.7",
+    "win_rate": "64.3",
+    "deck_count": 280,
+    "top8_pct": "22.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Unknown",
+    "tier": "B",
+    "power_level": "71.00",
+    "meta_share": "49.0",
+    "win_rate": "56.8",
+    "deck_count": 29,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Aggro",
+    "tier": "B",
+    "power_level": "66.00",
+    "meta_share": "9.2",
+    "win_rate": "67.3",
+    "deck_count": 216,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Challengers",
+    "tier": "B",
+    "power_level": "62.00",
+    "meta_share": "2.8",
+    "win_rate": "72.0",
+    "deck_count": 38,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Dumbo",
+    "tier": "B",
+    "power_level": "61.00",
+    "meta_share": "2.0",
+    "win_rate": "63.5",
+    "deck_count": 101,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Control",
+    "tier": "B",
+    "power_level": "60.00",
+    "meta_share": "6.6",
+    "win_rate": "59.1",
+    "deck_count": 188,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Midrange",
+    "tier": "C",
+    "power_level": "59.00",
+    "meta_share": "2.1",
+    "win_rate": "70.2",
+    "deck_count": 146,
+    "top8_pct": "15.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Allies",
+    "tier": "C",
+    "power_level": "53.00",
+    "meta_share": "3.1",
+    "win_rate": "59.1",
+    "deck_count": 49,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Songs",
+    "tier": "C",
+    "power_level": "52.00",
+    "meta_share": "1.2",
+    "win_rate": "66.7",
+    "deck_count": 74,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Princesses",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.1",
+    "win_rate": null,
+    "deck_count": 0,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Detectives",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.2",
+    "win_rate": null,
+    "deck_count": 0,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Tempo",
+    "tier": "C",
+    "power_level": "49.00",
+    "meta_share": "0.2",
+    "win_rate": null,
+    "deck_count": 0,
+    "top8_pct": "8.0",
+    "last_calculated": "2026-03-10 15:00:03.783+00"
+  },
+  {
+    "archetype": "Ramp",
+    "tier": "D",
+    "power_level": "40.00",
+    "meta_share": "5.8",
+    "win_rate": "48.0",
+    "deck_count": 69,
+    "top8_pct": "3.0",
+    "last_calculated": "2026-03-05 19:26:34.789414+00"
+  }
+]
+
+[
+  {
+    "problema": "Arquétipos fantasma (0 decks)",
+    "archetype": "Detectives",
+    "deck_count": 0
+  },
+  {
+    "problema": "Arquétipos fantasma (0 decks)",
+    "archetype": "Tempo",
+    "deck_count": 0
+  },
+  {
+    "problema": "Arquétipos fantasma (0 decks)",
+    "archetype": "Princesses",
+    "deck_count": 0
+  }
+]
+
+[
+  {
+    "problema": "Meta share inconsistente",
+    "archetype": "Aggro",
+    "deck_count": 216,
+    "meta_share": "9.15",
+    "total_decks_real": 1180,
+    "meta_share_correto": "18.3"
+  },
+  {
+    "problema": "Meta share inconsistente",
+    "archetype": "Control",
+    "deck_count": 188,
+    "meta_share": "6.61",
+    "total_decks_real": 1180,
+    "meta_share_correto": "15.9"
+  },
+  {
+    "problema": "Meta share inconsistente",
+    "archetype": "Midrange",
+    "deck_count": 146,
+    "meta_share": "2.12",
+    "total_decks_real": 1180,
+    "meta_share_correto": "12.4"
+  },
+  {
+    "problema": "Meta share inconsistente",
+    "archetype": "Allies",
+    "deck_count": 49,
+    "meta_share": "3.05",
+    "total_decks_real": 1180,
+    "meta_share_correto": "4.2"
+  },
+  {
+    "problema": "Meta share inconsistente",
+    "archetype": "Songs",
+    "deck_count": 74,
+    "meta_share": "1.19",
+    "total_decks_real": 1180,
+    "meta_share_correto": "6.3"
+  },
+  {
+    "problema": "Meta share inconsistente",
+    "archetype": "Unknown",
+    "deck_count": 29,
+    "meta_share": "48.98",
+    "total_decks_real": 1180,
+    "meta_share_correto": "2.5"
+  },
+  {
+    "problema": "Meta share inconsistente",
+    "archetype": "Dumbo",
+    "deck_count": 101,
+    "meta_share": "1.95",
+    "total_decks_real": 1180,
+    "meta_share_correto": "8.6"
+  }
+]
+
+Success. No rows returned
+
+query 5
+
+Error: Failed to run sql query: ERROR: 42883: function array_length(jsonb, integer) does not exist LINE 4: COUNT(CASE WHEN cards IS NOT NULL AND array_length(cards, 1) > 0 THEN 1 END) as unknown_with_cards, ^ HINT: No function matches the given name and argument types. You might need to add explicit type casts.
+
+Note: A limit of 100 was applied to your query. If this was the cause of a syntax error, try selecting "No limit" instead and re-run the query.
+
+query 6
+
+Error: Failed to run sql query: ERROR: 42883: function array_length(jsonb, integer) does not exist LINE 4: array_length(cards, 1) as num_cards, ^ HINT: No function matches the given name and argument types. You might need to add explicit type casts.

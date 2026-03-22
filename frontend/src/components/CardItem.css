@@ -1,0 +1,189 @@
+/* CardItem.css - Estilos otimizados para card individual */
+
+.card-item {
+  background: var(--card-bg, #1a1a2e);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /* Otimização: will-change para animações suaves */
+  will-change: transform;
+}
+
+.card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card-item:focus {
+  outline: 2px solid var(--primary-color, #4CAF50);
+  outline-offset: 2px;
+}
+
+/* Container de imagem */
+.card-item-image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 140%; /* Aspect ratio de cartas Lorcana */
+  background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
+  overflow: hidden;
+}
+
+.card-item-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Otimização: renderização mais rápida */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Placeholder quando não há imagem */
+.card-item-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
+}
+
+.card-item-placeholder-icon {
+  font-size: 4rem;
+  opacity: 0.3;
+}
+
+/* Informações da carta */
+.card-item-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.card-item-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary, #ffffff);
+  margin: 0;
+  line-height: 1.3;
+  /* Truncate com ellipsis */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-item-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #b0b0b0);
+  margin: 0;
+  font-style: italic;
+  /* Truncate */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stats */
+.card-item-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.card-item-cost {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary, #ffffff);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.card-item-cost-icon {
+  font-size: 1rem;
+}
+
+/* Ink types */
+.card-item-ink {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.ink-amber { background: #FFA500; color: #000; }
+.ink-amethyst { background: #9370DB; color: #fff; }
+.ink-emerald { background: #50C878; color: #000; }
+.ink-ruby { background: #E0115F; color: #fff; }
+.ink-sapphire { background: #0F52BA; color: #fff; }
+.ink-steel { background: #71797E; color: #fff; }
+
+/* Rarities */
+.card-item-rarity {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.rarity-common { background: #888; color: #fff; }
+.rarity-uncommon { background: #4CAF50; color: #fff; }
+.rarity-rare { background: #2196F3; color: #fff; }
+.rarity-superrare { background: #9C27B0; color: #fff; }
+.rarity-legendary { background: #FF9800; color: #fff; }
+.rarity-enchanted { background: linear-gradient(45deg, #FFD700, #FFA500); color: #000; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-item-name {
+    font-size: 0.85rem;
+  }
+  
+  .card-item-subtitle {
+    font-size: 0.75rem;
+  }
+  
+  .card-item-stats {
+    font-size: 0.8rem;
+  }
+}
+
+/* Animação de loading */
+@keyframes shimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+
+.card-item-loading {
+  animation: shimmer 1.5s infinite;
+  background: linear-gradient(
+    to right,
+    #2d2d44 0%,
+    #3d3d54 20%,
+    #2d2d44 40%,
+    #2d2d44 100%
+  );
+  background-size: 800px 104px;
+}
