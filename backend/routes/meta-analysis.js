@@ -148,6 +148,79 @@ router.get('/tier-list', async (req, res) => {
   }
 });
 
+// TRENDS ROUTE
+router.get('/trends', async (req, res) => {
+  try {
+    console.log('📈 Fetching trends...');
+    
+    // Para calcular trends, precisaríamos de dados históricos
+    // Por enquanto, vamos usar winrate vs 50% como proxy de "trend"
+    // Arquétipos com winrate > 52% = rising
+    // Arquétipos com winrate < 48% = falling
+    
+    const { data: metaData, error } = await supabase
+      .from('meta_analysis')
+      .select('*')
+      .order('play_rate', { ascending: false });
+    
+    if (error) {
+      return res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+    
+    const rising = [];
+    const falling = [];
+    
+    for (const deck of metaData || []) {
+      const playRate = parseFloat(deck.play_rate) || 0;
+      const winrate = parseFloat(deck.expected_winrate) || 50;
+      
+      // Calcular "trend_delta" baseado em quão longe está de 50%
+      const trendDelta = (winrate - 50).toFixed(1);
+      
+      const trendItem = {
+        archetype: deck.archetype,
+        trend_delta: parseFloat(trendDelta),
+        meta_share: playRate,
+        winrate: winrate.toFixed(1)
+      };
+      
+      if (winrate > 52) {
+        rising.push(trendItem);
+      } else if (winrate < 48) {
+        falling.push(trendItem);
+      }
+    }
+    
+    // Ordenar rising por trend_delta (decrescente)
+    rising.sort((a, b) => b.trend_delta - a.trend_delta);
+    
+    // Ordenar falling por trend_delta (crescente - mais negativo primeiro)
+    falling.sort((a, b) => a.trend_delta - b.trend_delta);
+    
+    console.log(`✅ Trends: ${rising.length} rising, ${falling.length} falling`);
+    
+    res.json({
+      success: true,
+      trends: {
+        rising: rising.slice(0, 10),
+        falling: falling.slice(0, 10)
+      },
+      timestamp: new Date().toISOString(),
+      note: 'Trend calculation based on winrate vs 50% baseline. Historical tracking coming soon.'
+    });
+    
+  } catch (err) {
+    console.error('❌ /trends error:', err);
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+});
+
 // TOP CARDS - QUERY PARAM (SEMPRE FUNCIONA)
 router.get('/archetype/top-cards', async (req, res) => {
   try {
