@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 // ═══════════════════════════════════════════════════════════════════
+// API URL - Usa variável de ambiente
+// ═══════════════════════════════════════════════════════════════════
+const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
+
+// ═══════════════════════════════════════════════════════════════════
 // CACHE GLOBAL - Evita requisições duplicadas
 // ═══════════════════════════════════════════════════════════════════
 const cardCache = new Map();
@@ -49,8 +54,9 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
             headers['Authorization'] = `Bearer ${token}`;
           }
           
+          // ✅ CORRIGIDO: Usa API variável de ambiente
           const response = await fetch(
-            `http://localhost:3002/api/deck/search-card?q=${encodeURIComponent(cardName)}`,
+            `${API}/api/deck/search-card?q=${encodeURIComponent(cardName)}`,
             { headers }
           );
           

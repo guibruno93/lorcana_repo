@@ -20,6 +20,7 @@ export default function MetaDashboard() {
   const [lastUpdate, setLastUpdate] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
   const [showDecklistDemo, setShowDecklistDemo] = useState(false);
+  const [showDecklist, setShowDecklist] = useState(false);
 
   useEffect(() => {
     fetchMetaData();
@@ -39,6 +40,7 @@ export default function MetaDashboard() {
       }
       
       const data = await res.json();
+      console.log('📊 Dashboard data received:', data);
       setMetaData(data);
       
       const now = new Date();
@@ -130,9 +132,11 @@ export default function MetaDashboard() {
     );
   }
 
+  // ✅ CORRIGIDO: Usar campos corretos do JSON
   const totalDecks = metaData?.stats?.totalDecks || 0;
-  const archetypes = metaData?.archetypes || [];
-  const topCards = metaData?.topCards || [];
+  const archetypes = metaData?.topArchetypes || metaData?.allArchetypes || [];
+  const totalArchetypes = metaData?.stats?.totalArchetypes || 0;
+  const topCards = [];  // Backend não retorna topCards ainda
 
   const exampleDeck = `4 Lore
 4 Beast - Hardheaded
@@ -213,7 +217,7 @@ export default function MetaDashboard() {
         <div className="stat-card">
           <div className="stat-icon">🎯</div>
           <div className="stat-content">
-            <div className="stat-number">{metaData?.stats?.uniqueArchetypes || 0}</div>
+            <div className="stat-number">{totalArchetypes}</div>
             <div className="stat-label">{t('metaDashboard.stats.archetypes')}</div>
           </div>
         </div>
@@ -221,29 +225,32 @@ export default function MetaDashboard() {
         <div className="stat-card">
           <div className="stat-icon">📈</div>
           <div className="stat-content">
-            <div className="stat-number">{metaData?.stats?.totalCards || 0}</div>
+            <div className="stat-number">0</div>
             <div className="stat-label">{t('metaDashboard.stats.uniqueCards')}</div>
           </div>
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon">⏱️</div>
+          <div className="stat-icon">⏰</div>
           <div className="stat-content">
             <div className="stat-number">30d</div>
-            <div className="stat-label">{t('metaDashboard.stats.timeRange')}</div>
+            <div className="stat-label">{t('metaDashboard.stats.timeframe')}</div>
           </div>
         </div>
       </div>
 
       {/* Tab Content */}
       {activeTab === 'overview' && (
-        <OverviewTab archetypes={archetypes} totalDecks={totalDecks} topCards={topCards} t={t} />
+        <OverviewTab 
+          archetypes={archetypes} 
+          totalDecks={totalDecks} 
+          topCards={topCards} 
+          t={t} 
+        />
       )}
 
       {activeTab === 'tierlist' && tierList && (
-        <div className="meta-section">
-          <TierListEnhanced tierList={tierList} />
-        </div>
+        <TierListEnhanced tierList={tierList} />
       )}
 
       {activeTab === 'trends' && (
@@ -255,82 +262,66 @@ export default function MetaDashboard() {
       )}
 
       {activeTab === 'demos' && (
-        <DemoTab exampleDeck={exampleDeck} showDecklist={showDecklistDemo} setShowDecklist={setShowDecklistDemo} t={t} />
+        <>
+          {/* CardImage Demo */}
+          <div className="meta-section">
+            <div className="section-header" style={{ marginBottom: '20px' }}>
+              <span className="section-icon">🖼️</span>
+              <span className="section-title">{t('metaDashboard.sections.cardImages')}</span>
+              <span className="section-badge live">
+                {t('metaDashboard.labels.live')}
+              </span>
+            </div>
+            
+            <div style={{ 
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '20px',
+              marginTop: '30px',
+              padding: '20px'
+            }}>
+              <CardImage cardName="Elsa - Spirit of Winter" size="normal" />
+              <CardImage cardName="Mickey Mouse - Brave Little Tailor" size="small" />
+              <CardImage cardName="Sisu - Divine Water Dragon" size="small" />
+              <CardImage cardName="Aurora - Dreaming Guardian" size="small" />
+              <CardImage cardName="Maleficent - Uninvited" size="small" />
+              <CardImage cardName="Cinderella - Ballroom Sensation" size="small" />
+              <CardImage cardName="Beast - Hardheaded" size="small" />
+              <CardImage cardName="Ursula - Trickster" size="small" />
+            </div>
+          </div>
+          
+          {/* DecklistVisual Demo */}
+          <div className="meta-section">
+            <div className="section-header" style={{ marginBottom: '20px' }}>
+              <span className="section-icon">🎴</span>
+              <span className="section-title">{t('metaDashboard.sections.decklistDemo')}</span>
+              <button 
+                onClick={() => setShowDecklist(!showDecklist)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: showDecklist ? '#e74c3c' : '#667eea',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: 'bold'
+                }}
+              >
+                {showDecklist ? `✕ ${t('metaDashboard.labels.hide')}` : `▶ ${t('metaDashboard.labels.showDemo')}`}
+              </button>
+            </div>
+            
+            {showDecklist && (
+              <DecklistVisual 
+                deckText={exampleDeck}
+                title="Exemplo: Evasivo Amethyst/Emerald"
+              />
+            )}
+          </div>
+        </>
       )}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  SUB-COMPONENTS
-// ═══════════════════════════════════════════════════════════════════════════
-
-function DemoTab({ exampleDeck, showDecklist, setShowDecklist, t }) {
-  return (
-    <div style={{ padding: '20px' }}>
-      {/* Lorcast API Test */}
-      <div className="meta-section" style={{ 
-        marginBottom: '40px',
-        padding: '30px', 
-        background: 'rgba(103, 126, 234, 0.1)', 
-        borderRadius: '12px', 
-        border: '2px solid #667eea' 
-      }}>
-        <div className="section-header">
-          <span className="section-icon">🧪</span>
-          <span className="section-title">{t('metaDashboard.sections.lorcastTest')}</span>
-          <span className="section-badge" style={{ background: '#667eea', color: 'white', padding: '4px 12px', borderRadius: '4px' }}>
-            {t('metaDashboard.labels.live')}
-          </span>
-        </div>
-        
-        <div style={{ 
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: '20px',
-          marginTop: '30px',
-          padding: '20px'
-        }}>
-          <CardImage cardName="Elsa - Spirit of Winter" size="normal" />
-          <CardImage cardName="Mickey Mouse - Brave Little Tailor" size="small" />
-          <CardImage cardName="Sisu - Divine Water Dragon" size="small" />
-          <CardImage cardName="Aurora - Dreaming Guardian" size="small" />
-          <CardImage cardName="Maleficent - Uninvited" size="small" />
-          <CardImage cardName="Cinderella - Ballroom Sensation" size="small" />
-          <CardImage cardName="Beast - Hardheaded" size="small" />
-          <CardImage cardName="Ursula - Trickster" size="small" />
-        </div>
-      </div>
-      
-      {/* DecklistVisual Demo */}
-      <div className="meta-section">
-        <div className="section-header" style={{ marginBottom: '20px' }}>
-          <span className="section-icon">🎴</span>
-          <span className="section-title">{t('metaDashboard.sections.decklistDemo')}</span>
-          <button 
-            onClick={() => setShowDecklist(!showDecklist)}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '8px',
-              border: 'none',
-              background: showDecklist ? '#e74c3c' : '#667eea',
-              color: '#fff',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: 'bold'
-            }}
-          >
-            {showDecklist ? `✕ ${t('metaDashboard.labels.hide')}` : `▶ ${t('metaDashboard.labels.showDemo')}`}
-          </button>
-        </div>
-        
-        {showDecklist && (
-          <DecklistVisual 
-            deckText={exampleDeck}
-            title="Exemplo: Evasivo Amethyst/Emerald"
-          />
-        )}
-      </div>
     </div>
   );
 }
@@ -347,13 +338,10 @@ function OverviewTab({ archetypes, totalDecks, topCards, t }) {
 
         <div className="archetype-breakdown">
           {archetypes.map((archetype, i) => {
-            const percentage = totalDecks > 0
-              ? ((archetype.deck_count / totalDecks) * 100).toFixed(1)
-              : '0.0';
-              
-            const winRate = archetype.win_rate != null
-              ? parseFloat(archetype.win_rate).toFixed(1) 
-              : '0.0';
+            // ✅ CORRIGIDO: Usar campos corretos do JSON
+            const playRate = archetype.playRate || archetype.play_rate || '0.0';
+            const winRate = archetype.winrate || archetype.expected_winrate || '0.0';
+            const sampleSize = archetype.sampleSize || archetype.sample_size || 0;
 
             return (
               <div key={i} className="breakdown-item">
@@ -361,7 +349,7 @@ function OverviewTab({ archetypes, totalDecks, topCards, t }) {
                 <div className="breakdown-info">
                   <span className="breakdown-name">{archetype.archetype}</span>
                   <span className="breakdown-inks">
-                    {archetype.inks?.join(' / ') || 'Unknown'}
+                    {archetype.inks?.join(' / ') || archetype.archetype}
                   </span>
                 </div>
                 
@@ -369,17 +357,17 @@ function OverviewTab({ archetypes, totalDecks, topCards, t }) {
                   <div 
                     className="breakdown-bar" 
                     style={{ 
-                      width: `${Math.min(100, parseFloat(percentage) * 5)}%`,
+                      width: `${Math.min(100, parseFloat(playRate) * 5)}%`,
                       background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)'
                     }}
                   >
-                    <span className="breakdown-percentage">{percentage}%</span>
+                    <span className="breakdown-percentage">{playRate}%</span>
                   </div>
                 </div>
 
                 <div className="breakdown-stats">
                   <span className="stat-wr">WR: {winRate}%</span>
-                  <span className="stat-decks">{archetype.deck_count || 0} {t('metaDashboard.labels.decks')}</span>
+                  <span className="stat-decks">{sampleSize} {t('metaDashboard.labels.decks')}</span>
                 </div>
               </div>
             );
@@ -387,29 +375,31 @@ function OverviewTab({ archetypes, totalDecks, topCards, t }) {
         </div>
       </div>
 
-      <div className="meta-section">
-        <div className="section-header">
-          <span className="section-icon">🃏</span>
-          <span className="section-title">{t('metaDashboard.sections.topCards')}</span>
-          <span className="section-badge">{t('metaDashboard.labels.preview')}</span>
-        </div>
+      {topCards.length > 0 && (
+        <div className="meta-section">
+          <div className="section-header">
+            <span className="section-icon">🃏</span>
+            <span className="section-title">{t('metaDashboard.sections.topCards')}</span>
+            <span className="section-badge">{t('metaDashboard.labels.preview')}</span>
+          </div>
 
-        <div className="card-grid-small">
-          {topCards.slice(0, 6).map((card, i) => {
-            const percentage = card.meta_share != null
-              ? parseFloat(card.meta_share).toFixed(1)
-              : '0.0';
+          <div className="card-grid-small">
+            {topCards.slice(0, 6).map((card, i) => {
+              const percentage = card.meta_share != null
+                ? parseFloat(card.meta_share).toFixed(1)
+                : '0.0';
 
-            return (
-              <div key={i} className="card-item-small">
-                <div className="card-rank">#{i + 1}</div>
-                <div className="card-name">{card.card_name}</div>
-                <div className="card-percentage">{percentage}%</div>
-              </div>
-            );
-          })}
+              return (
+                <div key={i} className="card-item-small">
+                  <div className="card-rank">#{i + 1}</div>
+                  <div className="card-name">{card.card_name}</div>
+                  <div className="card-percentage">{percentage}%</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -465,6 +455,14 @@ function TrendsTab({ trends, t }) {
 }
 
 function CardsTab({ cards, totalDecks, t }) {
+  if (cards.length === 0) {
+    return (
+      <div className="empty-state">
+        <p>Top cards data coming soon!</p>
+      </div>
+    );
+  }
+
   return (
     <div className="cards-grid-full">
       {cards.map((card, i) => {
