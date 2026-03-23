@@ -1,8 +1,3 @@
-/**
- * backend/routes/meta-analysis.js
- * ✅ VERSÃO CORRIGIDA - Com rota de teste e tratamento de erros melhorado
- */
-
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
@@ -12,67 +7,47 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
-// ═══════════════════════════════════════════════════════════════════
-// ROTA DE TESTE - Confirmar que router funciona
-// ═══════════════════════════════════════════════════════════════════
-
+// TEST ROUTE
 router.get('/test', (req, res) => {
   res.json({ 
     ok: true, 
-    message: 'Meta-analysis routes are working!',
-    timestamp: new Date().toISOString(),
-    supabaseConfigured: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY),
-    routes: [
-      'GET /api/meta-analysis/test',
-      'GET /api/meta-analysis/dashboard',
-      'GET /api/meta-analysis/trends',
-      'GET /api/meta-analysis/tier-list'
-    ]
+    message: 'Meta-analysis routes working!',
+    timestamp: new Date().toISOString()
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════
-// GET /api/meta-analysis/dashboard
-// Dashboard completo com estatísticas do meta
-// ═══════════════════════════════════════════════════════════════════
-
+// DASHBOARD ROUTE
 router.get('/dashboard', async (req, res) => {
   try {
     const { days = 30 } = req.query;
     
     console.log(`📊 Fetching dashboard data (last ${days} days)...`);
     
-    // Calcular data de corte
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - parseInt(days));
     
-    // Buscar dados do meta
-    const { data: metaData, error: metaError } = await supabase
+    const { data: metaData, error } = await supabase
       .from('meta_analysis')
       .select('*')
       .gte('analyzed_at', cutoffDate.toISOString())
       .order('play_rate', { ascending: false });
     
-    if (metaError) {
-      console.error('❌ Dashboard fetch error:', metaError);
+    if (error) {
+      console.error('❌ Dashboard error:', error);
       return res.status(500).json({
         success: false,
-        error: 'Failed to fetch dashboard data',
-        details: metaError.message,
-        hint: 'Check Supabase connection and meta_analysis table'
+        error: error.message
       });
     }
     
     console.log(`✅ Found ${metaData?.length || 0} archetypes`);
     
-    // Estatísticas gerais
     const totalDecks = metaData?.reduce((sum, d) => sum + (d.sample_size || 0), 0) || 0;
     const avgWinrate = metaData?.length > 0 
       ? metaData.reduce((sum, d) => sum + (d.expected_winrate || 50), 0) / metaData.length 
       : 50;
     
-    // Top archetypes
-    const topArchetypes = (metaData || []).slice(0, 5).map(d => ({
+    const topArchetypes = (metaData || []).slice(0, 8).map(d => ({
       archetype: d.archetype,
       playRate: parseFloat(d.play_rate || 0).toFixed(1),
       winrate: parseFloat(d.expected_winrate || 50).toFixed(1),
@@ -80,7 +55,6 @@ router.get('/dashboard', async (req, res) => {
       topCards: d.top_cards || []
     }));
     
-    // Distribuição por tier
     const tierDistribution = { S: 0, A: 0, B: 0, C: 0, D: 0 };
     
     for (const deck of metaData || []) {
@@ -97,7 +71,7 @@ router.get('/dashboard', async (req, res) => {
       tierDistribution[tier]++;
     }
     
-    const response = {
+    res.json({
       success: true,
       stats: {
         totalDecks,
@@ -109,102 +83,10 @@ router.get('/dashboard', async (req, res) => {
       tierDistribution,
       allArchetypes: metaData || [],
       timestamp: new Date().toISOString()
-    };
-    
-    console.log(`📊 Dashboard response ready:`, {
-      archetypes: response.stats.totalArchetypes,
-      decks: response.stats.totalDecks
     });
-    
-    res.json(response);
     
   } catch (err) {
     console.error('❌ /dashboard error:', err);
-    res.status(500).json({
-      success: false,
-      error: err.message,
-      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
-    });
-  }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// GET /api/meta-analysis/trends
-// Tendências do meta ao longo do tempo
-// ═══════════════════════════════════════════════════════════════════
-
-router.get('/trends', async (req, res) => {
-  try {
-    console.log('📈 Fetching meta trends...');
-    
-    // Buscar dados históricos
-    const { data: historicalData, error } = await supabase
-      .from('meta_analysis')
-      .select('*')
-      .order('analyzed_at', { ascending: true });
-    
-    if (error) {
-      console.error('❌ Trends fetch error:', error);
-      return res.status(500).json({
-        success: false,
-        error: 'Failed to fetch trends',
-        details: error.message
-      });
-    }
-    
-    // Agrupar por archetype
-    const trendsByArchetype = {};
-    
-    for (const entry of historicalData || []) {
-      const arch = entry.archetype;
-      
-      if (!trendsByArchetype[arch]) {
-        trendsByArchetype[arch] = [];
-      }
-      
-      trendsByArchetype[arch].push({
-        date: entry.analyzed_at,
-        playRate: parseFloat(entry.play_rate || 0),
-        winrate: parseFloat(entry.expected_winrate || 50),
-        sampleSize: entry.sample_size || 0
-      });
-    }
-    
-    // Calcular mudanças (últimos 7 dias vs anteriores)
-    const recentChanges = [];
-    const now = new Date();
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    
-    for (const [archetype, data] of Object.entries(trendsByArchetype)) {
-      const recent = data.filter(d => new Date(d.date) >= sevenDaysAgo);
-      const older = data.filter(d => new Date(d.date) < sevenDaysAgo);
-      
-      if (recent.length > 0 && older.length > 0) {
-        const recentAvg = recent.reduce((sum, d) => sum + d.playRate, 0) / recent.length;
-        const olderAvg = older.reduce((sum, d) => sum + d.playRate, 0) / older.length;
-        const change = recentAvg - olderAvg;
-        
-        recentChanges.push({
-          archetype,
-          change: change.toFixed(1),
-          trend: change > 0 ? 'rising' : change < 0 ? 'falling' : 'stable',
-          currentRate: recentAvg.toFixed(1)
-        });
-      }
-    }
-    
-    // Ordenar por maior mudança absoluta
-    recentChanges.sort((a, b) => Math.abs(parseFloat(b.change)) - Math.abs(parseFloat(a.change)));
-    
-    res.json({
-      success: true,
-      trends: trendsByArchetype,
-      recentChanges: recentChanges.slice(0, 10),
-      timestamp: new Date().toISOString()
-    });
-    
-  } catch (err) {
-    console.error('❌ /trends error:', err);
     res.status(500).json({
       success: false,
       error: err.message
@@ -212,11 +94,7 @@ router.get('/trends', async (req, res) => {
   }
 });
 
-// ═══════════════════════════════════════════════════════════════════
-// GET /api/meta-analysis/tier-list
-// Retorna tier list atual
-// ═══════════════════════════════════════════════════════════════════
-
+// TIER LIST ROUTE
 router.get('/tier-list', async (req, res) => {
   try {
     console.log('🏆 Generating tier list...');
@@ -229,26 +107,17 @@ router.get('/tier-list', async (req, res) => {
     if (error) {
       return res.status(500).json({
         success: false,
-        error: 'Failed to fetch tier list data',
-        details: error.message
+        error: error.message
       });
     }
     
-    // Agrupar por tier baseado em play_rate e expected_winrate
-    const tierList = {
-      S: [],
-      A: [],
-      B: [],
-      C: [],
-      D: []
-    };
+    const tierList = { S: [], A: [], B: [], C: [], D: [] };
     
     for (const deck of metaData || []) {
       const playRate = parseFloat(deck.play_rate) || 0;
       const winrate = parseFloat(deck.expected_winrate) || 50;
       
       let tier = 'C';
-      
       if (playRate >= 10 && winrate >= 55) tier = 'S';
       else if (playRate >= 7 && winrate >= 52) tier = 'A';
       else if (playRate >= 4 && winrate >= 50) tier = 'B';
@@ -272,6 +141,126 @@ router.get('/tier-list', async (req, res) => {
     
   } catch (err) {
     console.error('❌ /tier-list error:', err);
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+});
+
+// TOP CARDS - QUERY PARAM (SEMPRE FUNCIONA)
+router.get('/archetype/top-cards', async (req, res) => {
+  try {
+    const { name, limit = 8 } = req.query;
+    
+    if (!name) {
+      return res.status(400).json({
+        success: false,
+        error: 'Archetype name is required',
+        hint: 'Use ?name=Sapphire/Steel&limit=8'
+      });
+    }
+    
+    console.log(`🔍 Fetching top cards for: ${name}`);
+    
+    const { data: metaData, error } = await supabase
+      .from('meta_analysis')
+      .select('top_cards, archetype')
+      .eq('archetype', name)
+      .order('analyzed_at', { ascending: false })
+      .limit(1)
+      .single();
+    
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.json({
+          success: true,
+          archetype: name,
+          topCards: [],
+          message: 'No data for this archetype'
+        });
+      }
+      return res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+    
+    const topCards = (metaData?.top_cards || []).slice(0, parseInt(limit));
+    
+    console.log(`✅ Found ${topCards.length} cards for ${name}`);
+    
+    res.json({
+      success: true,
+      archetype: name,
+      topCards,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (err) {
+    console.error(`❌ /archetype/top-cards error:`, err);
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+});
+
+// TOP CARDS - WILDCARD PATH (ACEITA SAPPHIRE/STEEL SEM ENCODING)
+// IMPORTANTE: Deve vir DEPOIS de outras rotas /archetype/* para não conflitar
+router.get('/archetype/*/top-cards', async (req, res) => {
+  try {
+    // Extrair archetype do path
+    // URL: /archetype/Sapphire/Steel/top-cards
+    // req.path: /archetype/Sapphire/Steel/top-cards
+    const pathParts = req.path.split('/');
+    const archetypeStartIndex = pathParts.indexOf('archetype') + 1;
+    const topCardsIndex = pathParts.indexOf('top-cards');
+    
+    // Juntar tudo entre 'archetype' e 'top-cards'
+    const archetypeParts = pathParts.slice(archetypeStartIndex, topCardsIndex);
+    const archetype = archetypeParts.join('/');
+    
+    console.log(`🔍 Wildcard route - Fetching top cards for: ${archetype}`);
+    
+    const { limit = 8 } = req.query;
+    
+    const { data: metaData, error } = await supabase
+      .from('meta_analysis')
+      .select('top_cards, archetype')
+      .eq('archetype', archetype)
+      .order('analyzed_at', { ascending: false })
+      .limit(1)
+      .single();
+    
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.json({
+          success: true,
+          archetype,
+          topCards: [],
+          message: 'No data for this archetype'
+        });
+      }
+      return res.status(500).json({
+        success: false,
+        error: error.message
+      });
+    }
+    
+    const topCards = (metaData?.top_cards || []).slice(0, parseInt(limit));
+    
+    console.log(`✅ Found ${topCards.length} cards for ${archetype}`);
+    
+    res.json({
+      success: true,
+      archetype,
+      topCards,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (err) {
+    console.error(`❌ Wildcard archetype route error:`, err);
     res.status(500).json({
       success: false,
       error: err.message
