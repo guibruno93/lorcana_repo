@@ -1,11 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
+const { authenticateToken } = require('./auth');
+const { InkdecksScraper, deckToScrapedDeckRow } = require('../services/scrapers/inkdecks-puppeteer-scraper');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
+
+/** Se META_SCRAPE_ADMIN_EMAILS estiver definido (emails separados por vírgula), só eles podem usar scrape/status. */
+function requireMetaScrapeAccess(req, res, next) {
+  const raw = (process.env.META_SCRAPE_ADMIN_EMAILS || '').trim();
+  if (!raw) return next();
+  const allowed = raw.split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
+  const email = (req.user && req.user.email && String(req.user.email).toLowerCase()) || '';
+  if (!allowed.includes(email)) {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  return next();
+}
 
 // TEST ROUTE
 router.get('/test', (req, res) => {
@@ -340,5 +354,138 @@ router.get('/archetype/*/top-cards', async (req, res) => {
     });
   }
 });
+
+// ═══════════════════════════════════════════════════════════════════
+// POST /api/meta-analysis/scrape — Inkdecks (streaming NDJSON)
+// ═══════════════════════════════════════════════════════════════════
+
+router.post(
+  '/scrape',
+  authenticateToken,
+  requireMetaScrapeAccess,
+  async (req, res) => {
+    const { limit = 50 } = req.body || {};
+
+    res.setHeader('Content-Type', 'application/x-ndjson; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no');
+
+    const sendEvent = (data) => {
+      res.write(`${JSON.stringify(data)}\n`);
+    };
+
+    try {
+      sendEvent({
+        type: 'log',
+        level: 'info',
+        message: 'Inicializando scraper Inkdecks…',
+      });
+
+      const scraper = new InkdecksScraper();
+      const decks = await scraper.scrapeDecks(limit, (event) => {
+        sendEvent(event);
+      });
+
+      sendEvent({
+        type: 'log',
+        level: 'success',
+        message: `Scraped ${decks.length} decks`,
+      });
+
+      if (decks.length > 0) {
+        const rows = decks.map(deckToScrapedDeckRow);
+        const { error } = await supabase.from('scraped_decks').insert(rows);
+
+        if (error) {
+          sendEvent({
+            type: 'log',
+            level: 'error',
+            message: `Erro no banco: ${error.message}`,
+          });
+        } else {
+          sendEvent({
+            type: 'log',
+            level: 'success',
+            message: 'Salvo em scraped_decks',
+          });
+        }
+      }
+
+      sendEvent({
+        type: 'complete',
+        total: decks.length,
+      });
+    } catch (err) {
+      console.error('Scraper error:', err);
+      sendEvent({
+        type: 'log',
+        level: 'error',
+        message: err.message || String(err),
+      });
+    } finally {
+      res.end();
+    }
+  }
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/scraper-status
+// ═══════════════════════════════════════════════════════════════════
+
+router.get(
+  '/scraper-status',
+  authenticateToken,
+  requireMetaScrapeAccess,
+  async (req, res) => {
+    try {
+      const { data: lastRows, error: lastErr } = await supabase
+        .from('scraped_decks')
+        .select('scraped_at')
+        .order('scraped_at', { ascending: false })
+        .limit(1);
+
+      if (lastErr) {
+        console.error('scraper-status last scrape:', lastErr);
+        return res.status(500).json({ error: 'Failed to fetch status' });
+      }
+
+      const { count: totalDecks, error: countErr } = await supabase
+        .from('scraped_decks')
+        .select('*', { count: 'exact', head: true });
+
+      if (countErr) {
+        console.error('scraper-status count:', countErr);
+        return res.status(500).json({ error: 'Failed to fetch status' });
+      }
+
+      const { data: archetypes, error: archErr } = await supabase
+        .from('scraped_decks')
+        .select('archetype')
+        .not('archetype', 'is', null);
+
+      if (archErr) {
+        console.error('scraper-status archetypes:', archErr);
+        return res.status(500).json({ error: 'Failed to fetch status' });
+      }
+
+      const uniqueArchetypes = [
+        ...new Set(
+          (archetypes || []).map((d) => d.archetype).filter(Boolean)
+        ),
+      ];
+
+      res.json({
+        last_scrape: lastRows?.[0]?.scraped_at || null,
+        total_decks: totalDecks ?? 0,
+        archetypes: uniqueArchetypes.length,
+        archetype_list: uniqueArchetypes,
+      });
+    } catch (err) {
+      console.error('Status error:', err);
+      res.status(500).json({ error: 'Failed to fetch status' });
+    }
+  }
+);
 
 module.exports = router;

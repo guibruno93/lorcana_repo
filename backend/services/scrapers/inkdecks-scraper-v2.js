@@ -195,16 +195,21 @@ async function scrapeDeckDetails(deckMeta) {
       const quantity = parseInt($row.attr('data-quantity') || '0');
       const cardType = $row.attr('data-card-type') || 'character';
       
-      // Nome da carta está no link
+      // Nome: mesmo critério de test-html-parse.js — texto completo do <a> (bold + subtítulo)
       const $link = $row.find('a[href*="/cards/details-"]');
-      let cardName = $link.text().trim();
+      let cardName = $link.text().replace(/\s+/g, ' ').trim();
       
-      // Limpar o nome (remover espaços extras)
-      cardName = cardName.replace(/\s+/g, ' ').trim();
-      
-      // Ink color
-      const inkImg = $row.find('img[alt][src*=".svg"]').attr('alt');
-      const ink = inkImg ? inkImg.charAt(0).toUpperCase() + inkImg.slice(1) : 'Unknown';
+      // Ink: símbolo em /symbols/lorcana/*.svg, ignorando inkpot e ink-cost (como test-html-parse)
+      let ink = 'Unknown';
+      $row.find('img[src*="/symbols/lorcana/"]').each((__, img) => {
+        const src = $(img).attr('src') || '';
+        const m = src.match(/\/symbols\/lorcana\/([^./]+)\.svg/i);
+        if (!m) return;
+        const raw = m[1].toLowerCase();
+        if (raw === 'inkpot' || raw === 'ink-cost') return;
+        ink = raw.charAt(0).toUpperCase() + raw.slice(1);
+        return false;
+      });
       
       // Ink cost
       const inkCostDiv = $row.find('div[style*="position:absolute"]').text().trim();
@@ -222,9 +227,10 @@ async function scrapeDeckDetails(deckMeta) {
     });
     
     // Detectar arquétipo se não foi fornecido
+    const inksList = deckMeta.inks || [];
     let archetype = deckMeta.strategy || 'Unknown';
-    if (deckMeta.inks.length >= 2) {
-      archetype = deckMeta.inks.slice(0, 2).join('/');
+    if (inksList.length >= 2) {
+      archetype = inksList.slice(0, 2).join('/');
     }
     
     const deck = {
@@ -235,7 +241,7 @@ async function scrapeDeckDetails(deckMeta) {
       author: deckMeta.author,
       archetype,
       strategy: deckMeta.strategy,
-      inks: deckMeta.inks,
+      inks: inksList,
       cards,
       standing: deckMeta.placement,
       event: deckMeta.event.name,
@@ -422,4 +428,78 @@ Examples:
   main();
 }
 
-module.exports = { main, scrapeDeckListing, scrapeDeckDetails };
+/**
+ * Orquestra listagem + detalhes para uso nas rotas (streaming de eventos).
+ * @param {number} limit - máximo de decks na listagem
+ * @param {(e: { type?: string, level?: string, message?: string }) => void} [onProgress]
+ * @returns {Promise<object[]>} decks no formato interno do scraper (title, archetype, inks, cards[], …)
+ */
+async function scrapeDecks(limit = 50, onProgress) {
+  const emit = (payload) => {
+    if (typeof onProgress === 'function') onProgress(payload);
+  };
+
+  const cap = Math.min(Math.max(1, parseInt(limit, 10) || 50), CONFIG.maxDecksPerRun);
+
+  emit({ type: 'log', level: 'info', message: 'Buscando listagem no Inkdecks…' });
+  const deckMetaList = await scrapeDeckListing(cap);
+
+  if (deckMetaList.length === 0) {
+    emit({ type: 'log', level: 'warning', message: 'Nenhum deck encontrado na listagem.' });
+    return [];
+  }
+
+  const results = [];
+  for (let i = 0; i < deckMetaList.length; i++) {
+    const meta = deckMetaList[i];
+    emit({
+      type: 'log',
+      level: 'info',
+      message: `Deck ${i + 1}/${deckMetaList.length}: ${meta.name}`,
+    });
+    const deck = await scrapeDeckDetails(meta);
+    if (deck) results.push(deck);
+  }
+
+  return results;
+}
+
+/**
+ * Converte deck interno para linha compatível com `scraped_decks` (Supabase).
+ */
+function deckToScrapedDeckRow(deck) {
+  const cards = {};
+  for (const c of deck.cards || []) {
+    if (c.name) cards[c.name] = c.quantity;
+  }
+  return {
+    deck_name: deck.title,
+    archetype: deck.archetype,
+    ink_colors: deck.inks || [],
+    cards,
+    wins: deck.wins ?? 0,
+    losses: deck.losses ?? 0,
+    source_url: deck.url,
+    source_deck_id: deck.deckId,
+    author: deck.author,
+    event_name: deck.event,
+    organizer: deck.organizer,
+    standing: deck.standing,
+    scraped_at: new Date().toISOString(),
+  };
+}
+
+class InkdecksScraper {
+  scrapeDecks(limit, onProgress) {
+    return scrapeDecks(limit, onProgress);
+  }
+}
+
+module.exports = {
+  InkdecksScraper,
+  main,
+  scrapeDeckListing,
+  scrapeDeckDetails,
+  scrapeDecks,
+  deckToScrapedDeckRow,
+};
