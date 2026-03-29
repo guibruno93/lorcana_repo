@@ -1,5 +1,31 @@
 # Render Deployment Commands
 
+# ⚠️ RENDER FREE TIER CONFIGURATION
+
+## Environment Variables (Free Tier)
+
+**REMOVE these if present:**
+
+- ❌ `PUPPETEER_EXECUTABLE_PATH`
+- ❌ `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`
+
+**KEEP only:**
+
+- ✅ `PUPPETEER_HEADLESS=true`
+- ✅ All other vars (Supabase, JWT, etc.)
+
+## Build Settings
+
+- **Build Command:** `npm run render-build`
+- **Start Command:** `node server.js`
+
+## Note
+
+Free tier uses Puppeteer's bundled Chrome (~170MB download during build).
+This increases build time by 2–3 minutes but works reliably on read-only filesystems (no `apt-get`).
+
+---
+
 ## After fixing files with Cursor
 
 ### 1. Review Changes
@@ -14,6 +40,7 @@ git diff
 ```bash
 git add backend/package.json
 git add backend/package-lock.json
+git add backend/scripts/render-build-freetier.sh
 git add backend/scripts/render-build.sh
 git add backend/puppeteer.config.cjs
 git add backend/.puppeteerrc.cjs

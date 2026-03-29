@@ -272,22 +272,16 @@ class InkdecksPuppeteerScraper {
 
   async init() {
     if (this.browser) return;
-    const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || undefined;
-    const launchArgs = [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--disable-gpu',
-      '--window-size=1920,1080',
-    ];
-    if (process.env.PUPPETEER_SINGLE_PROCESS === 'true') {
-      launchArgs.push('--single-process');
-    }
+    // Sem executablePath → Chrome empacotado pelo Puppeteer (Render free tier, sem apt-get).
     this.browser = await puppeteer.launch({
       headless: process.env.PUPPETEER_HEADLESS !== 'false',
-      executablePath: executablePath || undefined,
-      args: launchArgs,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--single-process',
+      ],
     });
   }
 
