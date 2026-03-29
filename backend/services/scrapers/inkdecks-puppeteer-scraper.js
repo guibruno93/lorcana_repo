@@ -22,19 +22,27 @@ const LIST_PATH = '/lorcana-decks/core';
 const MAX_DECKS_PER_RUN = 100;
 const BETWEEN_DECKS_MS = 2000;
 
-/** Timeouts ajustáveis no Render (rede lenta / cold start). */
+/** Timeouts ajustáveis no Render (rede lenta / Cloudflare / cold start). */
 const GOTO_TIMEOUT_MS = parseInt(
-  process.env.PUPPETEER_GOTO_TIMEOUT_MS || '120000',
+  process.env.PUPPETEER_GOTO_TIMEOUT_MS || '180000',
   10
 );
 const LISTING_SELECTOR_TIMEOUT_MS = parseInt(
-  process.env.PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS || '90000',
+  process.env.PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS || '120000',
   10
 );
 const DECK_CARD_SELECTOR_TIMEOUT_MS = parseInt(
-  process.env.PUPPETEER_DECK_SELECTOR_TIMEOUT_MS || '45000',
+  process.env.PUPPETEER_DECK_SELECTOR_TIMEOUT_MS || '90000',
   10
 );
+const NAV_MAX_RETRIES = parseInt(process.env.PUPPETEER_NAV_RETRIES || '3', 10);
+const NAV_RETRY_DELAY_MS = parseInt(
+  process.env.PUPPETEER_NAV_RETRY_DELAY_MS || '5000',
+  10
+);
+/** `domcontentloaded` evita pendurar em `networkidle*` com analytics / long-polling. */
+const GOTO_WAIT_UNTIL =
+  process.env.PUPPETEER_GOTO_WAIT_UNTIL || 'domcontentloaded';
 
 /** Cache gravável em runtime (Render: /tmp; build em /opt/render não persiste). */
 function resolvePuppeteerCacheDir() {
@@ -349,9 +357,55 @@ class InkdecksPuppeteerScraper {
         '--disable-dev-shm-usage',
         '--disable-gpu',
         '--single-process',
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins,site-per-process',
+        '--disable-blink-features=AutomationControlled',
+        '--window-size=1920,1080',
       ],
     });
     console.log('✅ Browser launched successfully');
+  }
+
+  /**
+   * Navegação com retentativas (timeouts longos + Cloudflare).
+   * @param {*} page — Puppeteer Page
+   * @param {string} url
+   * @param {(e: object) => void} [emit]
+   */
+  async navigateWithRetry(page, url, emit) {
+    for (let attempt = 1; attempt <= NAV_MAX_RETRIES; attempt++) {
+      try {
+        const msg = `Navegação (${attempt}/${NAV_MAX_RETRIES}): ${url}`;
+        if (typeof emit === 'function') {
+          emit({ type: 'log', level: 'info', message: msg });
+        } else {
+          console.log(msg);
+        }
+        await page.goto(url, {
+          waitUntil: GOTO_WAIT_UNTIL,
+          timeout: GOTO_TIMEOUT_MS,
+        });
+        if (typeof emit === 'function') {
+          emit({
+            type: 'log',
+            level: 'info',
+            message: 'Navegação concluída (domcontentloaded)',
+          });
+        }
+        return;
+      } catch (err) {
+        if (attempt >= NAV_MAX_RETRIES) {
+          throw err;
+        }
+        const warn = `Falha na navegação (${attempt}/${NAV_MAX_RETRIES}): ${err.message} — nova tentativa em ${NAV_RETRY_DELAY_MS / 1000}s`;
+        if (typeof emit === 'function') {
+          emit({ type: 'log', level: 'warning', message: warn });
+        } else {
+          console.warn(warn);
+        }
+        await sleep(NAV_RETRY_DELAY_MS);
+      }
+    }
   }
 
   async close() {
@@ -380,10 +434,15 @@ class InkdecksPuppeteerScraper {
     const page = await this.browser.newPage();
 
     try {
+      page.setDefaultNavigationTimeout(GOTO_TIMEOUT_MS);
+      page.setDefaultTimeout(
+        Math.max(LISTING_SELECTOR_TIMEOUT_MS, DECK_CARD_SELECTOR_TIMEOUT_MS)
+      );
+
       await page.setViewport({ width: 1920, height: 1080 });
       const ua =
         process.env.PUPPETEER_UA ||
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36';
       await page.setUserAgent(ua);
 
       emit({
@@ -392,10 +451,11 @@ class InkdecksPuppeteerScraper {
         message: 'Abrindo listagem Inkdecks (Puppeteer)…',
       });
 
-      await page.goto(`${BASE_URL}${LIST_PATH}`, {
-        waitUntil: 'networkidle2',
-        timeout: GOTO_TIMEOUT_MS,
-      });
+      await this.navigateWithRetry(
+        page,
+        `${BASE_URL}${LIST_PATH}`,
+        emit
+      );
 
       emit({
         type: 'log',
@@ -531,10 +591,7 @@ class InkdecksPuppeteerScraper {
         if (i > 0) await sleep(BETWEEN_DECKS_MS);
 
         try {
-          await page.goto(meta.url, {
-            waitUntil: 'networkidle2',
-            timeout: GOTO_TIMEOUT_MS,
-          });
+          await this.navigateWithRetry(page, meta.url, emit);
           await sleep(1500);
 
           try {
