@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "render-build": "bash scripts/render-build-freetier.sh"
+    "render-build": "bash scripts/render-build-freetier.sh",
+    "postinstall": "node scripts/puppeteer-browser-install.cjs"
   },
   "engines": {
     "node": "20.x",

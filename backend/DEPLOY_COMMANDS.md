@@ -1,5 +1,43 @@
 # Render Deployment Commands
 
+# ⚠️ TROUBLESHOOTING: Chrome Not Found
+
+If you see error: `Could not find Chrome (ver. XXX)`
+
+## Solution 1: Verify Environment Variables
+
+Render Dashboard → Environment
+
+**DELETE these if present:**
+
+- ❌ `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`
+- ❌ `PUPPETEER_EXECUTABLE_PATH`
+
+**KEEP only:**
+
+- ✅ `PUPPETEER_HEADLESS=true`
+
+## Solution 2: Force Chrome Download
+
+Optional temporary env var (se downloads falharem por rede):
+
+- `PUPPETEER_DOWNLOAD_BASE_URL=https://storage.googleapis.com`
+
+## Solution 3: Clear Cache & Redeploy
+
+Render Dashboard → Manual Deploy → ✅ **Clear build cache**
+
+Wait for logs showing browser install, for example:
+
+```text
+puppeteer browsers install chrome
+chrome@... /opt/render/.cache/puppeteer/...
+```
+
+The build script also runs `npx puppeteer browsers install chrome` after `npm install`.
+
+---
+
 # ⚠️ RENDER FREE TIER CONFIGURATION
 
 ## Environment Variables (Free Tier)
@@ -41,6 +79,7 @@ git diff
 git add backend/package.json
 git add backend/package-lock.json
 git add backend/scripts/render-build-freetier.sh
+git add backend/scripts/puppeteer-browser-install.cjs
 git add backend/scripts/render-build.sh
 git add backend/puppeteer.config.cjs
 git add backend/.puppeteerrc.cjs
