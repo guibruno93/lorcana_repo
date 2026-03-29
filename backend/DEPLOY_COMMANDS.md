@@ -13,9 +13,19 @@ Render Dashboard → Environment
 - ❌ `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`
 - ❌ `PUPPETEER_EXECUTABLE_PATH`
 
-**KEEP only:**
+**KEEP:**
 
 - ✅ `PUPPETEER_HEADLESS=true`
+
+### Required for Chrome persistence (runtime)
+
+O cache em `/opt/render/.cache` **não** persiste entre build e runtime no free tier. O Chrome é instalado **na primeira execução do scraper** em diretório gravável:
+
+```text
+PUPPETEER_CACHE_DIR=/tmp/.cache/puppeteer
+```
+
+Se não definires, o código assume `/tmp/.cache/puppeteer` quando `RENDER=true`.
 
 ## Solution 2: Force Chrome Download
 
@@ -27,14 +37,12 @@ Optional temporary env var (se downloads falharem por rede):
 
 Render Dashboard → Manual Deploy → ✅ **Clear build cache**
 
-Wait for logs showing browser install, for example:
+Após o primeiro `POST /api/meta-analysis/scrape`, nos logs de **runtime** deves ver a instalação do Chrome, por exemplo:
 
 ```text
+Chrome não encontrado; a instalar em /tmp/.cache/puppeteer
 puppeteer browsers install chrome
-chrome@... /opt/render/.cache/puppeteer/...
 ```
-
-The build script also runs `npx puppeteer browsers install chrome` after `npm install`.
 
 ---
 
@@ -47,10 +55,11 @@ The build script also runs `npx puppeteer browsers install chrome` after `npm in
 - ❌ `PUPPETEER_EXECUTABLE_PATH`
 - ❌ `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`
 
-**KEEP only:**
+**SET (recomendado):**
 
 - ✅ `PUPPETEER_HEADLESS=true`
-- ✅ All other vars (Supabase, JWT, etc.)
+- ✅ `PUPPETEER_CACHE_DIR=/tmp/.cache/puppeteer` (cache gravável em runtime)
+- ✅ Todas as outras (Supabase, JWT, etc.)
 
 ## Build Settings
 
@@ -59,8 +68,7 @@ The build script also runs `npx puppeteer browsers install chrome` after `npm in
 
 ## Note
 
-Free tier uses Puppeteer's bundled Chrome (~170MB download during build).
-This increases build time by 2–3 minutes but works reliably on read-only filesystems (no `apt-get`).
+No free tier, o Chrome **não** é fiável no disco do build: o `render-build-freetier.sh` só instala dependências npm. O Chrome é descarregado **lazy** no primeiro scrape para `PUPPETEER_CACHE_DIR` (por omissão `/tmp/.cache/puppeteer` no Render). A primeira execução pode demorar **~1–2 min**; as seguintes reutilizam o cache em `/tmp` (até cold start do serviço).
 
 ---
 

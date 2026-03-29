@@ -9,6 +9,9 @@
  * Um deck de 60 cartas costuma ter ~15–25 linhas e soma(quantity) ≈ 60 — não espere 60 linhas.
  */
 
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
@@ -32,6 +35,68 @@ const DECK_CARD_SELECTOR_TIMEOUT_MS = parseInt(
   process.env.PUPPETEER_DECK_SELECTOR_TIMEOUT_MS || '45000',
   10
 );
+
+/** Cache gravável em runtime (Render: /tmp; build em /opt/render não persiste). */
+function resolvePuppeteerCacheDir() {
+  if (process.env.PUPPETEER_CACHE_DIR) return process.env.PUPPETEER_CACHE_DIR;
+  if (process.env.RENDER === 'true') return '/tmp/.cache/puppeteer';
+  const home = process.env.HOME || process.env.USERPROFILE;
+  if (home) return path.join(home, '.cache', 'puppeteer');
+  return path.join('/tmp', '.cache', 'puppeteer');
+}
+
+/**
+ * Garante Chrome gerido pelo Puppeteer (download lazy na 1.ª utilização).
+ * @returns {string} caminho do executável
+ */
+function ensureChromeInstalledAtRuntime() {
+  const puppeteerPkg = require('puppeteer');
+  const cacheDir = resolvePuppeteerCacheDir();
+  process.env.PUPPETEER_CACHE_DIR = cacheDir;
+  delete process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD;
+
+  const envPath = process.env.PUPPETEER_EXECUTABLE_PATH;
+  if (envPath && fs.existsSync(envPath)) {
+    return envPath;
+  }
+
+  let chromePath = null;
+  try {
+    if (typeof puppeteerPkg.executablePath === 'function') {
+      chromePath = puppeteerPkg.executablePath();
+    }
+  } catch {
+    chromePath = null;
+  }
+
+  if (chromePath && fs.existsSync(chromePath)) {
+    return chromePath;
+  }
+
+  console.log(
+    '🔧 Puppeteer: Chrome não encontrado; a instalar em',
+    cacheDir,
+    '(primeira execução pode demorar ~1–2 min)'
+  );
+  const backendRoot = path.join(__dirname, '..', '..');
+  const env = { ...process.env, PUPPETEER_CACHE_DIR: cacheDir };
+  delete env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD;
+  execSync('npx puppeteer browsers install chrome', {
+    stdio: 'inherit',
+    cwd: backendRoot,
+    env,
+    timeout: 600000,
+  });
+
+  chromePath = puppeteerPkg.executablePath();
+  if (!chromePath || !fs.existsSync(chromePath)) {
+    throw new Error(
+      'Chrome ainda não disponível após `puppeteer browsers install chrome`'
+    );
+  }
+  console.log('✅ Chrome instalado para Puppeteer');
+  return chromePath;
+}
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -272,9 +337,12 @@ class InkdecksPuppeteerScraper {
 
   async init() {
     if (this.browser) return;
-    // Sem executablePath → Chrome empacotado pelo Puppeteer (Render free tier, sem apt-get).
+    console.log('🔧 Initializing Puppeteer scraper…');
+    const executablePath = ensureChromeInstalledAtRuntime();
+    console.log('🚀 Launching browser…');
     this.browser = await puppeteer.launch({
       headless: process.env.PUPPETEER_HEADLESS !== 'false',
+      executablePath,
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -283,6 +351,7 @@ class InkdecksPuppeteerScraper {
         '--single-process',
       ],
     });
+    console.log('✅ Browser launched successfully');
   }
 
   async close() {
