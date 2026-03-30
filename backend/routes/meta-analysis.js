@@ -162,6 +162,221 @@ router.get('/tier-list', async (req, res) => {
   }
 });
 
+// ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/meta-share — agregado por scraped_decks (público)
+// ═══════════════════════════════════════════════════════════════════
+
+router.get('/meta-share', async (req, res) => {
+  try {
+    console.log('📊 Calculating meta share from scraped_decks...');
+
+    const { data: decks, error } = await supabase
+      .from('scraped_decks')
+      .select('archetype, wins, losses, deck_name, scraped_at')
+      .order('scraped_at', { ascending: false });
+
+    if (error) throw error;
+
+    const rows = decks || [];
+    const archetypeStats = {};
+
+    rows.forEach((deck) => {
+      const arch = deck.archetype || 'Unknown';
+      if (!archetypeStats[arch]) {
+        archetypeStats[arch] = {
+          archetype: arch,
+          deck_count: 0,
+          total_games: 0,
+          total_wins: 0,
+          total_losses: 0,
+          decks_with_record: 0,
+        };
+      }
+      const stats = archetypeStats[arch];
+      stats.deck_count += 1;
+      if (deck.wins != null && deck.losses != null) {
+        stats.total_wins += deck.wins;
+        stats.total_losses += deck.losses;
+        stats.total_games += deck.wins + deck.losses;
+        stats.decks_with_record += 1;
+      }
+    });
+
+    const totalDecks = rows.length;
+    const metaShare = Object.values(archetypeStats).map((stats) => {
+      const winRate =
+        stats.total_games > 0
+          ? (stats.total_wins / stats.total_games) * 100
+          : null;
+      return {
+        archetype: stats.archetype,
+        deck_count: stats.deck_count,
+        meta_share: totalDecks
+          ? ((stats.deck_count / totalDecks) * 100).toFixed(1)
+          : '0.0',
+        win_rate: winRate != null ? winRate.toFixed(1) : null,
+        total_games: stats.total_games,
+        total_wins: stats.total_wins,
+        total_losses: stats.total_losses,
+        avg_games_per_deck:
+          stats.decks_with_record > 0
+            ? (stats.total_games / stats.decks_with_record).toFixed(1)
+            : null,
+      };
+    });
+
+    metaShare.sort((a, b) => b.deck_count - a.deck_count);
+
+    console.log(`✅ Meta share: ${metaShare.length} archetypes`);
+
+    res.json({
+      success: true,
+      total_decks: totalDecks,
+      archetypes: metaShare,
+      meta: {
+        last_update: rows[0]?.scraped_at || null,
+        total_archetypes: metaShare.length,
+        source: 'scraped_decks',
+      },
+    });
+  } catch (err) {
+    console.error('❌ /meta-share error:', err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/scraped-tier-list — tiers por performance em scraped_decks
+// (não confundir com GET /tier-list que usa meta_analysis)
+// ═══════════════════════════════════════════════════════════════════
+
+router.get('/scraped-tier-list', async (req, res) => {
+  try {
+    const minGames = Math.max(
+      1,
+      parseInt(req.query.min_games || '10', 10) || 10
+    );
+    console.log(
+      `🏆 Generating scraped-decks tier list (min_games=${minGames})...`
+    );
+
+    const { data: decks, error } = await supabase
+      .from('scraped_decks')
+      .select('archetype, wins, losses, deck_name')
+      .order('scraped_at', { ascending: false });
+
+    if (error) throw error;
+
+    const rows = decks || [];
+    const archetypeStats = {};
+
+    rows.forEach((deck) => {
+      const arch = deck.archetype || 'Unknown';
+      if (!archetypeStats[arch]) {
+        archetypeStats[arch] = {
+          archetype: arch,
+          deck_count: 0,
+          total_wins: 0,
+          total_losses: 0,
+          total_games: 0,
+        };
+      }
+      const stats = archetypeStats[arch];
+      stats.deck_count += 1;
+      if (deck.wins != null && deck.losses != null) {
+        stats.total_wins += deck.wins;
+        stats.total_losses += deck.losses;
+        stats.total_games += deck.wins + deck.losses;
+      }
+    });
+
+    let tierData = Object.values(archetypeStats)
+      .filter((stats) => stats.total_games >= minGames)
+      .map((stats) => {
+        const winRate = stats.total_wins / stats.total_games;
+        const metaShare = rows.length ? stats.deck_count / rows.length : 0;
+        const tierScore = winRate * 0.7 + metaShare * 0.3;
+        return {
+          archetype: stats.archetype,
+          win_rate: (winRate * 100).toFixed(1),
+          meta_share: (metaShare * 100).toFixed(1),
+          deck_count: stats.deck_count,
+          total_games: stats.total_games,
+          tier_score: tierScore,
+          tier: null,
+        };
+      })
+      .sort((a, b) => b.tier_score - a.tier_score);
+
+    let effectiveMin = minGames;
+    if (tierData.length === 0 && minGames > 1) {
+      effectiveMin = 1;
+      tierData = Object.values(archetypeStats)
+        .filter((stats) => stats.total_games >= 1)
+        .map((stats) => {
+          const winRate = stats.total_wins / stats.total_games;
+          const metaShare = rows.length ? stats.deck_count / rows.length : 0;
+          const tierScore = winRate * 0.7 + metaShare * 0.3;
+          return {
+            archetype: stats.archetype,
+            win_rate: (winRate * 100).toFixed(1),
+            meta_share: (metaShare * 100).toFixed(1),
+            deck_count: stats.deck_count,
+            total_games: stats.total_games,
+            tier_score: tierScore,
+            tier: null,
+          };
+        })
+        .sort((a, b) => b.tier_score - a.tier_score);
+    }
+
+    const tierCount = tierData.length;
+    tierData.forEach((item, index) => {
+      if (tierCount === 0) return;
+      const percentile = index / tierCount;
+      if (percentile < 0.15) item.tier = 'S';
+      else if (percentile < 0.35) item.tier = 'A';
+      else if (percentile < 0.6) item.tier = 'B';
+      else if (percentile < 0.85) item.tier = 'C';
+      else item.tier = 'D';
+    });
+
+    const tierList = {
+      S: tierData.filter((d) => d.tier === 'S'),
+      A: tierData.filter((d) => d.tier === 'A'),
+      B: tierData.filter((d) => d.tier === 'B'),
+      C: tierData.filter((d) => d.tier === 'C'),
+      D: tierData.filter((d) => d.tier === 'D'),
+    };
+
+    console.log(
+      `✅ Scraped tier list: S=${tierList.S.length}, A=${tierList.A.length}, B=${tierList.B.length}`
+    );
+
+    res.json({
+      success: true,
+      tier_list: tierList,
+      all_archetypes: tierData,
+      meta: {
+        total_archetypes: tierData.length,
+        total_decks: rows.length,
+        minimum_games_requested: minGames,
+        minimum_games_effective: effectiveMin,
+        source: 'scraped_decks',
+      },
+    });
+  } catch (err) {
+    console.error('❌ /scraped-tier-list error:', err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+});
+
 // TRENDS ROUTE
 router.get('/trends', async (req, res) => {
   try {
@@ -484,7 +699,31 @@ router.post(
       });
 
       const scraper = new InkdecksScraper();
-      const decks = await scraper.scrapeDecks(limit, (event) => {
+      let savedPages = 0;
+      const decks = await scraper.scrapeDecks(limit, async (event) => {
+        if (event.type === 'pageComplete') {
+          const { decks: pageDecks, ...meta } = event;
+          if (pageDecks && pageDecks.length > 0) {
+            const rows = pageDecks.map(deckToScrapedDeckRow);
+            const { error } = await supabase.from('scraped_decks').insert(rows);
+            if (error) {
+              sendEvent({
+                type: 'log',
+                level: 'error',
+                message: `Erro no banco (página ${meta.page}): ${error.message}`,
+              });
+            } else {
+              savedPages += 1;
+              sendEvent({
+                type: 'log',
+                level: 'success',
+                message: `Página ${meta.page}: ${rows.length} deck(s) guardados em scraped_decks`,
+              });
+            }
+          }
+          sendEvent(meta);
+          return;
+        }
         sendEvent(event);
       });
 
@@ -494,7 +733,7 @@ router.post(
         message: `Scraped ${decks.length} decks`,
       });
 
-      if (decks.length > 0) {
+      if (decks.length > 0 && savedPages === 0) {
         const rows = decks.map(deckToScrapedDeckRow);
         const { error } = await supabase.from('scraped_decks').insert(rows);
 

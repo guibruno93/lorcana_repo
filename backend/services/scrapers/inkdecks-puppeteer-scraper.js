@@ -21,6 +21,20 @@ const BASE_URL = 'https://inkdecks.com';
 const LIST_PATH = '/lorcana-decks/core';
 const MAX_DECKS_PER_RUN = 100;
 const BETWEEN_DECKS_MS = 2000;
+/** Decks por página na listagem Inkdecks (ajustável se o site mudar). */
+const DECKS_PER_LISTING_PAGE = parseInt(
+  process.env.INKDECKS_DECKS_PER_PAGE || '20',
+  10
+);
+const BETWEEN_LISTING_PAGES_MS = parseInt(
+  process.env.INKDECKS_BETWEEN_PAGES_MS || '3000',
+  10
+);
+/** Retentativas ao carregar uma página de listagem vazia / instável. */
+const LISTING_PAGE_LOAD_RETRIES = parseInt(
+  process.env.INKDECKS_LISTING_PAGE_RETRIES || '2',
+  10
+);
 
 /** Timeouts ajustáveis no Render (rede lenta / Cloudflare / cold start). */
 const GOTO_TIMEOUT_MS = parseInt(
@@ -130,6 +144,134 @@ function findChromeExeUnderUserPuppeteerCache() {
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+/** URL da listagem com paginação (?page=N quando N > 1). */
+function listingUrlForPage(pageNum) {
+  const base = `${BASE_URL}${LIST_PATH}`;
+  if (pageNum <= 1) return base;
+  const sep = base.includes('?') ? '&' : '?';
+  return `${base}${sep}page=${pageNum}`;
+}
+
+function htmlLooksLikeCloudflareChallenge(html) {
+  return /Just a moment|checking your browser/i.test(html || '');
+}
+
+/**
+ * Extrai metadados dos decks na listagem atual (até maxDecks linhas).
+ * @param {import('puppeteer').Page} page
+ * @param {number} maxDecks
+ * @returns {Promise<object[]>}
+ */
+async function extractListingDeckMetaFromPage(page, maxDecks) {
+  return page.evaluate((maxDecksInner, base) => {
+    const rows = Array.from(
+      document.querySelectorAll('tr[id^="desktop-deck-"]')
+    );
+    const decks = [];
+    for (
+      let index = 0;
+      index < rows.length && decks.length < maxDecksInner;
+      index++
+    ) {
+      const row = rows[index];
+      const deckUrl = row.getAttribute('data-href');
+      if (!deckUrl) continue;
+      const tds = row.querySelectorAll('td');
+      const placement =
+        tds[0]?.querySelector('strong')?.textContent?.trim() || '';
+      const deckName =
+        tds[1]?.querySelector('strong')?.textContent?.trim() || '';
+      const authorRaw =
+        tds[1]?.querySelector('.small.text-secondary')?.textContent || '';
+      const author = authorRaw.replace(/\bby\b/gi, '').trim();
+      const strategy =
+        tds[3]?.querySelector('.text-muted.small')?.textContent?.trim() || '';
+      const eventName =
+        tds[4]?.querySelector('.text-truncate')?.textContent?.trim() || '';
+      const organizerRaw =
+        tds[4]?.querySelector('.text-theme-light')?.textContent || '';
+      const organizer = organizerRaw.replace('@', '').trim();
+      const playersText =
+        tds[4]?.querySelector('.text-muted')?.textContent?.trim() || '';
+      const playersMatch = playersText.match(/(\d+)/);
+      const players = playersMatch ? parseInt(playersMatch[1], 10) : 0;
+      const dateText = tds[7]?.textContent?.trim() || '';
+      const inks = [];
+      tds[3]?.querySelectorAll('img[alt]').forEach((img) => {
+        const alt = img.getAttribute('alt');
+        if (alt)
+          inks.push(alt.charAt(0).toUpperCase() + alt.slice(1).toLowerCase());
+      });
+      const fullUrl = deckUrl.startsWith('http') ? deckUrl : base + deckUrl;
+      const m = deckUrl.match(/deck-(.+?)$/);
+      const deckId = m ? m[1] : '';
+      decks.push({
+        url: fullUrl,
+        deckId,
+        name: deckName,
+        author,
+        placement,
+        strategy,
+        inks,
+        event: {
+          name: eventName,
+          organizer,
+          players,
+          date: dateText,
+        },
+      });
+    }
+    return decks;
+  }, maxDecks, BASE_URL);
+}
+
+/**
+ * Espera Cloudflare + linhas da listagem.
+ * @param {import('puppeteer').Page} page
+ * @param {(e: object) => void} emit
+ * @param {string} label
+ * @returns {Promise<boolean>}
+ */
+async function ensureListingReady(page, emit, label) {
+  emit({
+    type: 'log',
+    level: 'info',
+    message: `${label}: Aguardando possível verificação Cloudflare…`,
+  });
+  await sleep(3000);
+  let html = await page.content();
+  if (htmlLooksLikeCloudflareChallenge(html)) {
+    emit({
+      type: 'log',
+      level: 'warning',
+      message: `${label}: Challenge Cloudflare detectado; aguardando mais…`,
+    });
+    await sleep(15000);
+    html = await page.content();
+  }
+  if (htmlLooksLikeCloudflareChallenge(html)) {
+    emit({
+      type: 'log',
+      level: 'error',
+      message: `${label}: Bloqueado pelo Cloudflare.`,
+    });
+    return false;
+  }
+  try {
+    await page.waitForSelector('tr[id^="desktop-deck-"]', {
+      timeout: LISTING_SELECTOR_TIMEOUT_MS,
+    });
+    return true;
+  } catch {
+    emit({
+      type: 'log',
+      level: 'error',
+      message: `${label}: Não encontrou linhas tr[id^="desktop-deck-"].`,
+    });
+    return false;
+  }
 }
 
 /** Conta linhas de decklist visíveis no DOM. */
@@ -691,6 +833,116 @@ class InkdecksPuppeteerScraper {
     }
   }
 
+  /**
+   * Detecta quantas páginas existem na listagem (texto "Showing … of Z", links ?page=, botões).
+   * @param {import('puppeteer').Page} page
+   * @returns {Promise<number>}
+   */
+  async detectTotalPages(page) {
+    try {
+      const perPage = Math.max(1, DECKS_PER_LISTING_PAGE);
+      return await page.evaluate((perPageInner) => {
+        const text = document.body.innerText || '';
+        const showing = text.match(
+          /showing\s+\d+\s*[-–]\s*\d+\s+of\s+(\d+)/i
+        );
+        if (showing) {
+          const total = parseInt(showing[1], 10);
+          if (total > 0) return Math.max(1, Math.ceil(total / perPageInner));
+        }
+        const nums = [];
+        const sel =
+          'a[href*="page="], .pagination a, .page-link, [class*="pagination"] button, [class*="pagination"] a, nav.pagination a';
+        document.querySelectorAll(sel).forEach((el) => {
+          const t = (el.textContent || '').trim();
+          const n = parseInt(t, 10);
+          if (String(n) === t && n >= 1 && n < 5000) nums.push(n);
+        });
+        if (nums.length) return Math.max(...nums);
+        const hrefNums = [];
+        document.querySelectorAll('a[href*="page="]').forEach((a) => {
+          const u = a.getAttribute('href') || '';
+          const m = u.match(/[?&]page=(\d+)/i);
+          if (m) hrefNums.push(parseInt(m[1], 10));
+        });
+        if (hrefNums.length) return Math.max(...hrefNums);
+        return 1;
+      }, perPage);
+    } catch (err) {
+      console.warn(
+        'Could not detect total pages, assuming 1:',
+        err && err.message
+      );
+      return 1;
+    }
+  }
+
+  /**
+   * Navega para a página `pageNum` da listagem. Tenta clique na paginação se já estiver na listagem;
+   * caso contrário (ex.: após abrir um deck) usa URL `?page=N`.
+   * @param {import('puppeteer').Page} page
+   * @param {number} pageNum — 1-based
+   * @param {(e: object) => void} [emit]
+   */
+  async navigateToListingPage(page, pageNum, emit) {
+    if (pageNum <= 1) return;
+    const targetUrl = listingUrlForPage(pageNum);
+    try {
+      const cur = page.url();
+      const seemsListing =
+        /lorcana-decks/i.test(cur) && !/\/deck-/i.test(cur);
+
+      if (seemsListing) {
+        const clicked = await page.evaluate((num) => {
+          const candidates = Array.from(
+            document.querySelectorAll(
+              '[class*="pagination"] button, [class*="pagination"] a, .page-link, a[href*="page="]'
+            )
+          );
+          const target = candidates.find((el) => {
+            if (!el || el.offsetParent === null) return false;
+            const t = (el.textContent || '').trim();
+            return t === String(num);
+          });
+          if (target) {
+            target.click();
+            return true;
+          }
+          return false;
+        }, pageNum);
+
+        if (clicked) {
+          await sleep(2500);
+          const rowCount = await page.$$eval(
+            'tr[id^="desktop-deck-"]',
+            (els) => els.length
+          );
+          if (rowCount > 0) {
+            if (typeof emit === 'function') {
+              emit({
+                type: 'log',
+                level: 'info',
+                message: `Paginação: clique na página ${pageNum} (listagem atualizada).`,
+              });
+            }
+            return;
+          }
+        }
+      }
+    } catch {
+      /* fallback URL */
+    }
+
+    if (typeof emit === 'function') {
+      emit({
+        type: 'log',
+        level: 'info',
+        message: `Navegando para listagem página ${pageNum} (URL)…`,
+      });
+    }
+    await this.navigateWithRetry(page, targetUrl, emit);
+  }
+
   async close() {
     if (this.browser) {
       await this.browser.close();
@@ -699,6 +951,7 @@ class InkdecksPuppeteerScraper {
   }
 
   /**
+   * Listagem paginada: processa ~N decks por página, valida a página antes de avançar.
    * @param {number} limit
    * @param {(e: object) => void} [onProgress]
    * @returns {Promise<object[]>} mesmo formato interno do v2 (title, cards[], url, deckId, …)
@@ -708,10 +961,12 @@ class InkdecksPuppeteerScraper {
       if (typeof onProgress === 'function') onProgress(p);
     };
 
-    const cap = Math.min(
+    const targetLimit = Math.min(
       Math.max(1, parseInt(limit, 10) || 50),
       MAX_DECKS_PER_RUN
     );
+
+    const perPage = Math.max(1, DECKS_PER_LISTING_PAGE);
 
     await this.init();
     const page = await this.browser.newPage();
@@ -731,14 +986,10 @@ class InkdecksPuppeteerScraper {
       emit({
         type: 'log',
         level: 'info',
-        message: 'Abrindo listagem Inkdecks (Puppeteer)…',
+        message: 'Abrindo listagem Inkdecks (Puppeteer, modo paginado)…',
       });
 
-      await this.navigateWithRetry(
-        page,
-        `${BASE_URL}${LIST_PATH}`,
-        emit
-      );
+      await this.navigateWithRetry(page, listingUrlForPage(1), emit);
 
       emit({
         type: 'log',
@@ -748,7 +999,7 @@ class InkdecksPuppeteerScraper {
       await sleep(5000);
 
       let html = await page.content();
-      if (/Just a moment|checking your browser/i.test(html)) {
+      if (htmlLooksLikeCloudflareChallenge(html)) {
         emit({
           type: 'log',
           level: 'warning',
@@ -758,11 +1009,12 @@ class InkdecksPuppeteerScraper {
         html = await page.content();
       }
 
-      if (/Just a moment|checking your browser/i.test(html)) {
+      if (htmlLooksLikeCloudflareChallenge(html)) {
         emit({
           type: 'log',
           level: 'error',
-          message: 'Ainda na página de challenge (Cloudflare). Tente IP residencial ou aumentar espera.',
+          message:
+            'Ainda na página de challenge (Cloudflare). Tente IP residencial ou aumentar espera.',
         });
         return [];
       }
@@ -781,202 +1033,246 @@ class InkdecksPuppeteerScraper {
         return [];
       }
 
-      const deckMetaList = await page.evaluate((maxDecks, base) => {
-        const rows = Array.from(
-          document.querySelectorAll('tr[id^="desktop-deck-"]')
-        );
-        const decks = [];
-        for (
-          let index = 0;
-          index < rows.length && decks.length < maxDecks;
-          index++
-        ) {
-          const row = rows[index];
-          const deckUrl = row.getAttribute('data-href');
-          if (!deckUrl) continue;
-          const tds = row.querySelectorAll('td');
-          const placement =
-            tds[0]?.querySelector('strong')?.textContent?.trim() || '';
-          const deckName =
-            tds[1]?.querySelector('strong')?.textContent?.trim() || '';
-          const authorRaw =
-            tds[1]?.querySelector('.small.text-secondary')?.textContent || '';
-          const author = authorRaw.replace(/\bby\b/gi, '').trim();
-          const strategy =
-            tds[3]?.querySelector('.text-muted.small')?.textContent?.trim() ||
-            '';
-          const eventName =
-            tds[4]?.querySelector('.text-truncate')?.textContent?.trim() || '';
-          const organizerRaw =
-            tds[4]?.querySelector('.text-theme-light')?.textContent || '';
-          const organizer = organizerRaw.replace('@', '').trim();
-          const playersText =
-            tds[4]?.querySelector('.text-muted')?.textContent?.trim() || '';
-          const playersMatch = playersText.match(/(\d+)/);
-          const players = playersMatch ? parseInt(playersMatch[1], 10) : 0;
-          const dateText = tds[7]?.textContent?.trim() || '';
-          const inks = [];
-          tds[3]?.querySelectorAll('img[alt]').forEach((img) => {
-            const alt = img.getAttribute('alt');
-            if (alt)
-              inks.push(
-                alt.charAt(0).toUpperCase() + alt.slice(1).toLowerCase()
-              );
-          });
-          const fullUrl = deckUrl.startsWith('http')
-            ? deckUrl
-            : base + deckUrl;
-          const m = deckUrl.match(/deck-(.+?)$/);
-          const deckId = m ? m[1] : '';
-          decks.push({
-            url: fullUrl,
-            deckId,
-            name: deckName,
-            author,
-            placement,
-            strategy,
-            inks,
-            event: {
-              name: eventName,
-              organizer,
-              players,
-              date: dateText,
-            },
-          });
-        }
-        return decks;
-      }, cap, BASE_URL);
+      const totalPages = await this.detectTotalPages(page);
+      emit({
+        type: 'log',
+        level: 'info',
+        message: `Detectada(s) ${totalPages} página(s) na listagem (~${perPage} decks/página).`,
+      });
 
-      if (!deckMetaList.length) {
+      const allResults = [];
+      let totalScraped = 0;
+      let currentPage = 1;
+
+      while (totalScraped < targetLimit && currentPage <= totalPages) {
+        const remainingLimit = targetLimit - totalScraped;
+        const pageLimit = Math.min(remainingLimit, perPage);
+
         emit({
           type: 'log',
-          level: 'warning',
-          message: 'Listagem retornou 0 decks.',
+          level: 'info',
+          message: `📄 Processando página ${currentPage}/${totalPages} (até ${pageLimit} decks nesta página)`,
         });
-        return [];
+
+        if (currentPage > 1) {
+          await this.navigateToListingPage(page, currentPage, emit);
+          await sleep(1500);
+          const ok = await ensureListingReady(
+            page,
+            emit,
+            `Página ${currentPage}`
+          );
+          if (!ok) break;
+        }
+
+        let deckMetaList = [];
+        let loadAttempt = 0;
+        while (loadAttempt < LISTING_PAGE_LOAD_RETRIES) {
+          loadAttempt++;
+          deckMetaList = await extractListingDeckMetaFromPage(page, pageLimit);
+          if (deckMetaList.length > 0) break;
+          emit({
+            type: 'log',
+            level: 'warning',
+            message: `Página ${currentPage}: 0 decks na listagem (tentativa ${loadAttempt}/${LISTING_PAGE_LOAD_RETRIES}); recarregar…`,
+          });
+          await this.navigateWithRetry(
+            page,
+            listingUrlForPage(currentPage),
+            emit
+          );
+          await sleep(2000);
+          const ready = await ensureListingReady(
+            page,
+            emit,
+            `Página ${currentPage} (retry)`
+          );
+          if (!ready) break;
+        }
+
+        if (!deckMetaList.length) {
+          emit({
+            type: 'log',
+            level: 'warning',
+            message: `Página ${currentPage}: 0 decks encontrados — fim da listagem ou erro.`,
+          });
+          break;
+        }
+
+        emit({
+          type: 'log',
+          level: 'success',
+          message: `Página ${currentPage}: ${deckMetaList.length} deck(s) na listagem.`,
+        });
+
+        const pageResults = [];
+
+        for (let i = 0; i < deckMetaList.length; i++) {
+          const meta = deckMetaList[i];
+          emit({
+            type: 'log',
+            level: 'info',
+            message: `[P${currentPage}] Deck ${i + 1}/${deckMetaList.length}: ${meta.name}`,
+          });
+
+          if (i > 0) await sleep(BETWEEN_DECKS_MS);
+
+          try {
+            await this.navigateWithRetry(page, meta.url, emit);
+            await sleep(1500);
+
+            try {
+              await page.waitForSelector('tr.card-list-item', {
+                timeout: DECK_CARD_SELECTOR_TIMEOUT_MS,
+              });
+            } catch {
+              emit({
+                type: 'log',
+                level: 'warning',
+                message: `[P${currentPage}] Sem tr.card-list-item: ${meta.name}`,
+              });
+              continue;
+            }
+
+            const cards = await loadFullDecklistAndExtractCards(page, emit);
+
+            const perf = await extractDeckPagePerformance(page);
+            if (process.env.SCRAPER_DEBUG_PERF === 'true') {
+              emit({
+                type: 'log',
+                level: 'info',
+                message: `[P${currentPage}] [debug] Page perf: ${JSON.stringify(perf, null, 2)}`,
+              });
+            }
+
+            const inksList = meta.inks || [];
+            let archetype = meta.strategy || 'Unknown';
+            if (inksList.length >= 2) {
+              archetype = `${inksList[0]}/${inksList[1]}`;
+            }
+
+            const wins = Number.isFinite(perf.wins) ? perf.wins : null;
+            const losses = Number.isFinite(perf.losses) ? perf.losses : null;
+            const standing = meta.placement || perf.standing || null;
+            const eventName =
+              (meta.event.name && meta.event.name.trim()) ||
+              perf.event_name ||
+              null;
+
+            const hasWinLoss = wins != null && losses != null;
+            const hasStanding = standing != null;
+            const hasEvent = eventName != null;
+
+            if (hasWinLoss || hasStanding || hasEvent) {
+              const parts = [];
+              if (hasWinLoss) parts.push(`Record: ${wins}-${losses}`);
+              if (hasStanding) parts.push(`Standing: ${standing}`);
+              if (hasEvent) parts.push(`Event: ${eventName}`);
+
+              emit({
+                type: 'log',
+                level: 'info',
+                message: `📊 Performance Data: ${parts.join(' | ')}`,
+              });
+            } else {
+              emit({
+                type: 'log',
+                level: 'info',
+                message: `📊 Performance Data: None found (deck may not have tournament data)`,
+              });
+            }
+
+            const deck = {
+              source: 'inkdecks',
+              deckId: meta.deckId,
+              url: meta.url,
+              title: meta.name,
+              author: meta.author,
+              archetype,
+              strategy: meta.strategy,
+              inks: inksList,
+              cards,
+              wins,
+              losses,
+              standing,
+              event: eventName,
+              organizer: meta.event.organizer,
+              players: meta.event.players,
+              date: meta.event.date,
+              fetchedAt: new Date().toISOString(),
+            };
+
+            pageResults.push(deck);
+            const copies = totalCardCopies(cards);
+            emit({
+              type: 'log',
+              level: 'success',
+              message: `[P${currentPage}] OK: ${deck.title} (${cards.length} linhas, ${copies} cópias)`,
+            });
+          } catch (err) {
+            emit({
+              type: 'log',
+              level: 'error',
+              message: `[P${currentPage}] Falha no deck ${i + 1}: ${err.message}`,
+            });
+          }
+        }
+
+        const pageSuccessRate =
+          deckMetaList.length > 0
+            ? pageResults.length / deckMetaList.length
+            : 0;
+
+        emit({
+          type: 'log',
+          level: 'info',
+          message: `📊 Página ${currentPage} concluída: ${pageResults.length}/${deckMetaList.length} decks (${Math.round(pageSuccessRate * 100)}% sucesso)`,
+        });
+
+        if (typeof onProgress === 'function') {
+          await Promise.resolve(
+            onProgress({
+              type: 'pageComplete',
+              page: currentPage,
+              listed: deckMetaList.length,
+              scraped: pageResults.length,
+              successRate: pageSuccessRate,
+              decks: pageResults,
+            })
+          );
+        }
+
+        if (pageResults.length === 0 && deckMetaList.length > 0) {
+          emit({
+            type: 'log',
+            level: 'error',
+            message: `⛔ Página ${currentPage} falhou completamente (0/${deckMetaList.length}). Parando scrape.`,
+          });
+          break;
+        }
+
+        allResults.push(...pageResults);
+        totalScraped += pageResults.length;
+
+        currentPage++;
+
+        if (totalScraped < targetLimit && currentPage <= totalPages) {
+          emit({
+            type: 'log',
+            level: 'info',
+            message: `⏸️  Pausa de ${BETWEEN_LISTING_PAGES_MS / 1000}s antes da próxima página…`,
+          });
+          await sleep(BETWEEN_LISTING_PAGES_MS);
+        }
       }
 
       emit({
         type: 'log',
         level: 'success',
-        message: `Encontrados ${deckMetaList.length} decks na listagem.`,
+        message: `✅ Scrape finalizado: ${totalScraped} deck(s) (${Math.max(0, currentPage - 1)} página(s) percorridas).`,
       });
 
-      const results = [];
-      for (let i = 0; i < deckMetaList.length; i++) {
-        const meta = deckMetaList[i];
-        emit({
-          type: 'log',
-          level: 'info',
-          message: `Deck ${i + 1}/${deckMetaList.length}: ${meta.name}`,
-        });
-
-        if (i > 0) await sleep(BETWEEN_DECKS_MS);
-
-        try {
-          await this.navigateWithRetry(page, meta.url, emit);
-          await sleep(1500);
-
-          try {
-            await page.waitForSelector('tr.card-list-item', {
-              timeout: DECK_CARD_SELECTOR_TIMEOUT_MS,
-            });
-          } catch {
-            emit({
-              type: 'log',
-              level: 'warning',
-              message: `Sem tr.card-list-item: ${meta.name}`,
-            });
-            continue;
-          }
-
-          const cards = await loadFullDecklistAndExtractCards(page, emit);
-
-          const perf = await extractDeckPagePerformance(page);
-          if (process.env.SCRAPER_DEBUG_PERF === 'true') {
-            emit({
-              type: 'log',
-              level: 'info',
-              message: `[debug] Page perf: ${JSON.stringify(perf, null, 2)}`,
-            });
-          }
-
-          const inksList = meta.inks || [];
-          let archetype = meta.strategy || 'Unknown';
-          if (inksList.length >= 2) {
-            archetype = `${inksList[0]}/${inksList[1]}`;
-          }
-
-          const wins =
-            Number.isFinite(perf.wins) ? perf.wins : null;
-          const losses =
-            Number.isFinite(perf.losses) ? perf.losses : null;
-          const standing = meta.placement || perf.standing || null;
-          const eventName =
-            (meta.event.name && meta.event.name.trim()) ||
-            perf.event_name ||
-            null;
-
-          const hasWinLoss = wins != null && losses != null;
-          const hasStanding = standing != null;
-          const hasEvent = eventName != null;
-
-          if (hasWinLoss || hasStanding || hasEvent) {
-            const parts = [];
-            if (hasWinLoss) parts.push(`Record: ${wins}-${losses}`);
-            if (hasStanding) parts.push(`Standing: ${standing}`);
-            if (hasEvent) parts.push(`Event: ${eventName}`);
-
-            emit({
-              type: 'log',
-              level: 'info',
-              message: `📊 Performance Data: ${parts.join(' | ')}`,
-            });
-          } else {
-            emit({
-              type: 'log',
-              level: 'info',
-              message: `📊 Performance Data: None found (deck may not have tournament data)`,
-            });
-          }
-
-          const deck = {
-            source: 'inkdecks',
-            deckId: meta.deckId,
-            url: meta.url,
-            title: meta.name,
-            author: meta.author,
-            archetype,
-            strategy: meta.strategy,
-            inks: inksList,
-            cards,
-            wins,
-            losses,
-            standing,
-            event: eventName,
-            organizer: meta.event.organizer,
-            players: meta.event.players,
-            date: meta.event.date,
-            fetchedAt: new Date().toISOString(),
-          };
-
-          results.push(deck);
-          const copies = totalCardCopies(cards);
-          emit({
-            type: 'log',
-            level: 'success',
-            message: `OK: ${deck.title} (${cards.length} linhas, ${copies} cópias)`,
-          });
-        } catch (err) {
-          emit({
-            type: 'log',
-            level: 'error',
-            message: `Falha no deck ${i + 1}: ${err.message}`,
-          });
-        }
-      }
-
-      return results;
+      return allResults;
     } finally {
       await page.close().catch(() => {});
       await this.close();

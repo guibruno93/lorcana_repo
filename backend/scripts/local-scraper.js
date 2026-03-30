@@ -38,9 +38,28 @@ async function main() {
   );
 
   let scrapedDecks = [];
+  let savedIncremental = 0;
   try {
     const scraper = new InkdecksPuppeteerScraper();
-    scrapedDecks = await scraper.scrapeDecks(limit, (event) => {
+    scrapedDecks = await scraper.scrapeDecks(limit, async (event) => {
+      if (event.type === 'pageComplete') {
+        if (event.decks && event.decks.length > 0) {
+          const rows = event.decks.map(deckToScrapedDeckRow);
+          const { error } = await supabase.from('scraped_decks').insert(rows);
+          if (error) {
+            console.error(
+              `❌ Supabase insert (página ${event.page}):`,
+              error.message
+            );
+            throw error;
+          }
+          savedIncremental += rows.length;
+          console.log(
+            `[success] Página ${event.page}: ${rows.length} deck(s) guardados no Supabase`
+          );
+        }
+        return;
+      }
       const level = event.level || 'info';
       const msg = event.message || JSON.stringify(event);
       console.log(`[${level}] ${msg}`);
@@ -50,8 +69,8 @@ async function main() {
     process.exit(1);
   }
 
-  let saved = 0;
-  if (scrapedDecks.length > 0) {
+  let saved = savedIncremental;
+  if (savedIncremental === 0 && scrapedDecks.length > 0) {
     const rows = scrapedDecks.map(deckToScrapedDeckRow);
     const { error } = await supabase.from('scraped_decks').insert(rows);
     if (error) {
@@ -71,16 +90,43 @@ async function main() {
     count = null;
   }
 
+  const decksWithWinLoss = scrapedDecks.filter(
+    (deck) => deck.wins != null && deck.losses != null
+  ).length;
+  const decksWithStanding = scrapedDecks.filter(
+    (deck) => deck.standing != null
+  ).length;
+  const decksWithEvent = scrapedDecks.filter(
+    (deck) => deck.event != null
+  ).length;
+  const totalScraped = scrapedDecks.length;
+  const pct = (n) =>
+    totalScraped > 0 ? Math.round((n / totalScraped) * 100) : 0;
+  const executionTime = ((Date.now() - startTime) / 1000).toFixed(1);
+
   console.log('\n═══════════════════════════════════════════════════');
   console.log('📊 SCRAPING SUMMARY');
   console.log('═══════════════════════════════════════════════════');
-  console.log(`✅ Decks scraped: ${scrapedDecks.length}`);
+  console.log(`✅ Decks scraped: ${totalScraped}`);
   console.log(`💾 Decks saved to Supabase: ${saved}`);
-  console.log(`📈 Total decks in database: ${count ?? 'unknown'}`);
   console.log(
-    `⏱️  Execution time: ${((Date.now() - startTime) / 1000).toFixed(1)}s`
+    `📊 Decks with W-L data: ${decksWithWinLoss}/${totalScraped} (${pct(decksWithWinLoss)}%)`
   );
-  console.log('═══════════════════════════════════════════════════\n');
+  console.log(
+    `🏆 Decks with standing: ${decksWithStanding}/${totalScraped} (${pct(decksWithStanding)}%)`
+  );
+  console.log(
+    `🎪 Decks with event name: ${decksWithEvent}/${totalScraped} (${pct(decksWithEvent)}%)`
+  );
+  console.log(`📈 Total decks in database: ${count ?? 'unknown'}`);
+  console.log(`⏱️  Execution time: ${executionTime}s`);
+  console.log('═══════════════════════════════════════════════════');
+  if (process.env.SCRAPER_DEBUG_PERF !== 'true') {
+    console.log(
+      '💡 Tip: Set SCRAPER_DEBUG_PERF=true for detailed performance extraction debug'
+    );
+  }
+  console.log('');
 }
 
 main().catch((err) => {

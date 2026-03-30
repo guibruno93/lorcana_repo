@@ -83,11 +83,15 @@ try {
   console.error("❌ AI router não carregado:", e.message);
 }
 
-// 4. Meta analyzer
+// 4. Meta analyzer (/state) + análise scraped_decks (/share, /tier-list, /stats)
 try {
   const metaRouter = require("./routes/M3ta");
   app.use("/api/meta", metaRouter);
-  console.log("✅ Meta router carregado: /api/meta");
+  const scrapedMetaRouter = require("./routes/scraped-meta");
+  app.use("/api/meta", scrapedMetaRouter);
+  console.log(
+    "✅ Meta router carregado: /api/meta (state + share, tier-list, stats)"
+  );
 } catch (e) {
   console.warn("⚠️  Meta router não carregado:", e.message);
 }
@@ -108,6 +112,15 @@ try {
   console.log("✅ Meta Analysis carregado: /api/meta-analysis");
 } catch (e) {
   console.warn("⚠️  Meta Analysis não carregado:", e.message);
+}
+
+// 7. Tier lists (personalizadas + comunidade)
+try {
+  const tierListsRouter = require("./routes/tier-lists");
+  app.use("/api/tier-lists", tierListsRouter);
+  console.log("✅ Tier lists: /api/tier-lists");
+} catch (e) {
+  console.warn("⚠️  Tier lists não carregado:", e.message);
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
