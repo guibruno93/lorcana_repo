@@ -106,6 +106,28 @@ function ensureChromeInstalledAtRuntime() {
   return chromePath;
 }
 
+/** Windows: localiza chrome.exe em ~/.cache/puppeteer/chrome (subpastas win64-… / chrome-win64). */
+function findChromeExeUnderUserPuppeteerCache() {
+  const base = path.join(
+    process.env.USERPROFILE || '',
+    '.cache',
+    'puppeteer',
+    'chrome'
+  );
+  if (!fs.existsSync(base)) return null;
+  try {
+    const dirs = fs.readdirSync(base);
+    for (const d of dirs) {
+      if (!d.startsWith('win64-')) continue;
+      const candidate = path.join(base, d, 'chrome-win64', 'chrome.exe');
+      if (fs.existsSync(candidate)) return candidate;
+    }
+  } catch (_) {
+    /* ignore */
+  }
+  return null;
+}
+
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -118,6 +140,203 @@ async function countCardRows(page) {
 /** Soma das quantidades (cópias no baralho). */
 function totalCardCopies(cards) {
   return (cards || []).reduce((s, c) => s + (c.quantity || 0), 0);
+}
+
+/**
+ * Heurísticas no texto da página do deck (Inkdecks): W/L, colocação, título do evento.
+ * Evita depender de `:contains` (jQuery); `SCRAPER_DEBUG_PERF=true` regista o payload em log.
+ */
+async function extractDeckPagePerformance(page) {
+  const debugPerf = process.env.SCRAPER_DEBUG_PERF === 'true';
+  return page.evaluate((debugPerfFlag) => {
+    const body = document.body.innerText || '';
+    const out = {
+      wins: null,
+      losses: null,
+      standing: null,
+      event_name: null,
+      debug: {},
+    };
+
+    // PATTERN 1: Simple X-Y (ex.: 5-2). Exclui datas (YYYY-MM-DD, MM-DD em contexto de data).
+    const allMatches = [...body.matchAll(/\b(\d{1,2})\s*[-–]\s*(\d{1,2})\b/g)];
+
+    for (const match of allMatches) {
+      const w = parseInt(match[1], 10);
+      const l = parseInt(match[2], 10);
+
+      if (w > 50 || l > 50) continue;
+
+      const startIdx = Math.max(0, match.index - 100);
+      const endIdx = Math.min(
+        body.length,
+        match.index + match[0].length + 100
+      );
+      const context = body.slice(startIdx, endIdx).toLowerCase();
+
+      const dateKeywords = ['202', '201', ' on ', 'date', 'year', 'month', 'day'];
+      if (dateKeywords.some((kw) => context.includes(kw))) continue;
+
+      const ratio = Math.max(w, l) / Math.max(Math.min(w, l), 1);
+      if (ratio > 10) continue;
+
+      const wlKeywords = [
+        'record',
+        'win',
+        'loss',
+        'score',
+        'result',
+        'match',
+        'game',
+      ];
+      const hasWLKeyword = wlKeywords.some((kw) => context.includes(kw));
+
+      if (hasWLKeyword) {
+        out.wins = w;
+        out.losses = l;
+        out.debug.source = 'simple_record_with_context';
+        out.debug.match = match[0];
+        break;
+      }
+
+      if (out.wins == null) {
+        out.wins = w;
+        out.losses = l;
+        out.debug.source = 'simple_record_filtered';
+        out.debug.match = match[0];
+      }
+    }
+
+    if (out.wins == null) {
+      const winM = body.match(/\b(?:wins?|w)[:\s]*(\d{1,3})\b/i);
+      const lossM = body.match(/\b(?:loss(?:es)?|l)[:\s]*(\d{1,3})\b/i);
+
+      if (winM && lossM) {
+        const w = parseInt(winM[1], 10);
+        const l = parseInt(lossM[1], 10);
+        if (w <= 50 && l <= 50) {
+          out.wins = w;
+          out.losses = l;
+          out.debug.source = 'wins_losses_labels';
+        }
+      }
+    }
+
+    if (out.wins == null) {
+      const ctx = body.match(
+        /(?:record|w\s*\/\s*l|w-l|result|score)\s*[:\s]*(\d{1,2})\s*[-–]\s*(\d{1,2})/i
+      );
+      if (ctx) {
+        const w = parseInt(ctx[1], 10);
+        const l = parseInt(ctx[2], 10);
+        if (w <= 50 && l <= 50) {
+          out.wins = w;
+          out.losses = l;
+          out.debug.source = 'record_context';
+        }
+      }
+    }
+
+    // Standing: colocação numérica (31st at …) > Top N > palavras genéricas (Champion).
+    let numericStanding = null;
+    let genericStanding = null;
+
+    const standingWithContext = body.match(
+      /(\d+)(?:st|nd|rd|th)\s+(?:at|place|in)/i
+    );
+    if (standingWithContext) {
+      const ord = standingWithContext[0].match(/(?:st|nd|rd|th)/i);
+      if (ord) {
+        numericStanding = standingWithContext[1] + ord[0];
+        out.debug.standing_pattern = 'numeric_with_context';
+      }
+    }
+
+    if (!numericStanding) {
+      const place = body.match(/(\d+)(?:st|nd|rd|th)\s+place/i);
+      if (place) {
+        const ordP = place[0].match(/(?:st|nd|rd|th)/i);
+        numericStanding = ordP ? place[1] + ordP[0] : place[0];
+        out.debug.standing_pattern = 'place';
+      }
+    }
+
+    if (!numericStanding) {
+      const top = body.match(/Top\s*(\d+)/i);
+      if (top) {
+        numericStanding = top[0];
+        out.debug.standing_pattern = 'top';
+      }
+    }
+
+    const special = body.match(
+      /\b(winner|champion|finalist|semi-?finalist)\b/i
+    );
+    if (special) {
+      genericStanding = special[0];
+      out.debug.standing_generic = genericStanding;
+    }
+
+    if (numericStanding) {
+      out.standing = numericStanding;
+      out.debug.standing_source = 'numeric';
+    } else if (genericStanding) {
+      out.standing = genericStanding;
+      out.debug.standing_source = 'generic';
+    }
+
+    const og = document.querySelector('meta[property="og:title"]');
+    if (og?.content?.trim()) {
+      out.event_name = og.content.trim();
+      out.debug.event_source = 'og:title';
+    }
+
+    if (!out.event_name) {
+      const h1 = document.querySelector('h1');
+      if (h1?.textContent?.trim()) {
+        out.event_name = h1.textContent.trim();
+        out.debug.event_source = 'h1';
+      }
+    }
+
+    if (!out.event_name) {
+      const h2Ev = document.querySelector('h2');
+      if (h2Ev?.textContent?.trim()) {
+        out.event_name = h2Ev.textContent.trim();
+        out.debug.event_source = 'h2';
+      }
+    }
+
+    const h2 = document.querySelector('h2');
+    if (h2?.textContent?.trim()) {
+      out.debug.h2 = h2.textContent.trim().slice(0, 200);
+    }
+
+    if (debugPerfFlag) {
+      const lines = body
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0);
+      const keywords = [
+        'win',
+        'loss',
+        'record',
+        'standing',
+        'place',
+        'top',
+        'tournament',
+        'event',
+      ];
+      out.debug.relevant_lines = lines
+        .filter((line) => {
+          const lower = line.toLowerCase();
+          return keywords.some((kw) => lower.includes(kw));
+        })
+        .slice(0, 10);
+    }
+
+    return out;
+  }, debugPerf);
 }
 
 /** Extrai linhas `tr.card-list-item` (mesma lógica do v2 / test-html-parse). */
@@ -346,8 +565,72 @@ class InkdecksPuppeteerScraper {
   async init() {
     if (this.browser) return;
     console.log('🔧 Initializing Puppeteer scraper…');
-    const executablePath = ensureChromeInstalledAtRuntime();
-    console.log('🚀 Launching browser…');
+
+    let executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+
+    if (!executablePath || !fs.existsSync(executablePath)) {
+      try {
+        executablePath = ensureChromeInstalledAtRuntime();
+      } catch (err) {
+        console.warn(
+          '⚠️  ensureChromeInstalledAtRuntime() failed:',
+          err.message
+        );
+        executablePath = null;
+      }
+    }
+
+    if (!executablePath || !fs.existsSync(executablePath)) {
+      console.log('🔍 Trying Windows fallback paths...');
+
+      const fromCache = findChromeExeUnderUserPuppeteerCache();
+      if (fromCache) {
+        console.log(`✅ Found Chrome at: ${fromCache}`);
+        executablePath = fromCache;
+      } else {
+        const windowsPaths = [
+          path.join(
+            process.env.USERPROFILE || '',
+            '.cache',
+            'puppeteer',
+            'chrome',
+            'win64-146.0.7680.153',
+            'chrome-win64',
+            'chrome.exe'
+          ),
+          path.join(
+            process.env.LOCALAPPDATA || '',
+            'Puppeteer',
+            'chrome',
+            'win64-146.0.7680.153',
+            'chrome-win64',
+            'chrome.exe'
+          ),
+          'C:\\Users\\guilh\\.cache\\puppeteer\\chrome\\win64-146.0.7680.153\\chrome-win64\\chrome.exe',
+        ];
+
+        for (const testPath of windowsPaths) {
+          if (testPath && fs.existsSync(testPath)) {
+            console.log(`✅ Found Chrome at: ${testPath}`);
+            executablePath = testPath;
+            break;
+          }
+        }
+      }
+    }
+
+    if (!executablePath || !fs.existsSync(executablePath)) {
+      throw new Error(
+        `Chrome executable not found. Tried:\n` +
+          `- PUPPETEER_EXECUTABLE_PATH: ${process.env.PUPPETEER_EXECUTABLE_PATH || 'not set'}\n` +
+          `- ensureChromeInstalledAtRuntime(): failed\n` +
+          `- Windows fallback paths: not found\n` +
+          `Please run: npx puppeteer browsers install chrome`
+      );
+    }
+
+    console.log(`🚀 Launching browser with: ${executablePath}`);
+
     this.browser = await puppeteer.launch({
       headless: process.env.PUPPETEER_HEADLESS !== 'false',
       executablePath,
@@ -609,10 +892,52 @@ class InkdecksPuppeteerScraper {
 
           const cards = await loadFullDecklistAndExtractCards(page, emit);
 
+          const perf = await extractDeckPagePerformance(page);
+          if (process.env.SCRAPER_DEBUG_PERF === 'true') {
+            emit({
+              type: 'log',
+              level: 'info',
+              message: `[debug] Page perf: ${JSON.stringify(perf, null, 2)}`,
+            });
+          }
+
           const inksList = meta.inks || [];
           let archetype = meta.strategy || 'Unknown';
           if (inksList.length >= 2) {
             archetype = `${inksList[0]}/${inksList[1]}`;
+          }
+
+          const wins =
+            Number.isFinite(perf.wins) ? perf.wins : null;
+          const losses =
+            Number.isFinite(perf.losses) ? perf.losses : null;
+          const standing = meta.placement || perf.standing || null;
+          const eventName =
+            (meta.event.name && meta.event.name.trim()) ||
+            perf.event_name ||
+            null;
+
+          const hasWinLoss = wins != null && losses != null;
+          const hasStanding = standing != null;
+          const hasEvent = eventName != null;
+
+          if (hasWinLoss || hasStanding || hasEvent) {
+            const parts = [];
+            if (hasWinLoss) parts.push(`Record: ${wins}-${losses}`);
+            if (hasStanding) parts.push(`Standing: ${standing}`);
+            if (hasEvent) parts.push(`Event: ${eventName}`);
+
+            emit({
+              type: 'log',
+              level: 'info',
+              message: `📊 Performance Data: ${parts.join(' | ')}`,
+            });
+          } else {
+            emit({
+              type: 'log',
+              level: 'info',
+              message: `📊 Performance Data: None found (deck may not have tournament data)`,
+            });
           }
 
           const deck = {
@@ -625,8 +950,10 @@ class InkdecksPuppeteerScraper {
             strategy: meta.strategy,
             inks: inksList,
             cards,
-            standing: meta.placement,
-            event: meta.event.name,
+            wins,
+            losses,
+            standing,
+            event: eventName,
             organizer: meta.event.organizer,
             players: meta.event.players,
             date: meta.event.date,
@@ -657,6 +984,12 @@ class InkdecksPuppeteerScraper {
   }
 }
 
+function numOrNull(v) {
+  if (v === null || v === undefined) return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
 /** Mesmo contrato que inkdecks-scraper-v2 (cards = array de { name, quantity }) */
 function deckToScrapedDeckRow(deck) {
   const cards = {};
@@ -668,14 +1001,14 @@ function deckToScrapedDeckRow(deck) {
     archetype: deck.archetype,
     ink_colors: deck.inks || [],
     cards,
-    wins: deck.wins ?? 0,
-    losses: deck.losses ?? 0,
+    wins: numOrNull(deck.wins),
+    losses: numOrNull(deck.losses),
     source_url: deck.url,
     source_deck_id: deck.deckId,
     author: deck.author,
-    event_name: deck.event,
-    organizer: deck.organizer,
-    standing: deck.standing,
+    event_name: deck.event ?? null,
+    organizer: deck.organizer ?? null,
+    standing: deck.standing ?? null,
     scraped_at: new Date().toISOString(),
   };
 }
