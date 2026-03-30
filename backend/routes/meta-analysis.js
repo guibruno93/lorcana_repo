@@ -356,6 +356,107 @@ router.get('/archetype/*/top-cards', async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/decks — cache-first (Supabase, público)
+// ═══════════════════════════════════════════════════════════════════
+
+router.get('/decks', async (req, res) => {
+  try {
+    console.log('📊 Fetching cached decks from Supabase...');
+
+    const { data, error, count } = await supabase
+      .from('scraped_decks')
+      .select('*', { count: 'exact' })
+      .order('scraped_at', { ascending: false });
+
+    if (error) {
+      console.error('❌ Supabase error:', error);
+      throw error;
+    }
+
+    const rows = data || [];
+    const lastUpdate = rows[0]?.scraped_at || null;
+    const ageMs = lastUpdate
+      ? Date.now() - new Date(lastUpdate).getTime()
+      : null;
+    const ageHours = ageMs != null ? (ageMs / 3600000).toFixed(1) : null;
+
+    const archetypes = {};
+    rows.forEach((deck) => {
+      const arch = deck.archetype || 'Unknown';
+      archetypes[arch] = (archetypes[arch] || 0) + 1;
+    });
+
+    console.log(
+      `✅ Returned ${count ?? rows.length} decks (cache age: ${ageHours ?? 'n/a'}h)`
+    );
+
+    res.json({
+      success: true,
+      decks: rows,
+      meta: {
+        total: count ?? rows.length,
+        archetypes: Object.keys(archetypes).length,
+        last_update: lastUpdate,
+        cache_age_hours: ageHours != null ? parseFloat(ageHours) : null,
+        next_scheduled_update: 'Every 12 hours (00:00 & 12:00 UTC)',
+        archetype_distribution: archetypes,
+      },
+    });
+  } catch (err) {
+    console.error('❌ Error fetching decks:', err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// GET /api/meta-analysis/cache-status — estado do cache (público)
+// ═══════════════════════════════════════════════════════════════════
+
+router.get('/cache-status', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('scraped_decks')
+      .select('scraped_at')
+      .order('scraped_at', { ascending: false })
+      .limit(1);
+
+    if (error) throw error;
+
+    const lastUpdate = data?.[0]?.scraped_at || null;
+    const ageMs = lastUpdate
+      ? Date.now() - new Date(lastUpdate).getTime()
+      : null;
+    const ageHours = ageMs != null ? (ageMs / 3600000).toFixed(1) : null;
+    const ageNum = ageHours != null ? parseFloat(ageHours) : null;
+
+    const now = new Date();
+    const currentHour = now.getUTCHours();
+    const nextRun =
+      currentHour < 12 ? '12:00 UTC' : '00:00 UTC (next day)';
+
+    res.json({
+      success: true,
+      cache: {
+        last_update: lastUpdate,
+        age_hours: ageNum,
+        is_fresh: ageNum != null && ageNum < 12,
+        next_scheduled_run: nextRun,
+        scraper_location: 'GitHub Actions (automated)',
+        update_frequency: 'Every 12 hours',
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════
 // POST /api/meta-analysis/scrape — Inkdecks (streaming NDJSON)
 // ═══════════════════════════════════════════════════════════════════
 

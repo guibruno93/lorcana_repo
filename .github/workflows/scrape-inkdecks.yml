@@ -1,0 +1,64 @@
+name: Scrape Inkdecks Decks
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Number of decks to scrape'
+        required: false
+        default: '50'
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies and Chromium (Puppeteer)
+        working-directory: ./backend
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: ''
+        run: |
+          npm ci
+          npx puppeteer browsers install chrome
+
+      - name: Run Puppeteer scraper
+        working-directory: ./backend
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          PUPPETEER_HEADLESS: 'true'
+          GITHUB_ACTIONS: 'true'
+          LIMIT: ${{ github.event.inputs.limit }}
+        run: |
+          LIMIT="${LIMIT:-50}"
+          echo "🚀 Starting scraper (limit: $LIMIT decks)..."
+          node scripts/local-scraper.js "$LIMIT"
+
+      - name: Check scraping results
+        if: always()
+        working-directory: ./backend
+        run: |
+          echo "📊 Scraping step finished. See logs above."
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-logs-${{ github.run_number }}
+          path: |
+            backend/*.log
+            backend/error.png
+          retention-days: 7

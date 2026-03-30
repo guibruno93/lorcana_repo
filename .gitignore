@@ -1,1 +1,14 @@
 .vercel
+
+node_modules/
+.env
+.env.local
+*.log
+npm-debug.log*
+debug-*.html
+.DS_Store
+
+# Scraper artifacts
+backend/error.png
+backend/*.log
+backend/screenshots/

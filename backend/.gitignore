@@ -20,3 +20,7 @@ debug-*.html
 
 # OS
 .DS_Store
+
+# Scraper artifacts (CI / local)
+error.png
+screenshots/
