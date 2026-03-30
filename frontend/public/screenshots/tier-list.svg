@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="380" viewBox="0 0 640 380">
+  <rect width="640" height="380" rx="12" fill="#0f172a" stroke="rgba(148,163,184,0.2)"/>
+  <text x="320" y="36" fill="#e2e8f0" font-family="system-ui" font-size="18" font-weight="700" text-anchor="middle">Tier List S / A / B / C</text>
+  <rect x="40" y="60" width="560" height="40" rx="6" fill="rgba(212,175,55,0.25)"/>
+  <rect x="40" y="110" width="560" height="40" rx="6" fill="rgba(192,192,192,0.15)"/>
+  <rect x="40" y="160" width="560" height="40" rx="6" fill="rgba(205,127,50,0.2)"/>
+  <text x="320" y="330" fill="#64748b" font-family="system-ui" font-size="12" text-anchor="middle">Placeholder  tier-list.png</text>
+</svg>

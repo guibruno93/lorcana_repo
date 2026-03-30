@@ -9,17 +9,22 @@ export class DeckBuilderService {
    * Add card to deck
    */
   addCard(card, quantity = 1) {
+    const total = this.getTotalCards();
+    const roomDeck = Math.max(0, 60 - total);
+    if (roomDeck <= 0) return this.validate();
+
     const existing = this.deck.find(e => e.card.id === card.id);
-    
+    const currentQty = existing?.quantity ?? 0;
+    const roomCard = Math.max(0, 4 - currentQty);
+    const add = Math.min(quantity, roomCard, roomDeck);
+    if (add <= 0) return this.validate();
+
     if (existing) {
-      existing.quantity = Math.min(4, existing.quantity + quantity);
+      existing.quantity += add;
     } else {
-      this.deck.push({ 
-        card, 
-        quantity: Math.min(4, quantity)
-      });
+      this.deck.push({ card, quantity: add });
     }
-    
+
     return this.validate();
   }
 
@@ -36,11 +41,14 @@ export class DeckBuilderService {
    */
   updateQuantity(cardId, quantity) {
     const entry = this.deck.find(e => e.card.id === cardId);
-    
-    if (entry) {
-      entry.quantity = Math.max(1, Math.min(4, quantity));
+    if (!entry) return this.validate();
+
+    if (quantity <= 0) {
+      this.deck = this.deck.filter(e => e.card.id !== cardId);
+      return this.validate();
     }
-    
+
+    entry.quantity = Math.min(4, quantity);
     return this.validate();
   }
 

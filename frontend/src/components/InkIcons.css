@@ -1,0 +1,45 @@
+.archetype-with-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.ink-icons-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ink-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.35);
+  flex-shrink: 0;
+}
+
+.ink-badge--sm {
+  width: 10px;
+  height: 10px;
+}
+
+.ink-badge--md {
+  width: 14px;
+  height: 14px;
+}
+
+.ink-badge--lg {
+  width: 18px;
+  height: 18px;
+}
+
+.archetype-with-icons__text {
+  font: inherit;
+  color: inherit;
+  min-width: 0;
+  word-break: break-word;
+}

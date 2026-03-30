@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
@@ -21,7 +22,9 @@ const api = {
     apiFetch("/api/ai/simulate-mulligan", { hand, mulligan: indices, decklist: text }),
 };
 
-export default function HandAnalyzer({ deckText }) {
+export default function HandAnalyzer(props) {
+  const ctx = useOutletContext() || {};
+  const deckText = ctx.deckText ?? props.deckText ?? '';
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('');

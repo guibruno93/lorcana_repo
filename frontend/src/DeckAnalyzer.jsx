@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './DeckAnalyzer.css';
 import DeckComparison from './components/DeckComparison';
@@ -93,7 +94,10 @@ function InkCurveChart({ inkCurve, t }) {
 
 // ── Main Component ───────────────────────────────────────────────────────────
 
-export default function DeckAnalyzerTab({ deckText, setDeckText }) {
+export default function DeckAnalyzerTab(props) {
+  const ctx = useOutletContext() || {};
+  const deckText = ctx.deckText ?? props.deckText ?? '';
+  const setDeckText = ctx.setDeckText ?? props.setDeckText;
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('');

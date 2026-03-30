@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
-function Login({ onLoginSuccess }) {
-  const [mode, setMode] = useState('login'); // 'login', 'register', 'verify', 'forgot'
+const ALLOWED_POST_LOGIN = new Set([
+  '/deck',
+  '/hand',
+  '/meta',
+  '/cards',
+  '/deck-builder',
+  '/matchups',
+  '/profile',
+]);
+
+function Login({ onLoginSuccess, initialMode = 'login' }) {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [mode, setMode] = useState(initialMode);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -16,7 +32,17 @@ function Login({ onLoginSuccess }) {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState(''); // 'success', 'error', 'info'
+  const [messageType, setMessageType] = useState('');
+
+  useEffect(() => {
+    setMode(initialMode);
+  }, [initialMode]);
+
+  function resolvePostLoginPath() {
+    const raw = searchParams.get('next');
+    if (raw && ALLOWED_POST_LOGIN.has(raw)) return raw;
+    return '/deck';
+  }
 
   // ══════════════════════════════════════════════════════════
   // VALIDAÇÕES
@@ -25,6 +51,20 @@ function Login({ onLoginSuccess }) {
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
+  };
+
+  // ✅ MELHORADO: Validação de username
+  const validateUsername = (username) => {
+    if (!username || username.length < 3) {
+      return 'Usuário deve ter no mínimo 3 caracteres';
+    }
+    if (username.length > 20) {
+      return 'Usuário deve ter no máximo 20 caracteres';
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      return 'Usuário só pode conter letras, números e _';
+    }
+    return null;
   };
 
   const validatePassword = (password) => {
@@ -48,8 +88,9 @@ function Login({ onLoginSuccess }) {
 
     if (mode === 'register') {
       // Username
-      if (!formData.username || formData.username.length < 3) {
-        newErrors.username = 'Usuário deve ter no mínimo 3 caracteres';
+      const usernameError = validateUsername(formData.username);
+      if (usernameError) {
+        newErrors.username = usernameError;
       }
       
       // Email
@@ -91,7 +132,6 @@ function Login({ onLoginSuccess }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Limpar erro do campo quando usuário começa a digitar
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -120,10 +160,9 @@ function Login({ onLoginSuccess }) {
       setMessage('Cadastro realizado! Verifique seu email para confirmar sua conta.');
       setMode('verify');
       
-      // Limpar formulário
       setFormData({
         username: '',
-        email: formData.email, // Manter email para verificação
+        email: formData.email,
         password: '',
         confirmPassword: '',
         country: '',
@@ -160,7 +199,6 @@ function Login({ onLoginSuccess }) {
         password: formData.password,
       });
 
-      // Verificar se email foi verificado
       if (!response.data.user.emailVerified) {
         setMessageType('info');
         setMessage('Por favor, verifique seu email antes de fazer login.');
@@ -168,14 +206,13 @@ function Login({ onLoginSuccess }) {
         return;
       }
 
-      // Salvar token e user
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      // Callback de sucesso
       if (onLoginSuccess) {
         onLoginSuccess(response.data.user);
       }
+      navigate(resolvePostLoginPath(), { replace: true });
 
     } catch (err) {
       console.error('Login error:', err);
@@ -243,7 +280,7 @@ function Login({ onLoginSuccess }) {
   };
 
   // ══════════════════════════════════════════════════════════
-  // RENDER
+  // RENDER HELPERS
   // ══════════════════════════════════════════════════════════
 
   const getPasswordStrength = (password) => {
@@ -256,54 +293,40 @@ function Login({ onLoginSuccess }) {
     if (/[0-9]/.test(password)) strength++;
     if (/[^a-zA-Z0-9]/.test(password)) strength++;
 
-    const levels = [
-      { strength: 0, label: '', color: '' },
-      { strength: 1, label: 'Muito fraca', color: '#ef4444' },
-      { strength: 2, label: 'Fraca', color: '#f97316' },
-      { strength: 3, label: 'Média', color: '#f59e0b' },
-      { strength: 4, label: 'Forte', color: '#84cc16' },
-      { strength: 5, label: 'Muito forte', color: '#10b981' },
-    ];
+    const labels = ['Muito fraca', 'Fraca', 'Média', 'Forte', 'Muito forte'];
+    const colors = ['#e74c3c', '#e67e22', '#f39c12', '#27ae60', '#16a085'];
 
-    return levels[strength];
+    return {
+      strength: Math.min(strength, 5),
+      label: labels[strength - 1] || '',
+      color: colors[strength - 1] || '#95a5a6'
+    };
   };
 
-  const passwordStrength = mode === 'register' ? getPasswordStrength(formData.password) : null;
+  // ══════════════════════════════════════════════════════════
+  // RENDER
+  // ══════════════════════════════════════════════════════════
+
+  const passwordStrength = getPasswordStrength(formData.password);
 
   return (
-    <div className="login-container">
-      <div className="login-background">
-        <div className="gradient-circle circle-1"></div>
-        <div className="gradient-circle circle-2"></div>
-        <div className="gradient-circle circle-3"></div>
-      </div>
-
+    <div className="login-page">
       <div className="login-card">
+        <div className="login-breadcrumb">
+          <Link to="/">← Voltar ao início</Link>
+        </div>
         <div className="login-header">
-          <div className="login-logo">
-            <span className="logo-icon">🃏</span>
-            <span className="logo-text">Lorcana AI</span>
-          </div>
-          <h2 className="login-title">
-            {mode === 'login' && 'Bem-vindo de volta'}
-            {mode === 'register' && 'Criar nova conta'}
-            {mode === 'verify' && 'Verificar email'}
-            {mode === 'forgot' && 'Recuperar senha'}
-          </h2>
+          <h1>🪶 Inkwell Labs</h1>
           <p className="login-subtitle">
-            {mode === 'login' && 'Entre com suas credenciais'}
-            {mode === 'register' && 'Preencha os dados abaixo'}
-            {mode === 'verify' && 'Verifique sua caixa de entrada'}
-            {mode === 'forgot' && 'Digite seu email cadastrado'}
+            {mode === 'login' && 'Bem-vindo de volta!'}
+            {mode === 'register' && 'Criar sua conta'}
+            {mode === 'verify' && 'Verificar Email'}
+            {mode === 'forgot' && 'Recuperar Senha'}
           </p>
         </div>
 
-        {/* Message */}
         {message && (
-          <div className={`message message-${messageType}`}>
-            {messageType === 'success' && '✅ '}
-            {messageType === 'error' && '❌ '}
-            {messageType === 'info' && 'ℹ️ '}
+          <div className={`message ${messageType}`}>
             {message}
           </div>
         )}
@@ -313,7 +336,7 @@ function Login({ onLoginSuccess }) {
           <form onSubmit={handleRegister} className="login-form">
             {/* Username */}
             <div className="form-group">
-              <label htmlFor="username">Usuário *</label>
+              <label htmlFor="username">Usuário</label>
               <input
                 type="text"
                 id="username"
@@ -321,133 +344,13 @@ function Login({ onLoginSuccess }) {
                 value={formData.username}
                 onChange={handleChange}
                 className={errors.username ? 'error' : ''}
-                placeholder="Seu nome de usuário"
+                placeholder="usuario123"
                 disabled={loading}
+                autoFocus 
               />
               {errors.username && <span className="error-text">{errors.username}</span>}
             </div>
 
-            {/* Email */}
-            <div className="form-group">
-              <label htmlFor="email">Email *</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={errors.email ? 'error' : ''}
-                placeholder="seu@email.com"
-                disabled={loading}
-              />
-              {errors.email && <span className="error-text">{errors.email}</span>}
-            </div>
-
-            {/* Password */}
-            <div className="form-group">
-              <label htmlFor="password">Senha *</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? 'error' : ''}
-                placeholder="Mínimo 8 caracteres"
-                disabled={loading}
-              />
-              {errors.password && <span className="error-text">{errors.password}</span>}
-              
-              {/* Password Strength */}
-              {formData.password && passwordStrength && passwordStrength.strength > 0 && (
-                <div className="password-strength">
-                  <div className="strength-bar">
-                    <div 
-                      className="strength-fill"
-                      style={{ 
-                        width: `${(passwordStrength.strength / 5) * 100}%`,
-                        backgroundColor: passwordStrength.color
-                      }}
-                    />
-                  </div>
-                  <span style={{ color: passwordStrength.color }}>
-                    {passwordStrength.label}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Confirm Password */}
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirmar Senha *</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={errors.confirmPassword ? 'error' : ''}
-                placeholder="Digite a senha novamente"
-                disabled={loading}
-              />
-              {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-              {!errors.confirmPassword && formData.confirmPassword && formData.password === formData.confirmPassword && (
-                <span className="success-text">✓ Senhas coincidem</span>
-              )}
-            </div>
-
-            {/* Country */}
-            <div className="form-group">
-              <label htmlFor="country">País (opcional)</label>
-              <select
-                id="country"
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                disabled={loading}
-              >
-                <option value="">Selecione seu país</option>
-                <option value="BR">Brasil</option>
-                <option value="US">Estados Unidos</option>
-                <option value="PT">Portugal</option>
-                <option value="ES">Espanha</option>
-                <option value="UK">Reino Unido</option>
-                <option value="FR">França</option>
-                <option value="DE">Alemanha</option>
-                <option value="IT">Itália</option>
-                <option value="CA">Canadá</option>
-                <option value="MX">México</option>
-                <option value="AR">Argentina</option>
-                <option value="CL">Chile</option>
-                <option value="CO">Colômbia</option>
-                <option value="OTHER">Outro</option>
-              </select>
-            </div>
-
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? 'Criando conta...' : 'Criar Conta'}
-            </button>
-
-            <div className="form-footer">
-              Já tem uma conta?{' '}
-              <button
-                type="button"
-                className="link-button"
-                onClick={() => {
-                  setMode('login');
-                  setMessage('');
-                  setErrors({});
-                }}
-              >
-                Entrar
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* LOGIN FORM */}
-        {mode === 'login' && (
-          <form onSubmit={handleLogin} className="login-form">
             {/* Email */}
             <div className="form-group">
               <label htmlFor="email">Email</label>
@@ -464,19 +367,152 @@ function Login({ onLoginSuccess }) {
               {errors.email && <span className="error-text">{errors.email}</span>}
             </div>
 
-            {/* Password */}
+            {/* Password com Toggle */}
             <div className="form-group">
               <label htmlFor="password">Senha</label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? 'text' : 'password'} // TOGGLE
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={errors.password ? 'error' : ''}
+                  placeholder="Sua senha segura"
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
+              {errors.password && <span className="error-text">{errors.password}</span>}
+              
+              {/*Password Strength Visual */}
+              {formData.password && (
+                <div className="password-strength">
+                  <div className="password-strength-bar">
+                    <div 
+                      className="strength-fill"
+                      style={{ 
+                        width: `${(passwordStrength.strength / 5) * 100}%`,
+                        backgroundColor: passwordStrength.color
+                      }}
+                    />
+                  </div>
+                  <span className="strength-label" style={{ color: passwordStrength.color }}>
+                    {passwordStrength.label}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Confirm Password com Toggle */}
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirmar Senha</label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'} //  TOGGLE
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={errors.confirmPassword ? 'error' : ''}
+                  placeholder="Digite a senha novamente"
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
+              {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
+            </div>
+
+            {/* Country (optional) */}
+            <div className="form-group">
+              <label htmlFor="country">País (opcional)</label>
               <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
+                type="text"
+                id="country"
+                name="country"
+                value={formData.country}
                 onChange={handleChange}
-                className={errors.password ? 'error' : ''}
-                placeholder="Sua senha"
+                placeholder="Brasil"
                 disabled={loading}
               />
+            </div>
+
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading ? 'Criando conta...' : 'Criar conta'}
+            </button>
+
+            <div className="form-footer">
+              Já tem uma conta?{' '}
+              <button
+                type="button"
+                className="link-button"
+                onClick={() => {
+                  setMode('login');
+                  setMessage('');
+                  setErrors({});
+                }}
+              >
+                Fazer login
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* LOGIN FORM */}
+        {mode === 'login' && (
+          <form onSubmit={handleLogin} className="login-form">
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className={errors.email ? 'error' : ''}
+                placeholder="seu@email.com"
+                disabled={loading}
+                autoFocus // 
+              />
+              {errors.email && <span className="error-text">{errors.email}</span>}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Senha</label>
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? 'text' : 'password'} //  TOGGLE
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={errors.password ? 'error' : ''}
+                  placeholder="Sua senha"
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
               {errors.password && <span className="error-text">{errors.password}</span>}
             </div>
 
@@ -520,7 +556,7 @@ function Login({ onLoginSuccess }) {
           <div className="verify-screen">
             <div className="verify-icon">📧</div>
             <p className="verify-text">
-              Um email de verificação foi enviado para <strong>{formData.email}</strong>
+              Um e-mail de verificação foi enviado para <strong>{formData.email}</strong>
             </p>
             <p className="verify-subtext">
               Clique no link do email para ativar sua conta.
@@ -564,6 +600,7 @@ function Login({ onLoginSuccess }) {
                 className={errors.email ? 'error' : ''}
                 placeholder="seu@email.com"
                 disabled={loading}
+                autoFocus //  NOVO
               />
               {errors.email && <span className="error-text">{errors.email}</span>}
             </div>
@@ -589,9 +626,109 @@ function Login({ onLoginSuccess }) {
         )}
       </div>
 
+      {/* Rodapé com botão estilizado */}
       <div className="login-footer">
-        <p>© 2026 Lorcana AI. Todos os direitos reservados.</p>
+        <button
+          type="button"
+          className="link-button-small"
+          onClick={() => setShowDisclaimer(true)}
+        >
+          ⚠️ Avisos Importantes
+        </button>
+        <p>© 2026 Inkwell Labs. Projeto de fãs, não oficial.</p>
       </div>
+
+      {/* MODAL DE DISCLAIMER */}
+      {showDisclaimer && (
+        <div className="disclaimer-overlay" onClick={() => setShowDisclaimer(false)}>
+          <div className="disclaimer-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="disclaimer-header">
+              <h2>⚠️ Avisos Legais e Importantes</h2>
+              <button 
+                className="close-button"
+                onClick={() => setShowDisclaimer(false)}
+                aria-label="Fechar"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="disclaimer-content">
+              <section className="disclaimer-section">
+                <h3>🎴 Sobre o Conteúdo</h3>
+                <p>
+                  <strong>Inkwell Labs</strong> é um projeto de fãs, não oficial e sem fins lucrativos. 
+                  Disney Lorcana™ é uma marca registrada da Disney Enterprises, Inc. 
+                  Todas as imagens de cartas, logos e conteúdo relacionado são propriedade 
+                  de seus respectivos donos.
+                </p>
+                <p>
+                  Este site não é afiliado, endossado ou patrocinado pela Disney, 
+                  Ravensburger ou qualquer outra empresa relacionada ao jogo Disney Lorcana.
+                </p>
+              </section>
+
+              <section className="disclaimer-section">
+                <h3>📊 Dados e Privacidade</h3>
+                <ul>
+                  <li>Seus dados de deck são armazenados de forma segura</li>
+                  <li>Não vendemos ou compartilhamos suas informações pessoais</li>
+                  <li>Você pode excluir sua conta a qualquer momento</li>
+                  <li>Usamos cookies apenas para autenticação e melhorias de UX</li>
+                </ul>
+              </section>
+
+              <section className="disclaimer-section">
+                <h3>🤖 Meta-Análise e IA</h3>
+                <p>
+                  As análises de meta e sugestões de deck são geradas por algoritmos 
+                  baseados em dados da comunidade. <strong>Não garantimos precisão absoluta</strong> 
+                  e recomendamos usar como referência, não como verdade definitiva.
+                </p>
+                <p>
+                  Os dados de winrate e popularidade são estimados com base em amostras 
+                  limitadas e podem não refletir o meta competitivo global.
+                </p>
+              </section>
+
+              <section className="disclaimer-section">
+                <h3>⚖️ Termos de Uso</h3>
+                <ul>
+                  <li>Você é responsável pelo conteúdo que publica (nomes de deck, comentários)</li>
+                  <li>Não toleramos discurso de ódio ou comportamento abusivo</li>
+                  <li>Reservamos o direito de remover conteúdo inadequado</li>
+                  <li>O serviço é fornecido "como está", sem garantias</li>
+                </ul>
+              </section>
+
+              <section className="disclaimer-section">
+                <h3>🚧 Beta e Bugs</h3>
+                <p>
+                  Inkwell Labs está em desenvolvimento ativo. Bugs podem ocorrer e 
+                  funcionalidades podem mudar sem aviso prévio. Agradecemos seu feedback 
+                  e paciência enquanto melhoramos a plataforma!
+                </p>
+              </section>
+
+              <section className="disclaimer-section disclaimer-footer-section">
+                <p style={{ textAlign: 'center', color: '#999', fontSize: '13px', marginTop: '20px' }}>
+                  Ao usar Inkwell Labs, você concorda com estes termos.<br />
+                  <strong>Versão 1.0 - Março 2026</strong>
+                </p>
+              </section>
+            </div>
+
+            <div className="disclaimer-actions">
+              <button 
+                className="btn-primary"
+                onClick={() => setShowDisclaimer(false)}
+              >
+                Entendi
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

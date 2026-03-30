@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './MetaDashboard.css';
 import './MetaDashboard.mobile.css';
-import CardImage from './components/CardImage';
-import DecklistVisual from './components/DecklistVisual';
-import TierListEnhanced from './components/TierListEnhanced';
+import ScrapedMetaDashboard from './components/MetaDashboard';
+import { ArchetypeWithIcons } from './components/InkIcons';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
@@ -15,17 +14,11 @@ export default function MetaDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [metaData, setMetaData] = useState(null);
-  const [tierList, setTierList] = useState(null);
-  const [trends, setTrends] = useState(null);
   const [lastUpdate, setLastUpdate] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
-  const [showDecklistDemo, setShowDecklistDemo] = useState(false);
-  const [showDecklist, setShowDecklist] = useState(false);
 
   useEffect(() => {
     fetchMetaData();
-    fetchTierList();
-    fetchTrends();
     // eslint-disable-next-line
   }, []);
 
@@ -53,47 +46,52 @@ export default function MetaDashboard() {
     }
   }
 
-  async function fetchTierList() {
-    try {
-      const res = await fetch(`${API}/api/meta-analysis/tier-list`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      setTierList(data.tierList);
-    } catch (e) {
-      console.error('Error fetching tier list:', e);
-    }
-  }
-
-  async function fetchTrends() {
-    try {
-      const res = await fetch(`${API}/api/meta-analysis/trends`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      setTrends(data.trends);
-    } catch (e) {
-      console.error('Error fetching trends:', e);
-    }
-  }
-
   async function triggerScraping() {
     try {
       setLoading(true);
       setError(null);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert(t('metaDashboard.scrapeLoginRequired', 'Faça login para executar o scraper.'));
+        navigate('/login');
+        return;
+      }
       const res = await fetch(`${API}/api/meta-analysis/scrape`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ limit: 10 })
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ limit: 10 }),
       });
-      const data = await res.json();
-      
-      if (data.success) {
-        alert(`Scraping completed!\n${data.decks_scraped} decks scraped, ${data.decks_saved} saved`);
-        fetchMetaData();
-        fetchTierList();
+      if (!res.ok) {
+        const errBody = await res.text();
+        throw new Error(errBody || `HTTP ${res.status}`);
       }
+      const text = await res.text();
+      const lines = text.trim().split('\n').filter(Boolean);
+      let total = 0;
+      const logs = [];
+      for (const line of lines) {
+        try {
+          const evt = JSON.parse(line);
+          if (evt.type === 'log' && evt.message) logs.push(evt.message);
+          if (evt.type === 'complete') total = evt.total ?? total;
+        } catch (_) {
+          /* linha inválida */
+        }
+      }
+      alert(
+        `${t('metaDashboard.scrapeDone', 'Scraping concluído.')}\n` +
+          `${t('metaDashboard.scrapeDecks', 'Decks')}: ${total}\n\n` +
+          logs.slice(-8).join('\n')
+      );
+      fetchMetaData();
     } catch (e) {
       console.error('Error triggering scraping:', e);
-      alert('Failed to trigger scraping');
+      alert(
+        t('metaDashboard.scrapeFailed', 'Falha ao executar scraping') + `: ${e.message}`
+      );
     } finally {
       setLoading(false);
     }
@@ -112,8 +110,6 @@ export default function MetaDashboard() {
       if (data.success) {
         alert('Analysis completed!');
         fetchMetaData();
-        fetchTierList();
-        fetchTrends();
       }
     } catch (e) {
       console.error('Error triggering analysis:', e);
@@ -136,23 +132,7 @@ export default function MetaDashboard() {
   const totalDecks = metaData?.stats?.totalDecks || 0;
   const archetypes = metaData?.topArchetypes || metaData?.allArchetypes || [];
   const totalArchetypes = metaData?.stats?.totalArchetypes || 0;
-  const topCards = [];  // Backend não retorna topCards ainda
-
-  const exampleDeck = `4 Lore
-4 Beast - Hardheaded
-4 Fishbone Quill
-4 A Whole New World
-4 Ursula - Trickster
-4 Fire the Cannons!
-4 Mickey Mouse - Detective
-4 Aurora - Dreaming Guardian
-4 Cinderella - Ballroom Sensation
-4 Elsa - Spirit of Winter
-4 Sisu - Divine Water Dragon
-4 Maleficent - Uninvited
-4 Be Prepared
-4 Steal from the Rich
-4 Pawpsicle`;
+  const topCards = []; // Backend não retorna topCards ainda
 
   return (
     <div className="meta-dashboard">
@@ -171,7 +151,7 @@ export default function MetaDashboard() {
           <button onClick={triggerAnalysis} className="btn-action" disabled={loading}>
             📊 {t('metaDashboard.actions.analyze')}
           </button>
-          <button onClick={() => { fetchMetaData(); fetchTierList(); fetchTrends(); }} className="btn-refresh" disabled={loading}>
+          <button onClick={() => fetchMetaData()} className="btn-refresh" disabled={loading}>
             🔄 {t('metaDashboard.actions.refresh')}
           </button>
           <span className="last-update">{t('metaDashboard.lastUpdate', { time: lastUpdate })}</span>
@@ -189,22 +169,30 @@ export default function MetaDashboard() {
 
       {/* Tabs */}
       <div className="meta-tabs">
-        {['overview', 'tierlist', 'trends', 'cards', 'demos'].map(tab => (
+        {['overview', 'meta-analysis', 'cards'].map((tab) => (
           <button
             key={tab}
+            type="button"
             className={`meta-tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
           >
             {tab === 'overview' && '📊 ' + t('metaDashboard.tabs.overview')}
-            {tab === 'tierlist' && '🏆 ' + t('metaDashboard.tabs.tierlist')}
-            {tab === 'trends' && '📈 ' + t('metaDashboard.tabs.trends')}
+            {tab === 'meta-analysis' &&
+              '📈 ' + t('metaDashboard.tabs.metaAnalysis')}
             {tab === 'cards' && '🃏 ' + t('metaDashboard.tabs.cards')}
-            {tab === 'demos' && '🧪 ' + t('metaDashboard.tabs.demos')}
           </button>
         ))}
+        <button
+          type="button"
+          className="meta-tab meta-tab-link"
+          onClick={() => navigate('/meta/tier-lists')}
+        >
+          📋 {t('metaDashboard.tabs.tierLists', 'Tier lists')}
+        </button>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards — só na visão geral (evita duplicar com Análise do Meta) */}
+      {activeTab === 'overview' && (
       <div className="stats-cards">
         <div className="stat-card">
           <div className="stat-icon">🏆</div>
@@ -234,93 +222,30 @@ export default function MetaDashboard() {
           <div className="stat-icon">⏰</div>
           <div className="stat-content">
             <div className="stat-number">30d</div>
-            <div className="stat-label">{t('metaDashboard.stats.timeframe')}</div>
+            <div className="stat-label">{t('metaDashboard.stats.timeRange')}</div>
           </div>
         </div>
       </div>
+      )}
 
       {/* Tab Content */}
       {activeTab === 'overview' && (
-        <OverviewTab 
-          archetypes={archetypes} 
-          totalDecks={totalDecks} 
-          topCards={topCards} 
-          t={t} 
+        <OverviewTab
+          archetypes={archetypes}
+          totalDecks={totalDecks}
+          topCards={topCards}
+          t={t}
         />
       )}
 
-      {activeTab === 'tierlist' && tierList && (
-        <TierListEnhanced tierList={tierList} />
-      )}
-
-      {activeTab === 'trends' && (
-        <TrendsTab trends={trends} t={t} />
+      {activeTab === 'meta-analysis' && (
+        <div className="meta-embedded-scraped">
+          <ScrapedMetaDashboard embedded />
+        </div>
       )}
 
       {activeTab === 'cards' && (
         <CardsTab cards={topCards} totalDecks={totalDecks} t={t} />
-      )}
-
-      {activeTab === 'demos' && (
-        <>
-          {/* CardImage Demo */}
-          <div className="meta-section">
-            <div className="section-header" style={{ marginBottom: '20px' }}>
-              <span className="section-icon">🖼️</span>
-              <span className="section-title">{t('metaDashboard.sections.cardImages')}</span>
-              <span className="section-badge live">
-                {t('metaDashboard.labels.live')}
-              </span>
-            </div>
-            
-            <div style={{ 
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-              gap: '20px',
-              marginTop: '30px',
-              padding: '20px'
-            }}>
-              <CardImage cardName="Elsa - Spirit of Winter" size="normal" />
-              <CardImage cardName="Mickey Mouse - Brave Little Tailor" size="small" />
-              <CardImage cardName="Sisu - Divine Water Dragon" size="small" />
-              <CardImage cardName="Aurora - Dreaming Guardian" size="small" />
-              <CardImage cardName="Maleficent - Uninvited" size="small" />
-              <CardImage cardName="Cinderella - Ballroom Sensation" size="small" />
-              <CardImage cardName="Beast - Hardheaded" size="small" />
-              <CardImage cardName="Ursula - Trickster" size="small" />
-            </div>
-          </div>
-          
-          {/* DecklistVisual Demo */}
-          <div className="meta-section">
-            <div className="section-header" style={{ marginBottom: '20px' }}>
-              <span className="section-icon">🎴</span>
-              <span className="section-title">{t('metaDashboard.sections.decklistDemo')}</span>
-              <button 
-                onClick={() => setShowDecklist(!showDecklist)}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  background: showDecklist ? '#e74c3c' : '#667eea',
-                  color: '#fff',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: 'bold'
-                }}
-              >
-                {showDecklist ? `✕ ${t('metaDashboard.labels.hide')}` : `▶ ${t('metaDashboard.labels.showDemo')}`}
-              </button>
-            </div>
-            
-            {showDecklist && (
-              <DecklistVisual 
-                deckText={exampleDeck}
-                title="Exemplo: Evasivo Amethyst/Emerald"
-              />
-            )}
-          </div>
-        </>
       )}
     </div>
   );
@@ -347,7 +272,9 @@ function OverviewTab({ archetypes, totalDecks, topCards, t }) {
               <div key={i} className="breakdown-item">
                 <div className="breakdown-rank">#{i + 1}</div>
                 <div className="breakdown-info">
-                  <span className="breakdown-name">{archetype.archetype}</span>
+                  <span className="breakdown-name">
+                    <ArchetypeWithIcons archetype={archetype.archetype} />
+                  </span>
                   <span className="breakdown-inks">
                     {archetype.inks?.join(' / ') || archetype.archetype}
                   </span>
@@ -400,56 +327,6 @@ function OverviewTab({ archetypes, totalDecks, topCards, t }) {
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function TrendsTab({ trends, t }) {
-  if (!trends) {
-    return <div className="empty-state">{t('common.loading')}...</div>;
-  }
-
-  return (
-    <div className="trends-container">
-      <div className="trends-section">
-        <div className="section-header">
-          <span className="section-icon">📈</span>
-          <span className="section-title">{t('metaDashboard.sections.rising')}</span>
-          <span className="section-badge success">{trends.rising?.length || 0}</span>
-        </div>
-
-        <div className="trends-list">
-          {trends.rising?.slice(0, 10).map((trend, i) => (
-            <div key={i} className="trend-item rising">
-              <span className="trend-archetype">{trend.archetype}</span>
-              <span className="trend-delta">+{trend.trend_delta}%</span>
-              <span className="trend-share">
-                {trend.meta_share != null ? trend.meta_share.toFixed(1) : '0.0'}% {t('metaDashboard.labels.share')}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="trends-section">
-        <div className="section-header">
-          <span className="section-icon">📉</span>
-          <span className="section-title">{t('metaDashboard.sections.falling')}</span>
-          <span className="section-badge error">{trends.falling?.length || 0}</span>
-        </div>
-
-        <div className="trends-list">
-          {trends.falling?.slice(0, 10).map((trend, i) => (
-            <div key={i} className="trend-item falling">
-              <span className="trend-archetype">{trend.archetype}</span>
-              <span className="trend-delta">{trend.trend_delta}%</span>
-              <span className="trend-share">
-                {trend.meta_share != null ? trend.meta_share.toFixed(1) : '0.0'}% {t('metaDashboard.labels.share')}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

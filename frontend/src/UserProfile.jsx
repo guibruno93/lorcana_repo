@@ -1,10 +1,13 @@
 // UserProfile.jsx - Página de perfil do usuário
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import './UserProfile.css';
 
-const UserProfile = ({ user, setUser }) => {
+const UserProfile = (props) => {
+  const ctx = useOutletContext() || {};
+  const user = ctx.user ?? props.user;
+  const setUser = ctx.setUser ?? props.setUser;
   const { t } = useTranslation();
   const navigate = useNavigate();
   

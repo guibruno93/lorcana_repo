@@ -1,16 +1,15 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+/* Inkwell Labs — rotas principais (não misturar com App.i18n.jsx) */
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './styles.css';
 import './DesignSystem.css';
 import './LoadingSpinner.css';
 
-// Componentes sempre carregados
 import Login from './Login';
-import LanguageSelector from './components/LanguageSelector';
-import Logo from './components/Logo';
+import LandingPage from './pages/LandingPage';
+import LegalPage from './pages/LegalPage';
+import AuthenticatedLayout from './components/AuthenticatedLayout';
 
-// Lazy load de rotas pesadas
 const DeckAnalyzer = lazy(() => import('./DeckAnalyzer'));
 const HandAnalyzer = lazy(() => import('./HandAnalyzer'));
 const Matchups = lazy(() => import('./Matchups'));
@@ -19,13 +18,37 @@ const ArchetypePage = lazy(() => import('./components/ArchetypePage'));
 const CardDatabase = lazy(() => import('./CardDatabase'));
 const DeckBuilder = lazy(() => import('./DeckBuilder/DeckBuilder'));
 const UserProfile = lazy(() => import('./UserProfile'));
+const TierListGenerator = lazy(() => import('./components/TierListGenerator'));
+
+function TierListSuspense() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          style={{
+            minHeight: '40vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#94a3b8',
+            background: '#0f172a',
+          }}
+        >
+          …
+        </div>
+      }
+    >
+      <TierListGenerator />
+    </Suspense>
+  );
+}
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
 async function apiFetch(endpoint, body) {
   const res = await fetch(`${API}${endpoint}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
   const data = await res.json();
@@ -33,156 +56,102 @@ async function apiFetch(endpoint, body) {
   return data;
 }
 
-// Loading component
-const LoadingSpinner = () => (
-  <div className="loading-spinner">
-    <div className="spinner"></div>
-  </div>
-);
-
 const api = {
-  analyze: (text, opts) => apiFetch("/api/deck/analyze", { decklist: text, ...opts }),
-  matchups: (text) => apiFetch("/api/deck/matchups", { deckText: text }),
-  shuffle: (text) => apiFetch("/api/ai/shuffle", { decklist: text }),
-  mulligan: (hand, text) => apiFetch("/api/ai/mulligan", { hand, decklist: text }),
+  analyze: (text, opts) =>
+    apiFetch('/api/deck/analyze', { decklist: text, ...opts }),
+  matchups: (text) => apiFetch('/api/deck/matchups', { deckText: text }),
+  shuffle: (text) => apiFetch('/api/ai/shuffle', { decklist: text }),
+  mulligan: (hand, text) =>
+    apiFetch('/api/ai/mulligan', { hand, decklist: text }),
   simMulligan: (hand, indices, text) =>
-    apiFetch("/api/ai/simulate-mulligan", { hand, mulligan: indices, decklist: text }),
+    apiFetch('/api/ai/simulate-mulligan', {
+      hand,
+      mulligan: indices,
+      decklist: text,
+    }),
 };
 
 export default function App() {
-  const { t } = useTranslation();
-  const [deckText, setDeckText] = useState("");
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [deckText, setDeckText] = useState('');
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
+    const savedUser = localStorage.getItem('user');
+    if (!savedUser) return;
+    try {
       setUser(JSON.parse(savedUser));
+    } catch {
+      /* ignore */
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-  };
-
-  if (!user) {
-    return <Login onLoginSuccess={setUser} />;
-  }
-
-  const activeTab = location.pathname.split('/')[1] || 'deck';
-
   return (
-    <div className="app-container">
-      <header className="app-header glass">
-        <div className="header-left">
-          <Logo size="medium" animated />
-        </div>
-        <div className="header-right">
-          <LanguageSelector />
-          <span 
-            className="user-greeting"
-            onClick={() => navigate('/profile')}
-            style={{ cursor: 'pointer' }}
-            title={t('userProfile.viewProfile')}
-          >
-            👤 {user.username || user.name}
-          </span>
-          <button onClick={handleLogout} className="btn btn-ghost">
-            {t('auth.logout')}
-          </button>
-        </div>
-      </header>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          user ? <Navigate to="/deck" replace /> : <LandingPage />
+        }
+      />
+      <Route path="/login" element={<Login onLoginSuccess={setUser} />} />
+      <Route
+        path="/register"
+        element={<Login onLoginSuccess={setUser} initialMode="register" />}
+      />
+      <Route
+        path="/terms"
+        element={
+          <LegalPage title="Termos de uso">
+            <p>
+              Os termos completos serão publicados aqui. O Inkwell Labs é um
+              projeto de fãs, não oficial, dedicado a ferramentas para a
+              comunidade Lorcana.
+            </p>
+          </LegalPage>
+        }
+      />
+      <Route
+        path="/privacy"
+        element={
+          <LegalPage title="Privacidade">
+            <p>
+              Política de privacidade em elaboração. Não vendemos os teus
+              dados; a autenticação serve para melhorar a experiência na
+              aplicação.
+            </p>
+          </LegalPage>
+        }
+      />
 
-      <nav className="tabs">
-        <button 
-          onClick={() => navigate('/deck')}
-          className={`tab ${activeTab === 'deck' ? 'tab-active' : ''}`}
-        >
-          📋 {t('tabs.deck')}
-        </button>
+      <Route path="/tier-lists/:shareId" element={<TierListSuspense />} />
 
-        <button 
-          onClick={() => navigate('/hand')}
-          className={`tab ${activeTab === 'hand' ? 'tab-active' : ''}`}
-        >
-          🎴 {t('tabs.hand')}
-        </button>
-        
-        <button 
-          onClick={() => navigate('/cards')} 
-          className={`tab ${activeTab === 'cards' ? 'tab-active' : ''}`}
-        >
-          🃏 {t('tabs.cards')}
-        </button>
-
-        <button 
-          onClick={() => navigate('/deck-builder')} 
-          className={`tab ${activeTab === 'deck-builder' ? 'tab-active' : ''}`}
-        >
-          🎨 {t('tabs.deckBuilder')}
-        </button>
-
-        <button 
-          onClick={() => navigate('/matchups')}
-          className={`tab ${activeTab === 'matchups' ? 'tab-active' : ''}`}
-        >
-          ⚔️ {t('tabs.matchups')}
-        </button>
-
-        <button 
-          onClick={() => navigate('/meta')}
-          className={`tab ${activeTab === 'meta' ? 'tab-active' : ''}`}
-        >
-          📊 {t('tabs.meta')}
-        </button>
-      </nav>
-
-      <main className="app-main">
-        <Suspense fallback={<LoadingSpinner />}>
-          <Routes>
-            <Route path="/" element={<Navigate to="/deck" replace />} />
-            
-            <Route 
-              path="/deck" 
-              element={<DeckAnalyzer deckText={deckText} setDeckText={setDeckText} />} 
-            />
-            <Route 
-              path="/hand" 
-              element={<HandAnalyzer deckText={deckText} />} 
-            />
-            <Route 
-              path="/cards" 
-              element={<CardDatabase />} 
-            />
-            <Route 
-              path="/deck-builder" 
-              element={<DeckBuilder />} 
-            />
-            <Route 
-              path="/profile" 
-              element={<UserProfile user={user} setUser={setUser} />} 
-            />
-            <Route 
-              path="/matchups" 
-              element={<Matchups deckText={deckText} />} 
-            />
-            <Route 
-              path="/meta" 
-              element={<MetaDashboard />} 
-            />
-            <Route 
-              path="/archetype/:archetypeId" 
-              element={<ArchetypePage />} 
-            />
-            
-            <Route path="*" element={<Navigate to="/deck" replace />} />
-          </Routes>
-        </Suspense>
-      </main>
-    </div>
+      <Route
+        element={
+          <AuthenticatedLayout
+            user={user}
+            setUser={setUser}
+            deckText={deckText}
+            setDeckText={setDeckText}
+          />
+        }
+      >
+        <Route path="/deck" element={<DeckAnalyzer />} />
+        <Route path="/hand" element={<HandAnalyzer />} />
+        <Route path="/cards" element={<CardDatabase />} />
+        <Route path="/deck-builder" element={<DeckBuilder />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/matchups" element={<Matchups />} />
+        <Route path="/meta" element={<MetaDashboard />} />
+        <Route path="/meta/tier-lists" element={<TierListSuspense />} />
+        <Route
+          path="/meta/scraped-performance"
+          element={<Navigate to="/meta" replace />}
+        />
+        <Route path="/archetype/:archetypeId" element={<ArchetypePage />} />
+        <Route path="*" element={<Navigate to="/deck" replace />} />
+      </Route>
+    </Routes>
   );
 }
+
+export { api, apiFetch };

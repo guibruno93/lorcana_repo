@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
@@ -18,7 +19,9 @@ const api = {
   matchups: (text) => apiFetch("/api/deck/matchups", { deckText: text }),
 };
 
-export default function Matchups({ deckText }) {
+export default function Matchups(props) {
+  const ctx = useOutletContext() || {};
+  const deckText = ctx.deckText ?? props.deckText ?? '';
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");

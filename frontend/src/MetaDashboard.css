@@ -38,6 +38,10 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
+.meta-embedded-scraped {
+  margin-top: 0.5rem;
+}
+
 /* ── Action Buttons ──────────────────────────────────────── */
 
 .btn-action {
