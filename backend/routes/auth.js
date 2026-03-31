@@ -269,13 +269,33 @@ router.post('/login', async (req, res) => {
 
 /**
  * GET /api/auth/verify-email/:token
- * Verificar email do usuário
+ * Verificar email. No browser (clique no link do email) redireciona para APP_URL/login se APP_URL estiver definido.
+ * Resposta JSON: adiciona ?api=1 à URL (ou header Accept só application/json).
+ */
+function browserWantsRedirect(req) {
+  if (req.query.api === '1' || req.query.format === 'json') return false;
+  const appBase = (process.env.APP_URL || '').trim().replace(/\/$/, '');
+  if (!appBase || /localhost|127\.0\.0\.1/i.test(appBase)) return false;
+  const accept = req.get('accept') || '';
+  if (accept.includes('text/html')) return true;
+  if (accept.includes('*/*')) return true;
+  if (!accept) return true;
+  return false;
+}
+
+function redirectVerify(req, res, pathWithQuery) {
+  const appBase = (process.env.APP_URL || '').trim().replace(/\/$/, '');
+  const url = `${appBase}${pathWithQuery.startsWith('/') ? '' : '/'}${pathWithQuery}`;
+  return res.redirect(302, url);
+}
+
+/**
+ * GET /api/auth/verify-email/:token
  */
 router.get('/verify-email/:token', async (req, res) => {
   try {
     const { token } = req.params;
 
-    // Buscar token
     const { data: tokenData, error: tokenError } = await supabase
       .from('verification_tokens')
       .select('*')
@@ -285,15 +305,27 @@ router.get('/verify-email/:token', async (req, res) => {
       .single();
 
     if (tokenError || !tokenData) {
+      if (browserWantsRedirect(req)) {
+        return redirectVerify(
+          req,
+          res,
+          '/login?verify=error&reason=' + encodeURIComponent('Token inválido ou já utilizado.')
+        );
+      }
       return res.status(400).json({ error: 'Token inválido ou expirado' });
     }
 
-    // Verificar expiração
     if (new Date(tokenData.expires_at) < new Date()) {
+      if (browserWantsRedirect(req)) {
+        return redirectVerify(
+          req,
+          res,
+          '/login?verify=error&reason=' + encodeURIComponent('Link expirado. Ped um novo email de verificação.')
+        );
+      }
       return res.status(400).json({ error: 'Token expirado. Solicite um novo email de verificação.' });
     }
 
-    // Marcar usuário como verificado
     const { error: updateError } = await supabase
       .from('users')
       .update({
@@ -304,22 +336,30 @@ router.get('/verify-email/:token', async (req, res) => {
 
     if (updateError) {
       console.error('Update error:', updateError);
+      if (browserWantsRedirect(req)) {
+        return redirectVerify(req, res, '/login?verify=error&reason=' + encodeURIComponent('Erro ao confirmar.'));
+      }
       return res.status(500).json({ error: 'Erro ao verificar email' });
     }
 
-    // Marcar token como usado
     await supabase
       .from('verification_tokens')
       .update({ used_at: new Date().toISOString() })
       .eq('token', token);
 
+    if (browserWantsRedirect(req)) {
+      return redirectVerify(req, res, '/login?verified=1');
+    }
+
     res.json({
       success: true,
       message: 'Email verificado com sucesso! Você já pode fazer login.',
     });
-
   } catch (err) {
     console.error('Verify email error:', err);
+    if (browserWantsRedirect(req)) {
+      return redirectVerify(req, res, '/login?verify=error&reason=' + encodeURIComponent('Erro no servidor.'));
+    }
     res.status(500).json({ error: 'Erro ao verificar email' });
   }
 });
