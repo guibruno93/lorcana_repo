@@ -1,6 +1,7 @@
 /* Inkwell Labs — rotas principais (não misturar com App.i18n.jsx) */
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import './styles.css';
 import './DesignSystem.css';
 import './LoadingSpinner.css';
@@ -86,71 +87,74 @@ export default function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          user ? <Navigate to="/deck" replace /> : <LandingPage />
-        }
-      />
-      <Route path="/login" element={<Login onLoginSuccess={setUser} />} />
-      <Route
-        path="/register"
-        element={<Login onLoginSuccess={setUser} initialMode="register" />}
-      />
-      <Route
-        path="/terms"
-        element={
-          <LegalPage title="Termos de uso">
-            <p>
-              Os termos completos serão publicados aqui. O Inkwell Labs é um
-              projeto de fãs, não oficial, dedicado a ferramentas para a
-              comunidade Lorcana.
-            </p>
-          </LegalPage>
-        }
-      />
-      <Route
-        path="/privacy"
-        element={
-          <LegalPage title="Privacidade">
-            <p>
-              Política de privacidade em elaboração. Não vendemos os teus
-              dados; a autenticação serve para melhorar a experiência na
-              aplicação.
-            </p>
-          </LegalPage>
-        }
-      />
-
-      <Route path="/tier-lists/:shareId" element={<TierListSuspense />} />
-
-      <Route
-        element={
-          <AuthenticatedLayout
-            user={user}
-            setUser={setUser}
-            deckText={deckText}
-            setDeckText={setDeckText}
-          />
-        }
-      >
-        <Route path="/deck" element={<DeckAnalyzer />} />
-        <Route path="/hand" element={<HandAnalyzer />} />
-        <Route path="/cards" element={<CardDatabase />} />
-        <Route path="/deck-builder" element={<DeckBuilder />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/matchups" element={<Matchups />} />
-        <Route path="/meta" element={<MetaDashboard />} />
-        <Route path="/meta/tier-lists" element={<TierListSuspense />} />
+    <>
+      <Routes>
         <Route
-          path="/meta/scraped-performance"
-          element={<Navigate to="/meta" replace />}
+          path="/"
+          element={
+            user ? <Navigate to="/deck" replace /> : <LandingPage />
+          }
         />
-        <Route path="/archetype/:archetypeId" element={<ArchetypePage />} />
-        <Route path="*" element={<Navigate to="/deck" replace />} />
-      </Route>
-    </Routes>
+        <Route path="/login" element={<Login onLoginSuccess={setUser} />} />
+        <Route
+          path="/register"
+          element={<Login onLoginSuccess={setUser} initialMode="register" />}
+        />
+        <Route
+          path="/terms"
+          element={
+            <LegalPage title="Termos de uso">
+              <p>
+                Os termos completos serão publicados aqui. O Inkwell Labs é um
+                projeto de fãs, não oficial, dedicado a ferramentas para a
+                comunidade Lorcana.
+              </p>
+            </LegalPage>
+          }
+        />
+        <Route
+          path="/privacy"
+          element={
+            <LegalPage title="Privacidade">
+              <p>
+                Política de privacidade em elaboração. Não vendemos os teus
+                dados; a autenticação serve para melhorar a experiência na
+                aplicação.
+              </p>
+            </LegalPage>
+          }
+        />
+
+        <Route path="/tier-lists/:shareId" element={<TierListSuspense />} />
+
+        <Route
+          element={
+            <AuthenticatedLayout
+              user={user}
+              setUser={setUser}
+              deckText={deckText}
+              setDeckText={setDeckText}
+            />
+          }
+        >
+          <Route path="/deck" element={<DeckAnalyzer />} />
+          <Route path="/hand" element={<HandAnalyzer />} />
+          <Route path="/cards" element={<CardDatabase />} />
+          <Route path="/deck-builder" element={<DeckBuilder />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/matchups" element={<Matchups />} />
+          <Route path="/meta" element={<MetaDashboard />} />
+          <Route path="/meta/tier-lists" element={<TierListSuspense />} />
+          <Route
+            path="/meta/scraped-performance"
+            element={<Navigate to="/meta" replace />}
+          />
+          <Route path="/archetype/:archetypeId" element={<ArchetypePage />} />
+          <Route path="*" element={<Navigate to="/deck" replace />} />
+        </Route>
+      </Routes>
+      <SpeedInsights />
+    </>
   );
 }
 
