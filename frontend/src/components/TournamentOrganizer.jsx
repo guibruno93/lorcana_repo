@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import RoundTimer from './RoundTimer';
+import MatchResultInput from './MatchResultInput';
 import './TournamentOrganizer.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3002';
@@ -11,7 +15,19 @@ function headersAuth() {
   };
 }
 
+function isTournamentComplete(tournament) {
+  if (!tournament || tournament.status !== 'in-progress') return false;
+  const totalRounds = tournament.rounds || 0;
+  const cr = tournament.currentRound || 0;
+  if (totalRounds <= 0 || cr !== totalRounds) return false;
+  const roundMatches = (tournament.matches || []).filter((m) => m.round === cr);
+  if (roundMatches.length === 0) return false;
+  return roundMatches.every((m) => m.result || m.winnerId);
+}
+
 export default function TournamentOrganizer() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('list');
   const [tournaments, setTournaments] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -24,6 +40,8 @@ export default function TournamentOrganizer() {
     time: '14:00',
     location: '',
     format: 'swiss',
+    matchFormat: 'bo1',
+    roundTimeMinutes: 50,
     rounds: 4,
     topCut: 8,
     maxPlayers: 32,
@@ -56,14 +74,14 @@ export default function TournamentOrganizer() {
       headers: headersAuth(),
     });
     if (!r.ok) return;
-    const t = await r.json();
-    setSelected(t);
-    setTournaments((prev) => prev.map((x) => (x.id === id ? t : x)));
+    const tdata = await r.json();
+    setSelected(tdata);
+    setTournaments((prev) => prev.map((x) => (x.id === id ? tdata : x)));
   };
 
   const createTournament = async () => {
     if (!form.name || !form.date) {
-      window.alert('Nome e data são obrigatórios.');
+      window.alert(t('tournamentsOrg.nameDateRequired'));
       return;
     }
     try {
@@ -76,8 +94,8 @@ export default function TournamentOrganizer() {
         const err = await r.json().catch(() => ({}));
         throw new Error(err.error || r.status);
       }
-      const t = await r.json();
-      setTournaments((prev) => [t, ...prev]);
+      const tdata = await r.json();
+      setTournaments((prev) => [tdata, ...prev]);
       setActiveTab('list');
       setForm({
         name: '',
@@ -85,12 +103,14 @@ export default function TournamentOrganizer() {
         time: '14:00',
         location: '',
         format: 'swiss',
+        matchFormat: 'bo1',
+        roundTimeMinutes: 50,
         rounds: 4,
         topCut: 8,
         maxPlayers: 32,
         registrationType: 'open',
       });
-      window.alert('Torneio criado.');
+      window.alert(t('tournamentsOrg.createdOk'));
     } catch (e) {
       window.alert(e.message || 'Erro ao criar');
     }
@@ -106,7 +126,7 @@ export default function TournamentOrganizer() {
       if (!r.ok) throw new Error(data.error || r.status);
       setSelected(data);
       setTournaments((prev) => prev.map((x) => (x.id === id ? data : x)));
-      window.alert('Rodada 1 gerada.');
+      window.alert(t('tournamentsOrg.round1Ok'));
     } catch (e) {
       window.alert(e.message || 'Erro ao iniciar');
     }
@@ -161,21 +181,35 @@ export default function TournamentOrganizer() {
     }
   };
 
-  const loadStandings = async () => {
+  const goStandings = () => {
     if (!selected) return;
-    const r = await fetch(`${API_URL}/api/tournaments/${selected.id}/standings`, {
-      headers: headersAuth(),
-    });
-    if (!r.ok) return;
-    const data = await r.json();
-    const lines = (data.standings || [])
-      .map(
-        (p, i) =>
-          `${i + 1}. ${p.playerName} — ${p.points} pts (${p.wins}-${p.losses}-${p.draws})`
-      )
-      .join('\n');
-    window.alert(lines || 'Sem dados');
+    navigate(`/tournaments/${selected.id}/standings`);
   };
+
+  const handleEndTournament = async () => {
+    if (!selected) return;
+    if (!window.confirm(t('tournamentsOrg.confirmEnd'))) return;
+    try {
+      const r = await fetch(`${API_URL}/api/tournaments/${selected.id}/end`, {
+        method: 'PATCH',
+        headers: headersAuth(),
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.error || r.status);
+      setSelected(data.tournament);
+      setTournaments((prev) =>
+        prev.map((x) => (x.id === data.tournament.id ? data.tournament : x))
+      );
+      navigate(`/tournaments/${selected.id}/standings`);
+    } catch (e) {
+      console.error(e);
+      window.alert(t('tournamentsOrg.errorEnding'));
+    }
+  };
+
+  const onTimerUp = useCallback(() => {
+    window.alert(t('tournamentsOrg.timeUp'));
+  }, [t]);
 
   const nameOf = (pid) => {
     if (!selected?.players) return '?';
@@ -186,65 +220,78 @@ export default function TournamentOrganizer() {
   const roundMatches =
     selected?.matches?.filter((m) => m.round === selected.currentRound) || [];
 
+  const matchFormat = selected?.matchFormat || 'bo1';
+  const canEnd = isTournamentComplete(selected);
+  const showNextRound =
+    selected?.status === 'in-progress' &&
+    selected?.currentRound < (selected?.rounds || 0);
+
   return (
     <div className="tournament-org">
       <header className="tournament-org__head">
-        <h1>Organizador de torneios</h1>
+        <h1>{t('tournamentsOrg.title')}</h1>
         <nav className="tournament-org__tabs">
           <button
             type="button"
             className={activeTab === 'list' ? 'is-active' : ''}
             onClick={() => setActiveTab('list')}
           >
-            Meus torneios
+            {t('tournamentsOrg.tabList')}
           </button>
           <button
             type="button"
             className={activeTab === 'create' ? 'is-active' : ''}
             onClick={() => setActiveTab('create')}
           >
-            Criar
+            {t('tournamentsOrg.tabCreate')}
           </button>
           <button
             type="button"
             className={activeTab === 'search' ? 'is-active' : ''}
             onClick={() => setActiveTab('search')}
           >
-            Procurar
+            {t('tournamentsOrg.tabSearch')}
           </button>
         </nav>
       </header>
 
       {activeTab === 'list' && (
         <section>
-          {loading && <p className="tournament-org__muted">A carregar…</p>}
+          {loading && <p className="tournament-org__muted">{t('common.loading')}…</p>}
           {!loading && tournaments.length === 0 && (
-            <p className="tournament-org__muted">Ainda não criaste torneios.</p>
+            <p className="tournament-org__muted">{t('tournamentsOrg.emptyList')}</p>
           )}
           <ul className="tournament-org__cards">
-            {tournaments.map((t) => (
-              <li key={t.id} className="tournament-org__card">
+            {tournaments.map((titem) => (
+              <li key={titem.id} className="tournament-org__card">
                 <div className="tournament-org__card-head">
-                  <strong>{t.name}</strong>
-                  <span className={`tournament-org__badge tournament-org__badge--${t.status}`}>
-                    {t.status}
+                  <strong>{titem.name}</strong>
+                  <span className={`tournament-org__badge tournament-org__badge--${titem.status}`}>
+                    {titem.status}
                   </span>
                 </div>
                 <div className="tournament-org__card-meta">
-                  {t.date} {t.time} · {t.location || '—'}
+                  {titem.date} {titem.time} · {titem.location || '—'}
                 </div>
                 <div className="tournament-org__card-meta">
-                  {(t.players || []).length}/{t.maxPlayers} jogadores
+                  {(titem.players || []).length}/{titem.maxPlayers} {t('tournamentsOrg.players')}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelected(t);
-                    setActiveTab('manage');
-                  }}
-                >
-                  Gerir
-                </button>
+                <div className="tournament-org__card-actions">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelected(titem);
+                      setActiveTab('manage');
+                    }}
+                  >
+                    {t('tournamentsOrg.manage')}
+                  </button>
+                  {(titem.status === 'in-progress' || titem.status === 'completed') && (
+                    <button type="button" className="tournament-org__secondary" onClick={() => navigate(`/tournaments/${titem.id}/standings`)}>
+                      {t('tournamentsOrg.viewStandings')}
+                    </button>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
@@ -254,7 +301,7 @@ export default function TournamentOrganizer() {
       {activeTab === 'create' && (
         <section className="tournament-org__form">
           <label>
-            Nome
+            {t('tournamentsOrg.name')}
             <input
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -262,7 +309,7 @@ export default function TournamentOrganizer() {
           </label>
           <div className="tournament-org__row">
             <label>
-              Data
+              {t('tournamentsOrg.date')}
               <input
                 type="date"
                 value={form.date}
@@ -270,7 +317,7 @@ export default function TournamentOrganizer() {
               />
             </label>
             <label>
-              Hora
+              {t('tournamentsOrg.time')}
               <input
                 type="time"
                 value={form.time}
@@ -279,27 +326,58 @@ export default function TournamentOrganizer() {
             </label>
           </div>
           <label>
-            Local
+            {t('tournamentsOrg.location')}
             <input
               value={form.location}
               onChange={(e) => setForm({ ...form, location: e.target.value })}
             />
           </label>
           <label>
-            Formato
+            {t('tournamentsOrg.structureFormat')}
             <select
               value={form.format}
               onChange={(e) => setForm({ ...form, format: e.target.value })}
             >
-              <option value="swiss">Swiss</option>
-              <option value="single-elim">Eliminação simples</option>
-              <option value="double-elim">Eliminação dupla</option>
+              <option value="swiss">{t('tournamentsOrg.swiss')}</option>
+              <option value="single-elim">{t('tournamentsOrg.singleElim')}</option>
+              <option value="double-elim">{t('tournamentsOrg.doubleElim')}</option>
             </select>
           </label>
+          <label>
+            {t('tournamentsOrg.matchFormatLabel')}
+            <select
+              value={form.matchFormat}
+              onChange={(e) => setForm({ ...form, matchFormat: e.target.value })}
+            >
+              <option value="bo1">{t('tournamentsOrg.bo1')}</option>
+              <option value="bo3">{t('tournamentsOrg.bo3')}</option>
+            </select>
+          </label>
+          <p className="tournament-org__hint">
+            {form.matchFormat === 'bo1'
+              ? t('tournamentsOrg.formatBo1Hint')
+              : t('tournamentsOrg.formatBo3Hint')}
+          </p>
+          <label>
+            {t('tournamentsOrg.roundDuration')}
+            <input
+              type="number"
+              min={10}
+              max={120}
+              value={form.roundTimeMinutes}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  roundTimeMinutes: parseInt(e.target.value, 10) || 50,
+                })
+              }
+            />
+          </label>
+          <p className="tournament-org__hint">{t('tournamentsOrg.roundDurationHint')}</p>
           {form.format === 'swiss' && (
             <div className="tournament-org__row">
               <label>
-                Rodadas
+                {t('tournamentsOrg.rounds')}
                 <select
                   value={form.rounds}
                   onChange={(e) =>
@@ -312,14 +390,14 @@ export default function TournamentOrganizer() {
                 </select>
               </label>
               <label>
-                Top cut
+                {t('tournamentsOrg.topCut')}
                 <select
                   value={form.topCut}
                   onChange={(e) =>
                     setForm({ ...form, topCut: parseInt(e.target.value, 10) })
                   }
                 >
-                  <option value={0}>Nenhum</option>
+                  <option value={0}>{t('tournamentsOrg.topCutNone')}</option>
                   <option value={4}>Top 4</option>
                   <option value={8}>Top 8</option>
                   <option value={16}>Top 16</option>
@@ -329,7 +407,7 @@ export default function TournamentOrganizer() {
           )}
           <div className="tournament-org__row">
             <label>
-              Máx. jogadores
+              {t('tournamentsOrg.maxPlayers')}
               <input
                 type="number"
                 min={2}
@@ -340,20 +418,20 @@ export default function TournamentOrganizer() {
               />
             </label>
             <label>
-              Registo
+              {t('tournamentsOrg.registration')}
               <select
                 value={form.registrationType}
                 onChange={(e) =>
                   setForm({ ...form, registrationType: e.target.value })
                 }
               >
-                <option value="open">Aberto</option>
-                <option value="private">Privado</option>
+                <option value="open">{t('tournamentsOrg.open')}</option>
+                <option value="private">{t('tournamentsOrg.private')}</option>
               </select>
             </label>
           </div>
           <button type="button" className="tournament-org__primary" onClick={createTournament}>
-            Criar torneio
+            {t('tournamentsOrg.createSubmit')}
           </button>
         </section>
       )}
@@ -361,25 +439,26 @@ export default function TournamentOrganizer() {
       {activeTab === 'manage' && selected && (
         <section className="tournament-org__manage">
           <button type="button" className="tournament-org__back" onClick={() => setActiveTab('list')}>
-            ← Lista
+            ← {t('tournamentsOrg.backList')}
           </button>
           <h2>{selected.name}</h2>
           <p className="tournament-org__muted">
-            {(selected.players || []).length} jogadores · {selected.format} · estado: {selected.status}
-            {selected.currentRound ? ` · Ronda ${selected.currentRound}` : ''}
+            {(selected.players || []).length} {t('tournamentsOrg.players')} · {selected.format} ·{' '}
+            {(selected.matchFormat || 'bo1').toUpperCase()} · {t('tournamentsOrg.state')}: {selected.status}
+            {selected.currentRound ? ` · ${t('tournamentsOrg.round')} ${selected.currentRound}` : ''}
           </p>
 
           {selected.status === 'registration' && (
             <div className="tournament-org__block">
-              <h3>Inscrições</h3>
+              <h3>{t('tournamentsOrg.registrations')}</h3>
               <div className="tournament-org__add-player">
                 <input
-                  placeholder="Nome do jogador"
+                  placeholder={t('tournamentsOrg.playerPlaceholder')}
                   value={newPlayerName}
                   onChange={(e) => setNewPlayerName(e.target.value)}
                 />
                 <button type="button" onClick={addPlayer}>
-                  Adicionar
+                  {t('tournamentsOrg.addPlayer')}
                 </button>
               </div>
               <ul>
@@ -388,14 +467,22 @@ export default function TournamentOrganizer() {
                 ))}
               </ul>
               <button type="button" className="tournament-org__primary" onClick={() => startTournament(selected.id)}>
-                Iniciar torneio
+                {t('tournamentsOrg.startTournament')}
               </button>
             </div>
           )}
 
           {selected.status === 'in-progress' && (
             <div className="tournament-org__block">
-              <h3>Ronda {selected.currentRound}</h3>
+              <h3>
+                {t('tournamentsOrg.round')} {selected.currentRound}
+              </h3>
+              <RoundTimer
+                key={`${selected.id}-${selected.currentRound}`}
+                durationMinutes={selected.roundTimeMinutes || 50}
+                roundNumber={selected.currentRound}
+                onTimeUp={onTimerUp}
+              />
               <ul className="tournament-org__pairings">
                 {roundMatches.map((m) => {
                   if (m.result === 'bye') {
@@ -409,51 +496,57 @@ export default function TournamentOrganizer() {
                   return (
                     <li key={m.id}>
                       <div>
-                        Mesa {m.tableNumber}: {nameOf(m.player1Id)} vs {nameOf(m.player2Id)}
+                        {t('tournamentsOrg.table')} {m.tableNumber}: {nameOf(m.player1Id)} vs{' '}
+                        {nameOf(m.player2Id)}
                       </div>
                       {!done && (
-                        <div className="tournament-org__report">
-                          <button
-                            type="button"
-                            onClick={() => report(m.id, { winnerId: m.player1Id })}
-                          >
-                            Vitória {nameOf(m.player1Id)}
-                          </button>
-                          <button type="button" onClick={() => report(m.id, { result: 'draw' })}>
-                            Empate
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => report(m.id, { winnerId: m.player2Id })}
-                          >
-                            Vitória {nameOf(m.player2Id)}
-                          </button>
-                        </div>
+                        <MatchResultInput
+                          match={m}
+                          player1Name={nameOf(m.player1Id)}
+                          player2Name={nameOf(m.player2Id)}
+                          matchFormat={matchFormat}
+                          onReportBo1={(payload) => report(m.id, payload)}
+                          onReportBo3={(payload) => report(m.id, payload)}
+                        />
                       )}
-                      {done && <span className="tournament-org__done">Registado</span>}
+                      {done && (
+                        <span className="tournament-org__done">{t('tournamentsOrg.recorded')}</span>
+                      )}
                     </li>
                   );
                 })}
               </ul>
               <div className="tournament-org__row-btns">
-                <button type="button" onClick={loadStandings}>
-                  Standings
+                <button type="button" onClick={goStandings}>
+                  {t('tournamentsOrg.standings')}
                 </button>
-                <button type="button" className="tournament-org__primary" onClick={nextRound}>
-                  Próxima ronda
-                </button>
+                {showNextRound && (
+                  <button type="button" className="tournament-org__primary" onClick={nextRound}>
+                    {t('tournamentsOrg.nextRound')}
+                  </button>
+                )}
+                {canEnd && (
+                  <button type="button" className="btn-end-tournament" onClick={handleEndTournament}>
+                    🏁 {t('tournamentsOrg.endTournament')}
+                  </button>
+                )}
               </div>
             </div>
           )}
 
           {selected.status === 'completed' && (
-            <p className="tournament-org__muted">Torneio concluído.</p>
+            <div className="tournament-org__block">
+              <p className="tournament-org__muted">{t('tournamentsOrg.completed')}</p>
+              <button type="button" className="tournament-org__primary" onClick={goStandings}>
+                {t('tournamentsOrg.finalStandings')}
+              </button>
+            </div>
           )}
         </section>
       )}
 
       {activeTab === 'search' && (
-        <p className="tournament-org__muted">Em breve: torneios públicos perto de ti.</p>
+        <p className="tournament-org__muted">{t('tournamentsOrg.searchSoon')}</p>
       )}
     </div>
   );

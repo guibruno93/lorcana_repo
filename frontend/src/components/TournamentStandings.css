@@ -1,0 +1,237 @@
+.tournament-standings {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+  color: #e5e7eb;
+}
+
+.tournament-standings--loading,
+.standings-error {
+  text-align: center;
+  padding: 2rem;
+  color: #94a3b8;
+}
+
+.standings-error {
+  color: #f87171;
+}
+
+.standings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.standings-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.standings-header h1 {
+  background: linear-gradient(135deg, #06b6d4, #d946ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: clamp(1.35rem, 4vw, 2rem);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.standings-header-actions {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid #06b6d4;
+  color: #06b6d4;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  align-self: flex-start;
+}
+
+.btn-back:hover {
+  background: rgba(6, 182, 212, 0.12);
+}
+
+.btn-export {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font: inherit;
+}
+
+.btn-new-round {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  background: rgba(217, 70, 239, 0.2);
+  border: 1px solid rgba(217, 70, 239, 0.5);
+  color: #e9d5ff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.btn-new-round:hover {
+  background: rgba(217, 70, 239, 0.3);
+}
+
+.podium {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin: 2rem 0 3rem;
+  flex-wrap: wrap;
+}
+
+.podium-place {
+  background: rgba(6, 182, 212, 0.1);
+  border: 2px solid #06b6d4;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+  min-width: 130px;
+  transition: transform 0.2s;
+}
+
+.podium-place:hover {
+  transform: translateY(-4px);
+}
+
+.place-1 {
+  order: 2;
+  min-height: 180px;
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.place-2 {
+  order: 1;
+  min-height: 150px;
+  border-color: #c0c0c0;
+}
+
+.place-3 {
+  order: 3;
+  min-height: 120px;
+  border-color: #cd7f32;
+}
+
+.podium-medal {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.podium-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+  color: #e5e7eb;
+}
+
+.podium-record {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.standings-table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.standings-table thead {
+  background: rgba(6, 182, 212, 0.15);
+}
+
+.standings-table th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #06b6d4;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.standings-table td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.standings-table tbody tr:hover {
+  background: rgba(6, 182, 212, 0.06);
+}
+
+.standings-table tr.top-three {
+  background: rgba(6, 182, 212, 0.08);
+}
+
+.standings-table .position {
+  font-weight: 700;
+  color: #06b6d4;
+}
+
+.tournament-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.stat {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: 8px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  display: block;
+  color: #06b6d4;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.stat-value--small {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+@media (max-width: 640px) {
+  .standings-header {
+    flex-direction: column;
+  }
+}

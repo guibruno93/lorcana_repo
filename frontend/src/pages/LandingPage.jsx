@@ -11,14 +11,14 @@ const FEATURES = [
     title: 'Análise de meta em tempo real',
     description:
       'Tier lists automáticos com dados reais de torneios. Veja quais arquétipos dominam o meta competitivo.',
-    screenshot: `${pub}/screenshots/meta-analysis.svg`,
+    screenshot: `${pub}/screenshots/tier-list.svg`,
   },
   {
     icon: '🃏',
     title: 'Deckbuilder visual',
     description:
       'Monte decks com interface intuitiva. Filtros por tinta, custo e raridade, com validação de regras.',
-    screenshot: `${pub}/screenshots/deckbuilder.svg`,
+    screenshot: `${pub}/screenshots/deckbuilder-full.svg`,
   },
   {
     icon: '🎲',

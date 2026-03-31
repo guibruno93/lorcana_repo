@@ -28,7 +28,7 @@ export default function Header() {
         {/* Logo */}
         <div className="header-logo" onClick={() => navigate('/')}>
           <span className="logo-icon">🎴</span>
-          <span className="logo-text">LORCANA AI</span>
+          <span className="logo-text">Inkwell Labs</span>
         </div>
 
         {/* Desktop Navigation */}

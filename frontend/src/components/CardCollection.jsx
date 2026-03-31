@@ -124,6 +124,8 @@ export default function CardCollection() {
         console.warn('collection PUT:', e);
       }
     })();
+    // entries/wishlist entram via debouncedPersist (debounce 500ms); listar aqui dispararia PUT a cada mudança
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- deps intencionais: debouncedPersist + canSync
   }, [debouncedPersist, canSync]);
 
   const stats = useMemo(() => {

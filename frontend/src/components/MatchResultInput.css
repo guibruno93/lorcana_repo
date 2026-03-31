@@ -1,0 +1,151 @@
+.match-result-bo1 {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.btn-player {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.65rem 0.75rem;
+  background: rgba(6, 182, 212, 0.1);
+  border: 2px solid #06b6d4;
+  border-radius: 8px;
+  color: #06b6d4;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+
+.btn-player:hover:not(:disabled) {
+  background: rgba(6, 182, 212, 0.2);
+  transform: translateY(-2px);
+}
+
+.btn-player:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-player--draw {
+  border-color: #94a3b8;
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.match-result-bo3 {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 12px;
+  margin: 0.5rem 0;
+}
+
+.score-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.player-score {
+  flex: 1;
+  text-align: center;
+  min-width: 140px;
+}
+
+.player-name {
+  display: block;
+  color: #e5e7eb;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.score-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.score-buttons button {
+  width: 36px;
+  height: 36px;
+  background: rgba(6, 182, 212, 0.2);
+  border: 1px solid #06b6d4;
+  border-radius: 50%;
+  color: #06b6d4;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.score-buttons button:hover {
+  background: rgba(6, 182, 212, 0.35);
+  transform: scale(1.08);
+}
+
+.score-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #06b6d4;
+  min-width: 48px;
+  display: inline-block;
+}
+
+.vs {
+  color: #9ca3af;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.score-presets {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.score-presets button {
+  padding: 0.4rem 0.9rem;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 6px;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.score-presets button:hover {
+  background: rgba(6, 182, 212, 0.2);
+  color: #06b6d4;
+  border-color: #06b6d4;
+}
+
+.btn-submit-score {
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #06b6d4, #d946ef);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-submit-score:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(6, 182, 212, 0.35);
+}
+
+.btn-submit-score:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

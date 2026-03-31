@@ -1,0 +1,61 @@
+.legal-disclaimer-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+  color: #e5e7eb;
+  line-height: 1.8;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: #0f172a;
+}
+
+.legal-disclaimer-back {
+  background: transparent;
+  border: 1px solid #06b6d4;
+  color: #06b6d4;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  font: inherit;
+  transition: all 0.2s;
+}
+
+.legal-disclaimer-back:hover {
+  background: rgba(6, 182, 212, 0.1);
+}
+
+.legal-disclaimer-page h1 {
+  background: linear-gradient(135deg, #06b6d4, #d946ef);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.legal-disclaimer-page h2 {
+  color: #06b6d4;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.legal-disclaimer-page section {
+  margin-bottom: 2rem;
+}
+
+.legal-disclaimer-page p {
+  margin-bottom: 1rem;
+  color: #d1d5db;
+}
+
+@media (max-width: 768px) {
+  .legal-disclaimer-page {
+    padding: 1rem;
+  }
+
+  .legal-disclaimer-page h1 {
+    font-size: 2rem;
+  }
+}

@@ -52,6 +52,11 @@ router.post('/', authenticateToken, (req, res) => {
     }
 
     const id = crypto.randomUUID();
+    const matchFormat =
+      body.matchFormat === 'bo3' || body.matchFormat === 'best-of-3'
+        ? 'bo3'
+        : 'bo1';
+
     const tournament = {
       id,
       organizerId: organizerKey(req),
@@ -60,6 +65,11 @@ router.post('/', authenticateToken, (req, res) => {
       time: body.time || '14:00',
       location: body.location || '',
       format: body.format || 'swiss',
+      matchFormat,
+      roundTimeMinutes: Math.min(
+        120,
+        Math.max(10, parseInt(body.roundTimeMinutes, 10) || 50)
+      ),
       rounds: parseInt(body.rounds, 10) || 4,
       topCut: parseInt(body.topCut, 10) || 8,
       maxPlayers: parseInt(body.maxPlayers, 10) || 32,
@@ -109,6 +119,8 @@ router.post('/:id/start', authenticateToken, (req, res) => {
     wins: p.wins || 0,
     losses: p.losses || 0,
     draws: p.draws || 0,
+    gameWins: p.gameWins || 0,
+    gameLosses: p.gameLosses || 0,
   }));
 
   if (players.length < 2) {
@@ -158,6 +170,7 @@ router.post('/:id/start', authenticateToken, (req, res) => {
     }
   }
 
+  t.players = players;
   store.tournaments[idx] = t;
   writeStore(store);
   res.json(t);
@@ -190,6 +203,8 @@ router.post('/:id/players', authenticateToken, (req, res) => {
     wins: 0,
     losses: 0,
     draws: 0,
+    gameWins: 0,
+    gameLosses: 0,
   };
   t.players = [...players, player];
   store.tournaments[idx] = t;
@@ -197,10 +212,10 @@ router.post('/:id/players', authenticateToken, (req, res) => {
   res.json(player);
 });
 
-/** POST /api/tournaments/matches/:matchId/report — { winnerId | result: 'draw' } */
+/** POST /api/tournaments/matches/:matchId/report — { winnerId | result: 'draw', gamesP1?, gamesP2? } BO3 */
 router.post('/matches/:matchId/report', authenticateToken, (req, res) => {
   const { matchId } = req.params;
-  const { winnerId, result } = req.body || {};
+  const { winnerId, result, gamesP1, gamesP2 } = req.body || {};
 
   const store = readStore();
   let foundT = null;
@@ -218,11 +233,19 @@ router.post('/matches/:matchId/report', authenticateToken, (req, res) => {
     return res.status(403).json({ error: 'Sem permissão' });
   }
 
+  if (foundM.result || foundM.winnerId) {
+    return res.status(400).json({ error: 'Resultado já registado' });
+  }
+
+  const matchFormat = foundT.matchFormat || 'bo1';
   const players = foundT.players || [];
   const p1 = players.find((p) => p.id === foundM.player1Id);
   const p2 = players.find((p) => p.id === foundM.player2Id);
 
   if (result === 'draw' && p1 && p2) {
+    if (matchFormat === 'bo3') {
+      return res.status(400).json({ error: 'Empate não disponível em melhor de 3' });
+    }
     foundM.result = 'draw';
     foundM.winnerId = null;
     p1.points = (p1.points || 0) + 1;
@@ -240,6 +263,33 @@ router.post('/matches/:matchId/report', authenticateToken, (req, res) => {
     w.points = (w.points || 0) + 3;
     w.wins = (w.wins || 0) + 1;
     l.losses = (l.losses || 0) + 1;
+
+    if (matchFormat === 'bo3') {
+      const gp1 = parseInt(gamesP1, 10);
+      const gp2 = parseInt(gamesP2, 10);
+      if (!Number.isFinite(gp1) || !Number.isFinite(gp2)) {
+        return res.status(400).json({ error: 'Indique gamesP1 e gamesP2 (0–2)' });
+      }
+      if (gp1 < 0 || gp2 < 0 || gp1 > 2 || gp2 > 2) {
+        return res.status(400).json({ error: 'Placar inválido' });
+      }
+      if (gp1 !== 2 && gp2 !== 2) {
+        return res.status(400).json({ error: 'Um jogador deve ter vencido 2 games' });
+      }
+      if (winnerId === p1.id && gp1 < 2) {
+        return res.status(400).json({ error: 'Vencedor deve ter 2 games ganhos' });
+      }
+      if (winnerId === p2.id && gp2 < 2) {
+        return res.status(400).json({ error: 'Vencedor deve ter 2 games ganhos' });
+      }
+      foundM.gamesP1 = gp1;
+      foundM.gamesP2 = gp2;
+      foundM.matchScore = `${gp1}-${gp2}`;
+      p1.gameWins = (p1.gameWins || 0) + gp1;
+      p1.gameLosses = (p1.gameLosses || 0) + gp2;
+      p2.gameWins = (p2.gameWins || 0) + gp2;
+      p2.gameLosses = (p2.gameLosses || 0) + gp1;
+    }
   } else {
     return res.status(400).json({ error: 'Envie winnerId ou result: draw' });
   }
@@ -248,6 +298,32 @@ router.post('/matches/:matchId/report', authenticateToken, (req, res) => {
   writeStore(store);
   res.json({ ok: true, match: foundM, tournament: foundT });
 });
+
+function enrichStandingsRow(p, tournament) {
+  const w = p.wins || 0;
+  const l = p.losses || 0;
+  const d = p.draws || 0;
+  const played = w + l + d;
+  const gw = p.gameWins || 0;
+  const gl = p.gameLosses || 0;
+  const gPlayed = gw + gl;
+  return {
+    id: p.id,
+    name: p.playerName,
+    playerName: p.playerName,
+    points: p.points || 0,
+    wins: w,
+    losses: l,
+    draws: d,
+    gameWins: gw,
+    gameLosses: gl,
+    matchWinPercentage: played > 0 ? (w / played) * 100 : 0,
+    gameWinPercentage:
+      (tournament.matchFormat || 'bo1') === 'bo3' && gPlayed > 0
+        ? (gw / gPlayed) * 100
+        : null,
+  };
+}
 
 /** GET /api/tournaments/:id/standings */
 router.get('/:id/standings', authenticateToken, (req, res) => {
@@ -258,14 +334,66 @@ router.get('/:id/standings', authenticateToken, (req, res) => {
     return res.status(403).json({ error: 'Sem permissão' });
   }
 
-  const sorted = [...(t.players || [])].sort(
-    (a, b) =>
-      (b.points || 0) - (a.points || 0) ||
-      (b.wins || 0) - (a.wins || 0) ||
-      String(a.playerName).localeCompare(String(b.playerName))
-  );
+  const sorted = [...(t.players || [])].sort((a, b) => {
+    const pts = (b.points || 0) - (a.points || 0);
+    if (pts !== 0) return pts;
+    const mw =
+      (b.wins || 0) / Math.max(1, (b.wins || 0) + (b.losses || 0) + (b.draws || 0)) -
+      (a.wins || 0) / Math.max(1, (a.wins || 0) + (a.losses || 0) + (a.draws || 0));
+    if (Math.abs(mw) > 1e-6) return mw > 0 ? 1 : -1;
+    if ((t.matchFormat || 'bo1') === 'bo3') {
+      const ag = (a.gameWins || 0) + (a.gameLosses || 0);
+      const bg = (b.gameWins || 0) + (b.gameLosses || 0);
+      const apct = ag > 0 ? (a.gameWins || 0) / ag : 0;
+      const bpct = bg > 0 ? (b.gameWins || 0) / bg : 0;
+      if (Math.abs(bpct - apct) > 1e-6) return bpct - apct;
+    }
+    return String(a.playerName).localeCompare(String(b.playerName));
+  });
 
-  res.json({ standings: sorted });
+  const standings = sorted.map((p, i) => ({
+    position: i + 1,
+    ...enrichStandingsRow(p, t),
+  }));
+
+  const totalMatches = (t.matches || []).filter(
+    (m) => m.player1Id && m.player2Id && m.result !== 'bye'
+  ).length;
+
+  res.json({
+    tournament: t,
+    standings,
+    totalMatches,
+  });
+});
+
+/** PATCH /api/tournaments/:id/end */
+router.patch('/:id/end', authenticateToken, (req, res) => {
+  const store = readStore();
+  const idx = store.tournaments.findIndex((x) => x.id === req.params.id);
+  if (idx < 0) return res.status(404).json({ error: 'Não encontrado' });
+  const t = store.tournaments[idx];
+  if (String(t.organizerId) !== organizerKey(req)) {
+    return res.status(403).json({ error: 'Sem permissão' });
+  }
+  if (t.status !== 'in-progress') {
+    return res.status(400).json({ error: 'Torneio não está em progresso' });
+  }
+  const cr = t.currentRound || 0;
+  const maxR = t.rounds || 4;
+  if (cr !== maxR) {
+    return res.status(400).json({ error: 'Só pode encerrar após a última rodada' });
+  }
+  const roundMatches = (t.matches || []).filter((m) => m.round === cr);
+  const incomplete = roundMatches.some((m) => !m.result && !m.winnerId);
+  if (incomplete) {
+    return res.status(400).json({ error: 'Ainda há mesas sem resultado na última rodada' });
+  }
+  t.status = 'completed';
+  t.completedAt = new Date().toISOString();
+  store.tournaments[idx] = t;
+  writeStore(store);
+  res.json({ success: true, tournament: t });
 });
 
 /** POST /api/tournaments/:id/next-round */

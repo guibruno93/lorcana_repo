@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 import CardFilters from './components/CardFilters';
 import AdvancedFilters from './components/AdvancedFilters';
 import CardDetailModal from './components/CardDetailModal';
@@ -11,13 +10,10 @@ import {
   getCardStats,
   getAvailableInks,
   getAvailableTypes,
-  getCardImageUrl
 } from './services/cardService';
 import './CardDatabase.css';
 
 export default function CardDatabase() {
-  const { t } = useTranslation();
-  
   // State
   const [allCards, setAllCards] = useState([]);
   const [availableSets, setAvailableSets] = useState([]);

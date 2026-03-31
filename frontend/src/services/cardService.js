@@ -443,7 +443,7 @@ export function getCardStats(cards) {
   };
 }
 
-export default {
+const cardService = {
   fetchAllCards,
   fetchCardBySetAndNumber,
   searchCards,
@@ -456,5 +456,7 @@ export default {
   getAvailableInks,
   getAvailableRarities,
   getAvailableTypes,
-  getCardStats
+  getCardStats,
 };
+
+export default cardService;

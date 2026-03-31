@@ -24,6 +24,7 @@ export default function CardFilters({
     if (debouncedSearch !== filters.search) {
       onFilterChange({ ...filters, search: debouncedSearch });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- evitar reexecução quando filters/onFilterChange mudam a cada render do pai
   }, [debouncedSearch]);
 
   // Atualizar input se filters.search mudar externamente
@@ -31,6 +32,7 @@ export default function CardFilters({
     if (filters.search !== searchInput) {
       setSearchInput(filters.search || '');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- só reagir a filters.search externo; incluir searchInput reporia o input a cada tecla
   }, [filters.search]);
 
   const handleChange = (field, value) => {

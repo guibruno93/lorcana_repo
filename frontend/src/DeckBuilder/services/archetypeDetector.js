@@ -298,9 +298,3 @@ export function analyzeDeck(deck) {
   
   return analysis;
 }
-
-export default {
-  detectArchetype,
-  suggestCards,
-  analyzeDeck
-};

@@ -20,20 +20,58 @@ const userRoutes = require('./routes/user');
 const app = express();
 //const metaCron = require('./jobs/meta-cron'); - comentado até implementar scraper usando puppeteer; 
 
+// ── CORS (Vercel + browser preflight) ───────────────────────────────────────
+const extraOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+function isAllowedCorsOrigin(origin) {
+  if (process.env.CORS_ALLOW_ALL === "true") return true;
+  const allow = new Set([
+    "https://inkwell-labs.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+    ...extraOrigins,
+  ]);
+  if (allow.has(origin)) return true;
+  try {
+    const host = new URL(origin).hostname;
+    if (host === "vercel.app" || host.endsWith(".vercel.app")) return true;
+  } catch (_) {}
+  return false;
+}
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (isAllowedCorsOrigin(origin)) return callback(null, true);
+    callback(null, false);
+  },
+  credentials: true,
+  methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "Accept",
+    "Origin",
+    "X-Requested-With",
+    "Access-Control-Request-Method",
+    "Access-Control-Request-Headers",
+  ],
+  optionsSuccessStatus: 204,
+  maxAge: 86400,
+};
+
+const corsMiddleware = cors(corsOptions);
+app.use(corsMiddleware);
+app.options("*", corsMiddleware);
 
 // ── Middlewares ──────────────────────────────────────────────────────────────
-app.use(cors());
 app.use(express.json({ limit: "2mb" }));
 app.use('/api/user', userRoutes);
-
-
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  if (req.method === "OPTIONS") return res.sendStatus(204);
-  next();
-});
 
 // ── Logging middleware ───────────────────────────────────────────────────────
 app.use((req, res, next) => {

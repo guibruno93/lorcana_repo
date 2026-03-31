@@ -1,0 +1,407 @@
+{
+  "tournaments": [
+    {
+      "id": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+      "organizerId": "95abfab1-82d1-4ad8-963f-1e55c5f1c1e4",
+      "name": "Torneio Teste",
+      "date": "2026-03-31",
+      "time": "14:00",
+      "location": "Teste",
+      "format": "swiss",
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "completed",
+      "currentRound": 4,
+      "players": [
+        {
+          "id": "8c409bfe-a3db-4c5b-a40b-bebe5a147d94",
+          "playerName": "Teste1",
+          "playerId": "",
+          "deckName": "",
+          "points": 3,
+          "wins": 1,
+          "losses": 3,
+          "draws": 0
+        },
+        {
+          "id": "803cd111-02d0-41ac-902c-cc6fcea9f592",
+          "playerName": "teste 2",
+          "playerId": "",
+          "deckName": "",
+          "points": 4,
+          "wins": 1,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "id": "d378fbd0-b146-4ead-b454-9d3116599e80",
+          "playerName": "teste 3",
+          "playerId": "",
+          "deckName": "",
+          "points": 5,
+          "wins": 1,
+          "losses": 1,
+          "draws": 2
+        },
+        {
+          "id": "6dee0e46-b36c-41c6-b767-dd907aa0d1c4",
+          "playerName": "teste 4",
+          "playerId": "",
+          "deckName": "",
+          "points": 4,
+          "wins": 0,
+          "losses": 0,
+          "draws": 4
+        },
+        {
+          "id": "e99b4962-23b3-4818-9a08-378e9a427658",
+          "playerName": "teste 5",
+          "playerId": "",
+          "deckName": "",
+          "points": 1,
+          "wins": 0,
+          "losses": 3,
+          "draws": 1
+        },
+        {
+          "id": "fe391061-fb5b-4dbc-9acc-0f963c7024f0",
+          "playerName": "teste 6",
+          "playerId": "",
+          "deckName": "",
+          "points": 9,
+          "wins": 3,
+          "losses": 1,
+          "draws": 0
+        },
+        {
+          "id": "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6",
+          "playerName": "teste 7",
+          "playerId": "",
+          "deckName": "",
+          "points": 6,
+          "wins": 1,
+          "losses": 0,
+          "draws": 3
+        },
+        {
+          "id": "a45a5a5c-8960-45ac-b0c4-a36e8d088e17",
+          "playerName": "teste 8",
+          "playerId": "",
+          "deckName": "",
+          "points": 4,
+          "wins": 1,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "id": "27148b64-b890-4c98-acca-22ecb0e45121",
+          "playerName": "teste 9",
+          "playerId": "",
+          "deckName": "",
+          "points": 8,
+          "wins": 2,
+          "losses": 0,
+          "draws": 2
+        },
+        {
+          "id": "be005502-a30d-49a8-8dbd-75f4b761908f",
+          "playerName": "teste 10",
+          "playerId": "",
+          "deckName": "",
+          "points": 9,
+          "wins": 3,
+          "losses": 1,
+          "draws": 0
+        }
+      ],
+      "matches": [
+        {
+          "id": "14d9dccb-242c-44f6-a363-6e4f2177060a",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 1,
+          "tableNumber": 1,
+          "player1Id": "8c409bfe-a3db-4c5b-a40b-bebe5a147d94",
+          "player2Id": "803cd111-02d0-41ac-902c-cc6fcea9f592",
+          "winnerId": "803cd111-02d0-41ac-902c-cc6fcea9f592",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:15.244Z"
+        },
+        {
+          "id": "fb436ffe-c6c5-431b-86e2-09c577af18fe",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 1,
+          "tableNumber": 2,
+          "player1Id": "d378fbd0-b146-4ead-b454-9d3116599e80",
+          "player2Id": "6dee0e46-b36c-41c6-b767-dd907aa0d1c4",
+          "winnerId": null,
+          "result": "draw",
+          "reportedAt": "2026-03-31T16:37:17.321Z"
+        },
+        {
+          "id": "7a41146d-d449-4f00-8a81-b6ef179e8098",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 1,
+          "tableNumber": 3,
+          "player1Id": "e99b4962-23b3-4818-9a08-378e9a427658",
+          "player2Id": "fe391061-fb5b-4dbc-9acc-0f963c7024f0",
+          "winnerId": "fe391061-fb5b-4dbc-9acc-0f963c7024f0",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:19.631Z"
+        },
+        {
+          "id": "6e9c2d8c-fa25-4a3a-8c15-403af2b86c0d",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 1,
+          "tableNumber": 4,
+          "player1Id": "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6",
+          "player2Id": "a45a5a5c-8960-45ac-b0c4-a36e8d088e17",
+          "winnerId": "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:20.413Z"
+        },
+        {
+          "id": "e381e5a5-6477-49bd-9795-e21268feba9e",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 1,
+          "tableNumber": 5,
+          "player1Id": "27148b64-b890-4c98-acca-22ecb0e45121",
+          "player2Id": "be005502-a30d-49a8-8dbd-75f4b761908f",
+          "winnerId": "27148b64-b890-4c98-acca-22ecb0e45121",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:21.858Z"
+        },
+        {
+          "id": "78274369-46a5-4a0a-993e-442a76e5e6f6",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 2,
+          "tableNumber": 1,
+          "player1Id": "803cd111-02d0-41ac-902c-cc6fcea9f592",
+          "player2Id": "fe391061-fb5b-4dbc-9acc-0f963c7024f0",
+          "winnerId": "fe391061-fb5b-4dbc-9acc-0f963c7024f0",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:27.282Z"
+        },
+        {
+          "id": "d0494b0d-7977-462c-842a-8aadaf9b8ced",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 2,
+          "tableNumber": 2,
+          "player1Id": "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6",
+          "player2Id": "27148b64-b890-4c98-acca-22ecb0e45121",
+          "winnerId": null,
+          "result": "draw",
+          "reportedAt": "2026-03-31T16:37:28.012Z"
+        },
+        {
+          "id": "0037b531-74c6-40a2-8e50-c12651737bc9",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 2,
+          "tableNumber": 3,
+          "player1Id": "d378fbd0-b146-4ead-b454-9d3116599e80",
+          "player2Id": "8c409bfe-a3db-4c5b-a40b-bebe5a147d94",
+          "winnerId": "d378fbd0-b146-4ead-b454-9d3116599e80",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:28.803Z"
+        },
+        {
+          "id": "d7f94155-c9b3-46ea-8b22-a2258adb63eb",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 2,
+          "tableNumber": 4,
+          "player1Id": "6dee0e46-b36c-41c6-b767-dd907aa0d1c4",
+          "player2Id": "e99b4962-23b3-4818-9a08-378e9a427658",
+          "winnerId": null,
+          "result": "draw",
+          "reportedAt": "2026-03-31T16:37:29.370Z"
+        },
+        {
+          "id": "3bea1b48-f02e-4342-a845-dab2589c0a56",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 2,
+          "tableNumber": 5,
+          "player1Id": "a45a5a5c-8960-45ac-b0c4-a36e8d088e17",
+          "player2Id": "be005502-a30d-49a8-8dbd-75f4b761908f",
+          "winnerId": "be005502-a30d-49a8-8dbd-75f4b761908f",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:29.871Z"
+        },
+        {
+          "id": "d6d88289-3fb9-4694-bbcf-9c2c629fe02e",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 3,
+          "tableNumber": 1,
+          "player1Id": "fe391061-fb5b-4dbc-9acc-0f963c7024f0",
+          "player2Id": "d378fbd0-b146-4ead-b454-9d3116599e80",
+          "winnerId": "fe391061-fb5b-4dbc-9acc-0f963c7024f0",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:34.505Z"
+        },
+        {
+          "id": "661b5175-24d5-40a4-9896-285e765a69ac",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 3,
+          "tableNumber": 2,
+          "player1Id": "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6",
+          "player2Id": "803cd111-02d0-41ac-902c-cc6fcea9f592",
+          "winnerId": null,
+          "result": "draw",
+          "reportedAt": "2026-03-31T16:37:35.028Z"
+        },
+        {
+          "id": "7a3244fd-62ce-445a-9092-741012e474a8",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 3,
+          "tableNumber": 3,
+          "player1Id": "27148b64-b890-4c98-acca-22ecb0e45121",
+          "player2Id": "6dee0e46-b36c-41c6-b767-dd907aa0d1c4",
+          "winnerId": null,
+          "result": "draw",
+          "reportedAt": "2026-03-31T16:37:35.667Z"
+        },
+        {
+          "id": "5d1c78aa-dc0f-4ede-a3a8-1253176e425f",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 3,
+          "tableNumber": 4,
+          "player1Id": "be005502-a30d-49a8-8dbd-75f4b761908f",
+          "player2Id": "e99b4962-23b3-4818-9a08-378e9a427658",
+          "winnerId": "be005502-a30d-49a8-8dbd-75f4b761908f",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:36.163Z"
+        },
+        {
+          "id": "7f598069-c1be-4a2c-9dba-198f6c5e0a1c",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 3,
+          "tableNumber": 5,
+          "player1Id": "8c409bfe-a3db-4c5b-a40b-bebe5a147d94",
+          "player2Id": "a45a5a5c-8960-45ac-b0c4-a36e8d088e17",
+          "winnerId": "a45a5a5c-8960-45ac-b0c4-a36e8d088e17",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:36.743Z"
+        },
+        {
+          "id": "adcf7a7c-279d-4fae-83a4-8319c13e21d3",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 4,
+          "tableNumber": 1,
+          "player1Id": "fe391061-fb5b-4dbc-9acc-0f963c7024f0",
+          "player2Id": "be005502-a30d-49a8-8dbd-75f4b761908f",
+          "winnerId": "be005502-a30d-49a8-8dbd-75f4b761908f",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:42.944Z"
+        },
+        {
+          "id": "b72b21fd-c07d-4ee7-88a9-e91fb553a373",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 4,
+          "tableNumber": 2,
+          "player1Id": "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6",
+          "player2Id": "d378fbd0-b146-4ead-b454-9d3116599e80",
+          "winnerId": null,
+          "result": "draw",
+          "reportedAt": "2026-03-31T16:37:43.414Z"
+        },
+        {
+          "id": "f3055a77-78dd-47eb-895f-162e96b39f8e",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 4,
+          "tableNumber": 3,
+          "player1Id": "27148b64-b890-4c98-acca-22ecb0e45121",
+          "player2Id": "803cd111-02d0-41ac-902c-cc6fcea9f592",
+          "winnerId": "27148b64-b890-4c98-acca-22ecb0e45121",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:44.044Z"
+        },
+        {
+          "id": "30146d0e-35ca-4265-8caf-2b8aa7deb129",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 4,
+          "tableNumber": 4,
+          "player1Id": "6dee0e46-b36c-41c6-b767-dd907aa0d1c4",
+          "player2Id": "a45a5a5c-8960-45ac-b0c4-a36e8d088e17",
+          "winnerId": null,
+          "result": "draw",
+          "reportedAt": "2026-03-31T16:37:44.591Z"
+        },
+        {
+          "id": "0202855e-32aa-47f0-9f67-e7e12bcb8bfc",
+          "tournamentId": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
+          "round": 4,
+          "tableNumber": 5,
+          "player1Id": "e99b4962-23b3-4818-9a08-378e9a427658",
+          "player2Id": "8c409bfe-a3db-4c5b-a40b-bebe5a147d94",
+          "winnerId": "8c409bfe-a3db-4c5b-a40b-bebe5a147d94",
+          "result": "win",
+          "reportedAt": "2026-03-31T16:37:44.947Z"
+        }
+      ],
+      "matchHistory": {
+        "8c409bfe-a3db-4c5b-a40b-bebe5a147d94": {
+          "803cd111-02d0-41ac-902c-cc6fcea9f592": true,
+          "d378fbd0-b146-4ead-b454-9d3116599e80": true,
+          "a45a5a5c-8960-45ac-b0c4-a36e8d088e17": true,
+          "e99b4962-23b3-4818-9a08-378e9a427658": true
+        },
+        "803cd111-02d0-41ac-902c-cc6fcea9f592": {
+          "8c409bfe-a3db-4c5b-a40b-bebe5a147d94": true,
+          "fe391061-fb5b-4dbc-9acc-0f963c7024f0": true,
+          "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6": true,
+          "27148b64-b890-4c98-acca-22ecb0e45121": true
+        },
+        "d378fbd0-b146-4ead-b454-9d3116599e80": {
+          "6dee0e46-b36c-41c6-b767-dd907aa0d1c4": true,
+          "8c409bfe-a3db-4c5b-a40b-bebe5a147d94": true,
+          "fe391061-fb5b-4dbc-9acc-0f963c7024f0": true,
+          "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6": true
+        },
+        "6dee0e46-b36c-41c6-b767-dd907aa0d1c4": {
+          "d378fbd0-b146-4ead-b454-9d3116599e80": true,
+          "e99b4962-23b3-4818-9a08-378e9a427658": true,
+          "27148b64-b890-4c98-acca-22ecb0e45121": true,
+          "a45a5a5c-8960-45ac-b0c4-a36e8d088e17": true
+        },
+        "e99b4962-23b3-4818-9a08-378e9a427658": {
+          "fe391061-fb5b-4dbc-9acc-0f963c7024f0": true,
+          "6dee0e46-b36c-41c6-b767-dd907aa0d1c4": true,
+          "be005502-a30d-49a8-8dbd-75f4b761908f": true,
+          "8c409bfe-a3db-4c5b-a40b-bebe5a147d94": true
+        },
+        "fe391061-fb5b-4dbc-9acc-0f963c7024f0": {
+          "e99b4962-23b3-4818-9a08-378e9a427658": true,
+          "803cd111-02d0-41ac-902c-cc6fcea9f592": true,
+          "d378fbd0-b146-4ead-b454-9d3116599e80": true,
+          "be005502-a30d-49a8-8dbd-75f4b761908f": true
+        },
+        "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6": {
+          "a45a5a5c-8960-45ac-b0c4-a36e8d088e17": true,
+          "27148b64-b890-4c98-acca-22ecb0e45121": true,
+          "803cd111-02d0-41ac-902c-cc6fcea9f592": true,
+          "d378fbd0-b146-4ead-b454-9d3116599e80": true
+        },
+        "a45a5a5c-8960-45ac-b0c4-a36e8d088e17": {
+          "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6": true,
+          "be005502-a30d-49a8-8dbd-75f4b761908f": true,
+          "8c409bfe-a3db-4c5b-a40b-bebe5a147d94": true,
+          "6dee0e46-b36c-41c6-b767-dd907aa0d1c4": true
+        },
+        "27148b64-b890-4c98-acca-22ecb0e45121": {
+          "be005502-a30d-49a8-8dbd-75f4b761908f": true,
+          "cb93f34d-ef43-43f6-ae2c-4fd3c85d3bf6": true,
+          "6dee0e46-b36c-41c6-b767-dd907aa0d1c4": true,
+          "803cd111-02d0-41ac-902c-cc6fcea9f592": true
+        },
+        "be005502-a30d-49a8-8dbd-75f4b761908f": {
+          "27148b64-b890-4c98-acca-22ecb0e45121": true,
+          "a45a5a5c-8960-45ac-b0c4-a36e8d088e17": true,
+          "e99b4962-23b3-4818-9a08-378e9a427658": true,
+          "fe391061-fb5b-4dbc-9acc-0f963c7024f0": true
+        }
+      },
+      "createdAt": "2026-03-31T16:36:29.971Z",
+      "completedAt": "2026-03-31T17:11:24.420Z"
+    }
+  ]
+}

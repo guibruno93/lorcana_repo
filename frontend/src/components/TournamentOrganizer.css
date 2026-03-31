@@ -230,3 +230,43 @@
   color: #e2e8f0;
   cursor: pointer;
 }
+
+.tournament-org__card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+.tournament-org__secondary {
+  border-color: rgba(6, 182, 212, 0.45) !important;
+  color: #7dd3fc !important;
+  background: rgba(6, 182, 212, 0.1) !important;
+}
+
+.tournament-org__hint {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: -0.35rem 0 0.5rem;
+  line-height: 1.4;
+}
+
+.btn-end-tournament {
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: inherit;
+}
+
+.btn-end-tournament:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
+}
