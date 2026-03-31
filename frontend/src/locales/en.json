@@ -4,7 +4,11 @@
     "hand": "Mulligan Simulator",
     "matchups": "Matchups",
     "meta": "Meta Dashboard",
-    "cards": "Card Database"
+    "cards": "Card Database",
+    "deckBuilder": "Deck Builder",
+    "collection": "Collection",
+    "aiDeck": "AI Deck",
+    "tournaments": "Tournaments"
   },
   "auth": {
     "greeting": "Hello",

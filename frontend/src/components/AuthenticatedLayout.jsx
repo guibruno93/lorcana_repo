@@ -91,10 +91,24 @@ export default function AuthenticatedLayout({
         </button>
         <button
           type="button"
+          onClick={() => navigate('/collection')}
+          className={`tab ${activeTab === 'collection' ? 'tab-active' : ''}`}
+        >
+          📚 {t('tabs.collection')}
+        </button>
+        <button
+          type="button"
           onClick={() => navigate('/deck-builder')}
           className={`tab ${activeTab === 'deck-builder' ? 'tab-active' : ''}`}
         >
           🎨 {t('tabs.deckBuilder')}
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/ai-deck')}
+          className={`tab ${activeTab === 'ai-deck' ? 'tab-active' : ''}`}
+        >
+          🤖 {t('tabs.aiDeck')}
         </button>
         <button
           type="button"
@@ -109,6 +123,13 @@ export default function AuthenticatedLayout({
           className={`tab ${activeTab === 'meta' ? 'tab-active' : ''}`}
         >
           📊 {t('tabs.meta')}
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/tournaments')}
+          className={`tab ${activeTab === 'tournaments' ? 'tab-active' : ''}`}
+        >
+          🏆 {t('tabs.tournaments')}
         </button>
       </nav>
 

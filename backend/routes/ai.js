@@ -280,7 +280,99 @@ router.get('/health', (req, res) => {
       shuffle: true,
       mulligan: true,
       matchups: true,
+      generateDeck: true,
     }
+  });
+});
+
+let AnthropicCtor = null;
+try {
+  AnthropicCtor = require('@anthropic-ai/sdk').Anthropic;
+} catch (_) {
+  /* opcional */
+}
+
+router.post('/generate-deck', async (req, res) => {
+  const { prompt, mode, existingDeck } = req.body || {};
+  const p = prompt != null ? String(prompt).trim() : '';
+  if (!p) {
+    return res.status(400).json({ error: 'prompt obrigatório' });
+  }
+
+  const systemPrompt = `You are an expert Disney Lorcana TCG deck builder.
+
+Rules:
+1. Decks must have exactly 60 cards total across all categories.
+2. Max 4 copies per card name.
+3. Mix Characters, Actions, Items, and Locations appropriately.
+4. Respond with ONLY valid JSON (no markdown fences).
+
+JSON shape:
+{
+  "name": "Deck Name",
+  "archetype": "Ink/Ink Archetype",
+  "strategy": "Brief strategy",
+  "cards": {
+    "Characters": [{"name": "Exact card name", "quantity": 4, "reason": "Why"}],
+    "Actions": [],
+    "Items": [],
+    "Locations": []
+  },
+  "mulliganGuide": "Opening hand priorities",
+  "matchups": {
+    "favorable": ["..."],
+    "neutral": ["..."],
+    "difficult": ["..."]
+  }
+}`;
+
+  const userContent =
+    mode && mode !== 'create' && existingDeck
+      ? `${p}\n\nExisting deck JSON:\n${JSON.stringify(existingDeck).slice(0, 12000)}`
+      : p;
+
+  const model = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514';
+
+  if (process.env.ANTHROPIC_API_KEY && AnthropicCtor) {
+    try {
+      const anthropic = new AnthropicCtor({ apiKey: process.env.ANTHROPIC_API_KEY });
+      const message = await anthropic.messages.create({
+        model,
+        max_tokens: 4096,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userContent }],
+      });
+      let text = message.content[0].text.trim();
+      text = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+      const deck = JSON.parse(text);
+      return res.json({ deck, source: 'anthropic' });
+    } catch (err) {
+      console.error('generate-deck Anthropic:', err.message);
+    }
+  }
+
+  res.json({
+    deck: {
+      name: 'Deck (sem API)',
+      archetype: '—',
+      strategy:
+        'Define ANTHROPIC_API_KEY no servidor e instale @anthropic-ai/sdk para geração por Claude. Resposta de exemplo enquanto a API não está configurada.',
+      cards: {
+        Characters: [
+          {
+            name: 'Mickey Mouse - Brave Little Tailor',
+            quantity: 4,
+            reason: 'Exemplo de carta; substitua com IA ativa.',
+          },
+        ],
+        Actions: [],
+        Items: [],
+        Locations: [],
+      },
+      mulliganGuide: 'Procure custos baixos e tinta.',
+      matchups: { favorable: [], neutral: [], difficult: [] },
+    },
+    mock: true,
   });
 });
 

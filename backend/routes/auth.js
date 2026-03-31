@@ -161,18 +161,35 @@ router.post('/register', async (req, res) => {
       // Não falhar o registro se token não criar
     }
 
-    // Enviar email de verificação
+    let emailResult = {
+      sent: false,
+      hint: 'Serviço de email indisponível.',
+    };
     try {
-      await sendVerificationEmail(email, username, verificationToken);
+      emailResult = await sendVerificationEmail(
+        email,
+        username,
+        verificationToken
+      );
     } catch (emailErr) {
-      console.error('Error sending verification email:', emailErr);
-      // Não falhar o registro se email não enviar
+      console.error('Register: exceção ao enviar email (versão antiga do serviço?):', emailErr.message);
+      emailResult = {
+        sent: false,
+        code: emailErr.code || 'EMAIL_EXCEPTION',
+        hint:
+          'O servidor não conseguiu enviar o email (ex.: SMTP timeout no Render). Atualiza o backend no Git ou usa Resend.',
+      };
     }
 
     res.json({
       success: true,
-      message: 'Usuário criado com sucesso! Verifique seu email.',
+      message: emailResult.sent
+        ? 'Usuário criado com sucesso! Verifique seu email.'
+        : 'Conta criada, mas o email de verificação não foi enviado. Configura o envio no servidor (ex.: RESEND_API_KEY no Render) ou usa o link de debug se estiver ativo.',
       userId: newUser.id,
+      emailSent: emailResult.sent,
+      ...(emailResult.hint && { emailHint: emailResult.hint }),
+      ...(emailResult.debugLink && { debugVerificationLink: emailResult.debugLink }),
     });
 
   } catch (err) {
@@ -352,12 +369,36 @@ router.post('/resend-verification', async (req, res) => {
         },
       ]);
 
-    // Reenviar email
-    await sendVerificationEmail(email, user.username, verificationToken);
+    let emailResult = {
+      sent: false,
+      hint: 'Serviço de email indisponível.',
+    };
+    try {
+      emailResult = await sendVerificationEmail(
+        email,
+        user.username,
+        verificationToken
+      );
+    } catch (emailErr) {
+      console.error('Resend: exceção ao enviar email:', emailErr.message);
+      emailResult = {
+        sent: false,
+        code: emailErr.code || 'EMAIL_EXCEPTION',
+        hint:
+          emailErr.message ||
+          'Falha ao enviar (ex.: SMTP timeout). Faz deploy do código novo ou configura Resend.',
+      };
+    }
 
     res.json({
       success: true,
-      message: 'Email de verificação reenviado!',
+      emailSent: emailResult.sent,
+      message: emailResult.sent
+        ? 'Email de verificação reenviado!'
+        : 'Não foi possível enviar o email. Verifica RESEND_API_KEY ou SMTP no servidor.',
+      ...(emailResult.hint && { hint: emailResult.hint }),
+      ...(emailResult.code && !emailResult.sent && { code: emailResult.code }),
+      ...(emailResult.debugLink && { debugVerificationLink: emailResult.debugLink }),
     });
 
   } catch (err) {
@@ -411,8 +452,14 @@ router.post('/forgot-password', async (req, res) => {
         },
       ]);
 
-    // Enviar email
-    await sendPasswordResetEmail(email, user.username, resetToken);
+    const mailResult = await sendPasswordResetEmail(
+      email,
+      user.username,
+      resetToken
+    );
+    if (!mailResult.sent) {
+      console.warn('[auth] Password reset email not sent:', mailResult.code, mailResult.hint);
+    }
 
     res.json({
       success: true,

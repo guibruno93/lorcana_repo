@@ -38,7 +38,7 @@ const FEATURES = [
     icon: '⚔️',
     title: 'Matchups e análise de deck',
     description:
-      'Cole a lista do deck e receba análise, curva de mana e ferramentas de preparação.',
+      'Cole sua decklist e veja a análise, curva de mana e ferramentas de preparação.',
     screenshot: `${pub}/screenshots/dashboard-preview.svg`,
   },
 ];
@@ -54,13 +54,13 @@ const SCREENSHOTS = [
     src: `${pub}/screenshots/meta-share.svg`,
     alt: 'Gráfico de meta share',
     title: 'Distribuição do meta',
-    caption: 'Popularidade por arquétipo, com ícones das tintas Lorcana.',
+    caption: 'Popularidade dos decks por arquétipo.',
   },
   {
     src: `${pub}/screenshots/deckbuilder-full.svg`,
     alt: 'Deckbuilder',
     title: 'Construa decks com clareza',
-    caption: 'Grid visual, filtros e contagens automáticas.',
+    caption: 'Construa, exporte e mostre seu deck',
   },
 ];
 
@@ -73,7 +73,7 @@ const STEPS = [
   {
     n: '2',
     title: 'Explore o meta',
-    text: 'Consulte tiers, meta share e dados agregados de eventos reais.',
+    text: 'Consulte tiers, meta competitivo e dados agregados de torneios reais.',
   },
   {
     n: '3',
@@ -93,27 +93,27 @@ const FAQS = [
   },
   {
     q: 'Posso guardar os meus decks?',
-    a: 'Com conta gratuita podes criar e gerir perfil; o deckbuilder e o analisador funcionam com as tuas listas. Funcionalidades de persistência podem evoluir — consulta a app após login.',
+    a: 'Com conta gratuita é possível criar novos decks; o deckbuilder e o analisador funcionam com as qualquer lista. Algumas funcionalidades podem mudar conforme o tempo — consulta o aplicativo após login.',
   },
   {
     q: 'Com que frequência o meta é atualizado?',
-    a: 'O scraping e os cálculos são executados de forma regular (por exemplo, em ciclo agendado). A data da última recolha aparece no painel de meta.',
+    a: 'As validações e os cálculos são executados de forma regular. A data da última recolha aparece no painel de meta.',
   },
   {
-    q: 'Posso usar no telemóvel?',
-    a: 'Sim. A interface é responsiva e funciona em telemóvel, tablet e desktop.',
+    q: 'Posso usar no meu celular?',
+    a: 'Sim. A interface é responsiva e funciona em celulares, tablet e computadores desktop.',
   },
   {
     q: 'Como funciona o simulador de mulligan?',
-    a: 'Indica o texto do deck; o simulador sorteia a mão inicial e permite devolver cartas e comprar novas de acordo com as regras habituais de mulligan do Lorcana.',
+    a: 'O sistema irá simular um embaralhamento da sua decklist e indicar uma mão inicial. Você pode optar por manter as cartas da sua mão ou indicar quais cartas deseja alterar, seguindo as regras do Disney Lorcana.',
   },
   {
-    q: 'Têm cartas de todas as expansões?',
-    a: 'A base de dados cobre as cartas disponíveis no serviço ligado ao projeto; consulta o separador de cartas na app para o conjunto atual.',
+    q: 'Quais expansões tem disponível?',
+    a: 'A base de dados cobre as cartas disponíveis no serviço ligado ao projeto; Conforme novos sets são lançados o banco de dados também é atualizado. Confirme as datas de lançamentos de novas coleções.',
   },
   {
     q: 'Como reporto bugs ou dou sugestões?',
-    a: 'Contacta contato@inkwelllabs.com ou usa o feedback dentro da ferramenta quando disponível.',
+    a: 'Entre em contato pelo e-mail: contato@inkwelllabs.com ou deixe um feedback dentro da ferramenta quando disponível.',
   },
 ];
 
@@ -134,7 +134,7 @@ function LandingPage() {
             Entrar
           </Link>
           <button type="button" className="landing-btn-nav" onClick={goRegister}>
-            Registo
+            Registar
           </button>
         </div>
       </header>
@@ -147,10 +147,10 @@ function LandingPage() {
               <Logo size="large" animated />
             </div>
             <h1 id="landing-hero-title">
-              Domine o meta de <span className="landing-gradient">Lorcana</span>
+               Faça parte do competitivo de <span className="landing-gradient">Lorcana</span>
             </h1>
             <p className="landing-tagline">
-              Análise de meta em tempo real, deckbuilder inteligente e ferramentas para
+              Análise de meta em tempo real, ferramenta inteligente feita por jogadores para
               jogadores competitivos de Disney Lorcana TCG.
             </p>
             <div className="landing-cta-row">
@@ -191,7 +191,7 @@ function LandingPage() {
       <section className="landing-section landing-features" aria-labelledby="feat-title">
         <div className="landing-container">
           <h2 id="feat-title" className="landing-section-title">
-            Tudo o que precisas para dominar Lorcana
+            Todas as ferramentas para entender Lorcana!
           </h2>
           <div className="landing-features-grid">
             {FEATURES.map((f) => (
@@ -219,8 +219,8 @@ function LandingPage() {
             Vê a ferramenta em ação
           </h2>
           <p className="landing-section-lead">
-            Capturas de ecrã de referência — substitui os ficheiros em{' '}
-            <code>public/screenshots/</code> por PNGs reais quando os tiveres.
+            Alterar para prints reais{' '}
+            <code>public/screenshots/</code> por PNGs reais quando os tiver.
           </p>
           <div className="landing-shots-grid">
             {SCREENSHOTS.map((s) => (
@@ -273,8 +273,8 @@ function LandingPage() {
 
       <section className="landing-cta-final" aria-labelledby="cta-final-title">
         <div className="landing-container landing-cta-inner">
-          <h2 id="cta-final-title">Pronto para dominar o meta?</h2>
-          <p>Junta-te a jogadores competitivos que usam o Inkwell Labs.</p>
+          <h2 id="cta-final-title">Faça parte da história de Lorcana</h2>
+          <p>Junte-se á outros jogadores competitivos com o Inkwell Labs.</p>
           <div className="landing-cta-row landing-cta-row--center">
             <button type="button" className="landing-btn-primary landing-btn-on-accent" onClick={goRegister}>
               Criar conta grátis

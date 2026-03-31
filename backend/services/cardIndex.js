@@ -88,4 +88,16 @@ function getCardIndex() {
   }
 }
 
-module.exports = { getCardIndex, normalizeName };
+function getAllCards() {
+  const p = resolveCardsPath();
+  if (!p) return [];
+  try {
+    const raw = fs.readFileSync(p, "utf-8");
+    const json = JSON.parse(raw);
+    return Array.isArray(json) ? json : json.cards || [];
+  } catch {
+    return [];
+  }
+}
+
+module.exports = { getCardIndex, normalizeName, getAllCards, resolveCardsPath };

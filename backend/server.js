@@ -6,6 +6,14 @@
  * ✅ CORREÇÃO: Auth carregado ANTES de Deck
  */
 require('dotenv').config();
+
+try {
+  const { logEmailBootstrap } = require('./services/email-service');
+  logEmailBootstrap();
+} catch (e) {
+  console.warn('📧 Email bootstrap:', e.message);
+}
+
 const express = require("express");
 const cors = require("cors");
 const userRoutes = require('./routes/user');
@@ -123,6 +131,33 @@ try {
   console.warn("⚠️  Tier lists não carregado:", e.message);
 }
 
+// 8. Coleção + wishlist (ficheiro local por utilizador autenticado)
+try {
+  const collectionRouter = require("./routes/collection");
+  app.use("/api/collection", collectionRouter);
+  console.log("✅ Collection: /api/collection");
+} catch (e) {
+  console.warn("⚠️  Collection não carregado:", e.message);
+}
+
+// 9. Busca de cartas (cards.json local)
+try {
+  const cardsRouter = require("./routes/cards");
+  app.use("/api/cards", cardsRouter);
+  console.log("✅ Cards: /api/cards");
+} catch (e) {
+  console.warn("⚠️  Cards API não carregado:", e.message);
+}
+
+// 10. Torneios (Swiss simplificado, ficheiro local)
+try {
+  const tournamentsRouter = require("./routes/tournaments");
+  app.use("/api/tournaments", tournamentsRouter);
+  console.log("✅ Tournaments: /api/tournaments");
+} catch (e) {
+  console.warn("⚠️  Tournaments não carregado:", e.message);
+}
+
 // ══════════════════════════════════════════════════════════════════════════════
 // 404 E ERROR HANDLERS - SEMPRE POR ÚLTIMO!
 // ══════════════════════════════════════════════════════════════════════════════
@@ -140,7 +175,11 @@ app.use((req, res) => {
       '/api/ai/*',
       '/api/meta/*',
       '/api/meta-analysis/*',
-      '/api/deck-comparison/*'
+      '/api/deck-comparison/*',
+      '/api/tier-lists/*',
+      '/api/collection/*',
+      '/api/cards/*',
+      '/api/tournaments/*'
     ]
   });
 });

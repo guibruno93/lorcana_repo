@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import CardFilters from './components/CardFilters';
+import AdvancedFilters from './components/AdvancedFilters';
 import CardDetailModal from './components/CardDetailModal';
 import {
   fetchAllCards,
@@ -26,7 +27,12 @@ export default function CardDatabase() {
     cost: '',
     rarity: 'all',
     type: 'all',
-    set: 'all'
+    set: 'all',
+    inkMulti: [],
+    manaCostMulti: [],
+    typeMulti: [],
+    setMulti: [],
+    rarityMulti: [],
   });
   const [sortBy, setSortBy] = useState('name');
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,7 +107,12 @@ export default function CardDatabase() {
       cost: '',
       rarity: 'all',
       type: 'all',
-      set: 'all'
+      set: 'all',
+      inkMulti: [],
+      manaCostMulti: [],
+      typeMulti: [],
+      setMulti: [],
+      rarityMulti: [],
     });
     setCurrentPage(1);
   }, []);
@@ -160,6 +171,12 @@ export default function CardDatabase() {
           </div>
         </div>
       </div>
+
+      <AdvancedFilters
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        allCards={allCards}
+      />
 
       {/* Filtros */}
       <CardFilters

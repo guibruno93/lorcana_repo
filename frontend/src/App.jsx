@@ -19,6 +19,9 @@ const CardDatabase = lazy(() => import('./CardDatabase'));
 const DeckBuilder = lazy(() => import('./DeckBuilder/DeckBuilder'));
 const UserProfile = lazy(() => import('./UserProfile'));
 const TierListGenerator = lazy(() => import('./components/TierListGenerator'));
+const CardCollection = lazy(() => import('./components/CardCollection'));
+const AIDeckBuilder = lazy(() => import('./components/AIDeckBuilder'));
+const TournamentOrganizer = lazy(() => import('./components/TournamentOrganizer'));
 
 function TierListSuspense() {
   return (
@@ -138,6 +141,9 @@ export default function App() {
         <Route path="/deck" element={<DeckAnalyzer />} />
         <Route path="/hand" element={<HandAnalyzer />} />
         <Route path="/cards" element={<CardDatabase />} />
+        <Route path="/collection" element={<CardCollection />} />
+        <Route path="/ai-deck" element={<AIDeckBuilder />} />
+        <Route path="/tournaments" element={<TournamentOrganizer />} />
         <Route path="/deck-builder" element={<DeckBuilder />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/matchups" element={<Matchups />} />

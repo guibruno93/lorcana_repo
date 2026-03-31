@@ -243,6 +243,43 @@ export function extractSetsFromCards(cards) {
   return Array.from(setsMap.values()).sort((a, b) => a.name.localeCompare(b.name));
 }
 
+function normRarity(r) {
+  return String(r || '')
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/_/g, '');
+}
+
+function cardInk(c) {
+  return String(c.ink_type || c.ink || c.color || '').toLowerCase();
+}
+
+function cardCost(c) {
+  const v = c.ink_cost != null ? c.ink_cost : c.cost;
+  return v != null ? Number(v) : null;
+}
+
+function cardSetLabel(c) {
+  return String(c.set_name || c.set || '').toLowerCase();
+}
+
+function cardSetCode(c) {
+  return String(c.set_code || c.setCode || '').toLowerCase();
+}
+
+export function estimateCardPriceUsd(card) {
+  if (!card || !card.prices) return 0;
+  const p = card.prices;
+  if (typeof p.usd === 'number') return p.usd;
+  if (typeof p.usd_foil === 'number') return p.usd_foil;
+  if (typeof p.market === 'number') return p.market;
+  if (p.tcgplayer && typeof p.tcgplayer === 'object') {
+    const m = p.tcgplayer.usd ?? p.tcgplayer.market;
+    if (typeof m === 'number') return m;
+  }
+  return 0;
+}
+
 export function filterAndSortCards(cards, filters, sortBy = 'name') {
   if (!Array.isArray(cards)) return [];
   
@@ -257,30 +294,59 @@ export function filterAndSortCards(cards, filters, sortBy = 'name') {
     );
   }
 
-  if (filters.ink && filters.ink !== 'all') {
+  if (Array.isArray(filters.inkMulti) && filters.inkMulti.length > 0) {
+    const set = new Set(filters.inkMulti.map((x) => String(x).toLowerCase()));
+    filtered = filtered.filter((c) => set.has(cardInk(c)));
+  } else if (filters.ink && filters.ink !== 'all') {
     filtered = filtered.filter(c => 
       c.ink_type?.toLowerCase() === filters.ink.toLowerCase()
     );
   }
 
-  if (filters.cost !== null && filters.cost !== undefined && filters.cost !== '') {
-    const cost = parseInt(filters.cost);
-    filtered = filtered.filter(c => c.ink_cost === cost);
+  if (Array.isArray(filters.manaCostMulti) && filters.manaCostMulti.length > 0) {
+    filtered = filtered.filter((c) => {
+      const cost = cardCost(c);
+      if (cost == null) return false;
+      return filters.manaCostMulti.some((m) => {
+        if (m === '9+' || m === '9plus') return cost >= 9;
+        return cost === Number(m);
+      });
+    });
+  } else if (filters.cost !== null && filters.cost !== undefined && filters.cost !== '') {
+    const cost = parseInt(filters.cost, 10);
+    filtered = filtered.filter((c) => cardCost(c) === cost);
   }
 
-  if (filters.rarity && filters.rarity !== 'all') {
+  if (Array.isArray(filters.rarityMulti) && filters.rarityMulti.length > 0) {
+    const keys = new Set(filters.rarityMulti.map(normRarity));
+    filtered = filtered.filter((c) => keys.has(normRarity(c.rarity)));
+  } else if (filters.rarity && filters.rarity !== 'all') {
     filtered = filtered.filter(c => 
       c.rarity?.toLowerCase() === filters.rarity.toLowerCase()
     );
   }
 
-  if (filters.set && filters.set !== 'all') {
+  if (Array.isArray(filters.setMulti) && filters.setMulti.length > 0) {
+    filtered = filtered.filter((c) =>
+      filters.setMulti.some((s) => {
+        const q = String(s).toLowerCase();
+        return (
+          cardSetLabel(c) === q ||
+          cardSetCode(c) === q ||
+          cardSetLabel(c).includes(q)
+        );
+      })
+    );
+  } else if (filters.set && filters.set !== 'all') {
     filtered = filtered.filter(c => 
       c.set_id === filters.set || c.set_code === filters.set
     );
   }
 
-  if (filters.type && filters.type !== 'all') {
+  if (Array.isArray(filters.typeMulti) && filters.typeMulti.length > 0) {
+    const set = new Set(filters.typeMulti.map((x) => String(x).toLowerCase()));
+    filtered = filtered.filter((c) => set.has(String(c.type || '').toLowerCase()));
+  } else if (filters.type && filters.type !== 'all') {
     filtered = filtered.filter(c => 
       c.type?.toLowerCase() === filters.type.toLowerCase()
     );

@@ -5,7 +5,10 @@
     "matchups": "Matchups",
     "meta": "Painel do Meta",
     "cards": "Database de Cartas",
-    "deckBuilder": "Deck Builder"
+    "deckBuilder": "Deck Builder",
+    "collection": "Coleção",
+    "aiDeck": "Deck IA",
+    "tournaments": "Torneios"
   },
   "auth": {
     "greeting": "Olá",

@@ -156,8 +156,19 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
         country: formData.country || null,
       });
 
-      setMessageType('success');
-      setMessage('Cadastro realizado! Verifique seu email para confirmar sua conta.');
+      const { emailSent, message: apiMsg, emailHint } = response.data || {};
+      if (emailSent === false) {
+        setMessageType('info');
+        setMessage(
+          [apiMsg, emailHint].filter(Boolean).join(' ') ||
+            'Conta criada, mas o email não foi enviado. Tenta “Reenviar” ou verifica a configuração do servidor.'
+        );
+      } else {
+        setMessageType('success');
+        setMessage(
+          apiMsg || 'Cadastro realizado! Verifique seu email para confirmar sua conta.'
+        );
+      }
       setMode('verify');
       
       setFormData({
@@ -239,12 +250,22 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
     setMessage('');
 
     try {
-      await axios.post(`${API_BASE}/api/auth/resend-verification`, {
+      const { data } = await axios.post(`${API_BASE}/api/auth/resend-verification`, {
         email: formData.email,
       });
 
-      setMessageType('success');
-      setMessage('Email de verificação reenviado! Verifique sua caixa de entrada.');
+      if (data.emailSent === false) {
+        setMessageType('info');
+        setMessage(
+          [data.message, data.hint].filter(Boolean).join(' ') ||
+            'Não foi possível enviar o email. O servidor pode estar com SMTP bloqueado (comum no Render).'
+        );
+      } else {
+        setMessageType('success');
+        setMessage(
+          data.message || 'Email de verificação reenviado! Verifique sua caixa de entrada.'
+        );
+      }
     } catch (err) {
       setMessageType('error');
       setMessage(err.response?.data?.error || 'Erro ao reenviar email');
@@ -363,6 +384,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
                 className={errors.email ? 'error' : ''}
                 placeholder="seu@email.com"
                 disabled={loading}
+                autoComplete="email"
               />
               {errors.email && <span className="error-text">{errors.email}</span>}
             </div>
@@ -380,6 +402,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
                   className={errors.password ? 'error' : ''}
                   placeholder="Sua senha segura"
                   disabled={loading}
+                  autoComplete="new-password"
                 />
                 <button
                   type="button"
@@ -424,6 +447,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
                   className={errors.confirmPassword ? 'error' : ''}
                   placeholder="Digite a senha novamente"
                   disabled={loading}
+                  autoComplete="new-password"
                 />
                 <button
                   type="button"
@@ -487,6 +511,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
                 placeholder="seu@email.com"
                 disabled={loading}
                 autoFocus // 
+                autoComplete="email"
               />
               {errors.email && <span className="error-text">{errors.email}</span>}
             </div>
@@ -500,6 +525,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
+                  autoComplete="current-password"
                   className={errors.password ? 'error' : ''}
                   placeholder="Sua senha"
                   disabled={loading}

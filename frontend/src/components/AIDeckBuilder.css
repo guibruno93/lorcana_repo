@@ -1,0 +1,214 @@
+.ai-deckbuilder {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  color: #e2e8f0;
+}
+
+.ai-deckbuilder__head h1 {
+  font-size: 1.65rem;
+  margin: 0 0 0.35rem;
+  color: #fff;
+}
+
+.ai-deckbuilder__head p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.ai-deckbuilder__modes {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.25rem 0;
+  flex-wrap: wrap;
+}
+
+.ai-deckbuilder__modes button {
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ai-deckbuilder__modes button.is-active {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+}
+
+.ai-deckbuilder__prompt label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.ai-deckbuilder__prompt textarea {
+  width: 100%;
+  padding: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font: inherit;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.ai-deckbuilder__examples {
+  margin: 0.65rem 0 1rem;
+}
+
+.ai-deckbuilder__examples span {
+  display: block;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 0.35rem;
+}
+
+.ai-deckbuilder__examples button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.45rem 0.65rem;
+  margin-bottom: 0.35rem;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  background: rgba(255, 255, 255, 0.03);
+  color: #94a3b8;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.ai-deckbuilder__examples button:hover {
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.ai-deckbuilder__go {
+  width: 100%;
+  padding: 0.85rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #06b6d4, #a855f7);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ai-deckbuilder__go:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ai-deckbuilder__loading {
+  text-align: center;
+  padding: 2rem;
+  color: #94a3b8;
+}
+
+.ai-deckbuilder__spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: ai-spin 0.9s linear infinite;
+}
+
+@keyframes ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ai-deckbuilder__error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem 0;
+  color: #fecaca;
+}
+
+.ai-deckbuilder__result {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 12px;
+}
+
+.ai-deckbuilder__result h2 {
+  margin: 0;
+  color: #fff;
+}
+
+.ai-deckbuilder__meta {
+  color: #94a3b8;
+  margin: 0.25rem 0 1rem;
+}
+
+.ai-deckbuilder__result section {
+  margin-bottom: 1.25rem;
+}
+
+.ai-deckbuilder__result h3 {
+  font-size: 1.05rem;
+  color: #93c5fd;
+  margin: 0 0 0.5rem;
+}
+
+.ai-deckbuilder__result h4 {
+  font-size: 0.95rem;
+  color: #67e8f9;
+  margin: 0.75rem 0 0.35rem;
+}
+
+.ai-deckbuilder__line {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  padding: 0.2rem 0;
+}
+
+.ai-deckbuilder__q {
+  color: #94a3b8;
+  font-weight: 700;
+  min-width: 2rem;
+}
+
+.ai-deckbuilder__why {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.ai-deckbuilder__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.ai-deckbuilder__actions button {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ai-deckbuilder__empty {
+  text-align: center;
+  color: #64748b;
+  margin-top: 2rem;
+}

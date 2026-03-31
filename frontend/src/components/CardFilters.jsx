@@ -49,6 +49,11 @@ export default function CardFilters({
   // Garantir que availableSets seja um array
   const setsArray = Array.isArray(availableSets) ? availableSets : [];
 
+  const filterIsActive = (v) => {
+    if (Array.isArray(v)) return v.length > 0;
+    return v != null && v !== '' && v !== 'all';
+  };
+
   return (
     <div className="card-filters">
       <div className="filters-header">
@@ -58,7 +63,7 @@ export default function CardFilters({
         <button 
           onClick={onClearFilters}
           className="btn-clear-filters"
-          disabled={!Object.values(filters).some(v => v && v !== 'all')}
+          disabled={!Object.values(filters).some(filterIsActive)}
         >
           ✕ {t('cardDatabase.filters.clear')}
         </button>
