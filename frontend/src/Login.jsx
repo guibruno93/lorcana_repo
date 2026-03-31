@@ -38,6 +38,28 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
     setMode(initialMode);
   }, [initialMode]);
 
+  useEffect(() => {
+    if (searchParams.get('verified') === '1') {
+      setMode('login');
+      setMessageType('success');
+      setMessage('Email verificado! Já podes fazer login.');
+    }
+    if (searchParams.get('verify') === 'error') {
+      setMode('login');
+      setMessageType('error');
+      const reason = searchParams.get('reason');
+      if (!reason) {
+        setMessage('Link de verificação inválido ou expirado.');
+      } else {
+        try {
+          setMessage(decodeURIComponent(reason.replace(/\+/g, ' ')));
+        } catch {
+          setMessage(reason);
+        }
+      }
+    }
+  }, [searchParams]);
+
   function resolvePostLoginPath() {
     const raw = searchParams.get('next');
     if (raw && ALLOWED_POST_LOGIN.has(raw)) return raw;
