@@ -1,0 +1,377 @@
+﻿2026-03-30T02:57:25.8940040Z Current runner version: '2.333.0'
+2026-03-30T02:57:25.8964585Z ##[group]Runner Image Provisioner
+2026-03-30T02:57:25.8965417Z Hosted Compute Agent
+2026-03-30T02:57:25.8965968Z Version: 20260213.493
+2026-03-30T02:57:25.8966669Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+2026-03-30T02:57:25.8967358Z Build Date: 2026-02-13T00:28:41Z
+2026-03-30T02:57:25.8968014Z Worker ID: {98cd7cf0-8134-43aa-8034-bfdaa6dcb6ad}
+2026-03-30T02:57:25.8968810Z Azure Region: westus
+2026-03-30T02:57:25.8969301Z ##[endgroup]
+2026-03-30T02:57:25.8971127Z ##[group]Operating System
+2026-03-30T02:57:25.8971825Z Ubuntu
+2026-03-30T02:57:25.8972299Z 24.04.4
+2026-03-30T02:57:25.8972752Z LTS
+2026-03-30T02:57:25.8973292Z ##[endgroup]
+2026-03-30T02:57:25.8973761Z ##[group]Runner Image
+2026-03-30T02:57:25.8974303Z Image: ubuntu-24.04
+2026-03-30T02:57:25.8974927Z Version: 20260323.65.1
+2026-03-30T02:57:25.8976072Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260323.65/images/ubuntu/Ubuntu2404-Readme.md
+2026-03-30T02:57:25.8977565Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260323.65
+2026-03-30T02:57:25.8978430Z ##[endgroup]
+2026-03-30T02:57:25.8979841Z ##[group]GITHUB_TOKEN Permissions
+2026-03-30T02:57:25.8981717Z Contents: read
+2026-03-30T02:57:25.8982222Z Metadata: read
+2026-03-30T02:57:25.8982853Z Packages: read
+2026-03-30T02:57:25.8983370Z ##[endgroup]
+2026-03-30T02:57:25.8985735Z Secret source: Actions
+2026-03-30T02:57:25.8986519Z Prepare workflow directory
+2026-03-30T02:57:25.9318286Z Prepare all required actions
+2026-03-30T02:57:25.9356445Z Getting action download info
+2026-03-30T02:57:26.4287960Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-03-30T02:57:26.5582384Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-03-30T02:57:26.6453749Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-03-30T02:57:26.8584647Z Complete job name: scrape
+2026-03-30T02:57:26.9283872Z ##[group]Run actions/checkout@v4
+2026-03-30T02:57:26.9284696Z with:
+2026-03-30T02:57:26.9285108Z   repository: guibruno93/lorcana_repo
+2026-03-30T02:57:26.9285789Z   token: ***
+2026-03-30T02:57:26.9286168Z   ssh-strict: true
+2026-03-30T02:57:26.9286558Z   ssh-user: git
+2026-03-30T02:57:26.9286955Z   persist-credentials: true
+2026-03-30T02:57:26.9287405Z   clean: true
+2026-03-30T02:57:26.9287815Z   sparse-checkout-cone-mode: true
+2026-03-30T02:57:26.9288288Z   fetch-depth: 1
+2026-03-30T02:57:26.9288665Z   fetch-tags: false
+2026-03-30T02:57:26.9289066Z   show-progress: true
+2026-03-30T02:57:26.9289468Z   lfs: false
+2026-03-30T02:57:26.9290050Z   submodules: false
+2026-03-30T02:57:26.9290457Z   set-safe-directory: true
+2026-03-30T02:57:26.9291145Z ##[endgroup]
+2026-03-30T02:57:27.0371471Z Syncing repository: guibruno93/lorcana_repo
+2026-03-30T02:57:27.0373207Z ##[group]Getting Git version info
+2026-03-30T02:57:27.0373991Z Working directory is '/home/runner/work/lorcana_repo/lorcana_repo'
+2026-03-30T02:57:27.0374986Z [command]/usr/bin/git version
+2026-03-30T02:57:27.0410894Z git version 2.53.0
+2026-03-30T02:57:27.0436753Z ##[endgroup]
+2026-03-30T02:57:27.0451074Z Temporarily overriding HOME='/home/runner/work/_temp/a33853d8-65e5-45bc-9261-b9a20bc01103' before making global git config changes
+2026-03-30T02:57:27.0452501Z Adding repository directory to the temporary git global config as a safe directory
+2026-03-30T02:57:27.0463844Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lorcana_repo/lorcana_repo
+2026-03-30T02:57:27.0494468Z Deleting the contents of '/home/runner/work/lorcana_repo/lorcana_repo'
+2026-03-30T02:57:27.0497972Z ##[group]Initializing the repository
+2026-03-30T02:57:27.0502258Z [command]/usr/bin/git init /home/runner/work/lorcana_repo/lorcana_repo
+2026-03-30T02:57:27.0594869Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-03-30T02:57:27.0597256Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-03-30T02:57:27.0598787Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-03-30T02:57:27.0600091Z hint: call:
+2026-03-30T02:57:27.0600497Z hint:
+2026-03-30T02:57:27.0601005Z hint: 	git config --global init.defaultBranch <name>
+2026-03-30T02:57:27.0601940Z hint:
+2026-03-30T02:57:27.0602674Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-03-30T02:57:27.0603685Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-03-30T02:57:27.0604434Z hint:
+2026-03-30T02:57:27.0604833Z hint: 	git branch -m <name>
+2026-03-30T02:57:27.0605296Z hint:
+2026-03-30T02:57:27.0605911Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-03-30T02:57:27.0607423Z Initialized empty Git repository in /home/runner/work/lorcana_repo/lorcana_repo/.git/
+2026-03-30T02:57:27.0609175Z [command]/usr/bin/git remote add origin https://github.com/guibruno93/lorcana_repo
+2026-03-30T02:57:27.0636493Z ##[endgroup]
+2026-03-30T02:57:27.0637210Z ##[group]Disabling automatic garbage collection
+2026-03-30T02:57:27.0640978Z [command]/usr/bin/git config --local gc.auto 0
+2026-03-30T02:57:27.0669046Z ##[endgroup]
+2026-03-30T02:57:27.0670196Z ##[group]Setting up auth
+2026-03-30T02:57:27.0675799Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-03-30T02:57:27.0707080Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-03-30T02:57:27.0993027Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-03-30T02:57:27.1022952Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-03-30T02:57:27.1238265Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-03-30T02:57:27.1267990Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-03-30T02:57:27.1498163Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-03-30T02:57:27.1545447Z ##[endgroup]
+2026-03-30T02:57:27.1546166Z ##[group]Fetching the repository
+2026-03-30T02:57:27.1554294Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +40462bb7f59e10071fce260b66e5f3bc54dc80c7:refs/remotes/origin/main
+2026-03-30T02:57:33.6613130Z From https://github.com/guibruno93/lorcana_repo
+2026-03-30T02:57:33.6614243Z  * [new ref]           40462bb7f59e10071fce260b66e5f3bc54dc80c7 -> origin/main
+2026-03-30T02:57:33.6643052Z ##[endgroup]
+2026-03-30T02:57:33.6643518Z ##[group]Determining the checkout info
+2026-03-30T02:57:33.6645551Z ##[endgroup]
+2026-03-30T02:57:33.6651121Z [command]/usr/bin/git sparse-checkout disable
+2026-03-30T02:57:33.6697776Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-03-30T02:57:33.6722685Z ##[group]Checking out the ref
+2026-03-30T02:57:33.6726336Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-03-30T02:57:34.7233905Z Updating files:  24% (10446/42820)
+2026-03-30T02:57:34.7480701Z Updating files:  25% (10705/42820)
+2026-03-30T02:57:34.7651408Z Updating files:  26% (11134/42820)
+2026-03-30T02:57:34.7794161Z Updating files:  27% (11562/42820)
+2026-03-30T02:57:34.7930929Z Updating files:  28% (11990/42820)
+2026-03-30T02:57:34.8062807Z Updating files:  29% (12418/42820)
+2026-03-30T02:57:34.8203551Z Updating files:  30% (12846/42820)
+2026-03-30T02:57:34.8362586Z Updating files:  31% (13275/42820)
+2026-03-30T02:57:34.8535637Z Updating files:  32% (13703/42820)
+2026-03-30T02:57:34.8698272Z Updating files:  33% (14131/42820)
+2026-03-30T02:57:34.8838029Z Updating files:  34% (14559/42820)
+2026-03-30T02:57:34.8974308Z Updating files:  35% (14987/42820)
+2026-03-30T02:57:34.9115088Z Updating files:  36% (15416/42820)
+2026-03-30T02:57:34.9251381Z Updating files:  37% (15844/42820)
+2026-03-30T02:57:34.9386452Z Updating files:  38% (16272/42820)
+2026-03-30T02:57:34.9519118Z Updating files:  39% (16700/42820)
+2026-03-30T02:57:34.9690011Z Updating files:  40% (17128/42820)
+2026-03-30T02:57:34.9858713Z Updating files:  41% (17557/42820)
+2026-03-30T02:57:35.0001219Z Updating files:  42% (17985/42820)
+2026-03-30T02:57:35.0240378Z Updating files:  43% (18413/42820)
+2026-03-30T02:57:35.0520776Z Updating files:  44% (18841/42820)
+2026-03-30T02:57:35.0742921Z Updating files:  45% (19269/42820)
+2026-03-30T02:57:35.0952256Z Updating files:  46% (19698/42820)
+2026-03-30T02:57:35.1178761Z Updating files:  47% (20126/42820)
+2026-03-30T02:57:35.1367361Z Updating files:  48% (20554/42820)
+2026-03-30T02:57:35.1525010Z Updating files:  49% (20982/42820)
+2026-03-30T02:57:35.1683457Z Updating files:  50% (21410/42820)
+2026-03-30T02:57:35.1841045Z Updating files:  51% (21839/42820)
+2026-03-30T02:57:35.1997694Z Updating files:  52% (22267/42820)
+2026-03-30T02:57:35.2173778Z Updating files:  53% (22695/42820)
+2026-03-30T02:57:35.2406366Z Updating files:  54% (23123/42820)
+2026-03-30T02:57:35.2646120Z Updating files:  55% (23551/42820)
+2026-03-30T02:57:35.2833715Z Updating files:  56% (23980/42820)
+2026-03-30T02:57:35.3099085Z Updating files:  57% (24408/42820)
+2026-03-30T02:57:35.3394755Z Updating files:  58% (24836/42820)
+2026-03-30T02:57:35.3625872Z Updating files:  59% (25264/42820)
+2026-03-30T02:57:35.3833584Z Updating files:  60% (25692/42820)
+2026-03-30T02:57:35.4044923Z Updating files:  61% (26121/42820)
+2026-03-30T02:57:35.4478029Z Updating files:  62% (26549/42820)
+2026-03-30T02:57:35.4733100Z Updating files:  63% (26977/42820)
+2026-03-30T02:57:35.5011061Z Updating files:  64% (27405/42820)
+2026-03-30T02:57:35.5288125Z Updating files:  65% (27833/42820)
+2026-03-30T02:57:35.5648016Z Updating files:  66% (28262/42820)
+2026-03-30T02:57:35.5907027Z Updating files:  67% (28690/42820)
+2026-03-30T02:57:35.6138897Z Updating files:  68% (29118/42820)
+2026-03-30T02:57:35.6332614Z Updating files:  69% (29546/42820)
+2026-03-30T02:57:35.6548046Z Updating files:  70% (29974/42820)
+2026-03-30T02:57:35.6767774Z Updating files:  71% (30403/42820)
+2026-03-30T02:57:35.7075604Z Updating files:  72% (30831/42820)
+2026-03-30T02:57:35.7110165Z Updating files:  72% (31237/42820)
+2026-03-30T02:57:35.7451272Z Updating files:  73% (31259/42820)
+2026-03-30T02:57:35.7676679Z Updating files:  74% (31687/42820)
+2026-03-30T02:57:35.7968715Z Updating files:  75% (32115/42820)
+2026-03-30T02:57:35.8437352Z Updating files:  76% (32544/42820)
+2026-03-30T02:57:35.8689086Z Updating files:  77% (32972/42820)
+2026-03-30T02:57:35.8945584Z Updating files:  78% (33400/42820)
+2026-03-30T02:57:35.9223494Z Updating files:  79% (33828/42820)
+2026-03-30T02:57:35.9594108Z Updating files:  80% (34256/42820)
+2026-03-30T02:57:35.9824869Z Updating files:  81% (34685/42820)
+2026-03-30T02:57:36.0040094Z Updating files:  82% (35113/42820)
+2026-03-30T02:57:36.0367633Z Updating files:  83% (35541/42820)
+2026-03-30T02:57:36.0670287Z Updating files:  84% (35969/42820)
+2026-03-30T02:57:36.2422784Z Updating files:  85% (36397/42820)
+2026-03-30T02:57:36.2621983Z Updating files:  86% (36826/42820)
+2026-03-30T02:57:36.2798779Z Updating files:  87% (37254/42820)
+2026-03-30T02:57:36.3105375Z Updating files:  88% (37682/42820)
+2026-03-30T02:57:36.3374376Z Updating files:  89% (38110/42820)
+2026-03-30T02:57:36.3598765Z Updating files:  90% (38538/42820)
+2026-03-30T02:57:36.7161375Z Updating files:  91% (38967/42820)
+2026-03-30T02:57:36.7281818Z Updating files:  91% (39193/42820)
+2026-03-30T02:57:36.7536536Z Updating files:  92% (39395/42820)
+2026-03-30T02:57:36.8873278Z Updating files:  93% (39823/42820)
+2026-03-30T02:57:36.9065567Z Updating files:  94% (40251/42820)
+2026-03-30T02:57:36.9336689Z Updating files:  95% (40679/42820)
+2026-03-30T02:57:36.9520153Z Updating files:  96% (41108/42820)
+2026-03-30T02:57:36.9840135Z Updating files:  97% (41536/42820)
+2026-03-30T02:57:37.0046411Z Updating files:  98% (41964/42820)
+2026-03-30T02:57:37.0405309Z Updating files:  99% (42392/42820)
+2026-03-30T02:57:37.0406042Z Updating files: 100% (42820/42820)
+2026-03-30T02:57:37.0406524Z Updating files: 100% (42820/42820), done.
+2026-03-30T02:57:37.1749911Z Switched to a new branch 'main'
+2026-03-30T02:57:37.1752049Z branch 'main' set up to track 'origin/main'.
+2026-03-30T02:57:37.1840493Z ##[endgroup]
+2026-03-30T02:57:37.1880801Z [command]/usr/bin/git log -1 --format=%H
+2026-03-30T02:57:37.1902422Z 40462bb7f59e10071fce260b66e5f3bc54dc80c7
+2026-03-30T02:57:37.2190808Z ##[group]Run actions/setup-node@v4
+2026-03-30T02:57:37.2191077Z with:
+2026-03-30T02:57:37.2191259Z   node-version: 20
+2026-03-30T02:57:37.2191451Z   cache: npm
+2026-03-30T02:57:37.2191675Z   cache-dependency-path: backend/package-lock.json
+2026-03-30T02:57:37.2191974Z   always-auth: false
+2026-03-30T02:57:37.2192174Z   check-latest: false
+2026-03-30T02:57:37.2192513Z   token: ***
+2026-03-30T02:57:37.2192689Z ##[endgroup]
+2026-03-30T02:57:37.4305215Z Found in cache @ /opt/hostedtoolcache/node/20.20.1/x64
+2026-03-30T02:57:37.4313211Z ##[group]Environment details
+2026-03-30T02:57:40.4551659Z node: v20.20.1
+2026-03-30T02:57:40.4552069Z npm: 10.8.2
+2026-03-30T02:57:40.4552365Z yarn: 1.22.22
+2026-03-30T02:57:40.4553975Z ##[endgroup]
+2026-03-30T02:57:40.4554570Z [command]/opt/hostedtoolcache/node/20.20.1/x64/bin/npm config get cache
+2026-03-30T02:57:40.6289893Z /home/runner/.npm
+2026-03-30T02:57:40.9053397Z npm cache is not found
+2026-03-30T02:57:40.9206387Z ##[group]Run npm ci
+2026-03-30T02:57:40.9206669Z [36;1mnpm ci[0m
+2026-03-30T02:57:40.9206911Z [36;1mnpx puppeteer browsers install chrome[0m
+2026-03-30T02:57:40.9245096Z shell: /usr/bin/bash -e {0}
+2026-03-30T02:57:40.9245345Z env:
+2026-03-30T02:57:40.9245537Z   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 
+2026-03-30T02:57:40.9245800Z ##[endgroup]
+2026-03-30T02:57:43.7003310Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-03-30T02:57:43.9113588Z npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-03-30T02:57:44.4099758Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-03-30T02:57:44.4777835Z npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-03-30T02:57:45.5525229Z npm warn deprecated jpeg-exif@1.1.4: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+2026-03-30T02:57:55.3485442Z 
+2026-03-30T02:57:55.3486287Z > inkwell-labs-backend@4.0.0 postinstall
+2026-03-30T02:57:55.3486770Z > node scripts/puppeteer-browser-install.cjs
+2026-03-30T02:57:55.3486984Z 
+2026-03-30T02:57:55.8725534Z chrome@146.0.7680.153 /home/runner/.cache/puppeteer/chrome/linux-146.0.7680.153/chrome-linux64/chrome
+2026-03-30T02:57:55.9004285Z 
+2026-03-30T02:57:55.9005103Z added 414 packages, and audited 415 packages in 15s
+2026-03-30T02:57:55.9005398Z 
+2026-03-30T02:57:55.9005563Z 91 packages are looking for funding
+2026-03-30T02:57:55.9005974Z   run `npm fund` for details
+2026-03-30T02:57:55.9055268Z 
+2026-03-30T02:57:55.9056233Z 4 vulnerabilities (1 moderate, 3 high)
+2026-03-30T02:57:55.9057567Z 
+2026-03-30T02:57:55.9058535Z To address issues that do not require attention, run:
+2026-03-30T02:57:55.9060058Z   npm audit fix
+2026-03-30T02:57:55.9060446Z 
+2026-03-30T02:57:55.9061110Z To address all issues (including breaking changes), run:
+2026-03-30T02:57:55.9061815Z   npm audit fix --force
+2026-03-30T02:57:55.9062084Z 
+2026-03-30T02:57:55.9062314Z Run `npm audit` for details.
+2026-03-30T02:57:56.4042749Z chrome@146.0.7680.153 /home/runner/.cache/puppeteer/chrome/linux-146.0.7680.153/chrome-linux64/chrome
+2026-03-30T02:57:56.4271180Z ##[group]Run LIMIT="${LIMIT:-50}"
+2026-03-30T02:57:56.4271492Z [36;1mLIMIT="${LIMIT:-50}"[0m
+2026-03-30T02:57:56.4271811Z [36;1mecho "🚀 Starting scraper (limit: $LIMIT decks)..."[0m
+2026-03-30T02:57:56.4272435Z [36;1mnode scripts/local-scraper.js "$LIMIT"[0m
+2026-03-30T02:57:56.4300295Z shell: /usr/bin/bash -e {0}
+2026-03-30T02:57:56.4300518Z env:
+2026-03-30T02:57:56.4300888Z   SUPABASE_URL: ***
+2026-03-30T02:57:56.4302296Z   SUPABASE_SERVICE_KEY: ***
+2026-03-30T02:57:56.4302533Z   PUPPETEER_HEADLESS: true
+2026-03-30T02:57:56.4302746Z   GITHUB_ACTIONS: true
+2026-03-30T02:57:56.4302935Z   LIMIT: 10
+2026-03-30T02:57:56.4303106Z ##[endgroup]
+2026-03-30T02:57:56.4353046Z 🚀 Starting scraper (limit: 10 decks)...
+2026-03-30T02:57:56.6143205Z 🚀 Inkwell Labs Scraper - Starting...
+2026-03-30T02:57:56.6147407Z 📍 Environment: GitHub Actions
+2026-03-30T02:57:56.6151870Z 📊 Target limit: 10 decks
+2026-03-30T02:57:56.6152370Z 
+2026-03-30T02:57:56.6322102Z 🔧 Initializing Puppeteer scraper…
+2026-03-30T02:57:56.6330005Z 🚀 Launching browser…
+2026-03-30T02:57:58.1202397Z ✅ Browser launched successfully
+2026-03-30T02:57:58.1773694Z [info] Abrindo listagem Inkdecks (Puppeteer)…
+2026-03-30T02:57:58.1775267Z [info] Navegação (1/3): https://inkdecks.com/lorcana-decks/core
+2026-03-30T02:57:59.8755712Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:57:59.8757933Z [info] Aguardando possível verificação Cloudflare…
+2026-03-30T02:58:04.9162278Z [success] Encontrados 10 decks na listagem.
+2026-03-30T02:58:04.9164844Z [info] Deck 1/10: Cory BS
+2026-03-30T02:58:04.9166015Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-cory-bs-508281
+2026-03-30T02:58:05.4002065Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:07.4220014Z [info] Tamanho do HTML (deck): 208151 caracteres
+2026-03-30T02:58:13.1528839Z [info] Após scroll inicial: 18 linhas
+2026-03-30T02:58:13.1730221Z [info]   · linhas tr.card-list-item: 18 (estável após scroll)
+2026-03-30T02:58:14.5849483Z [success] Decklist: 18 tipos (linhas), 61 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:14.5851060Z [success] OK: Cory BS (18 linhas, 61 cópias)
+2026-03-30T02:58:14.5851579Z [info] Deck 2/10: StormLibHybrid
+2026-03-30T02:58:16.5866602Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-stormlibhybrid-508280
+2026-03-30T02:58:17.2975909Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:18.8741568Z [info] Tamanho do HTML (deck): 220544 caracteres
+2026-03-30T02:58:24.2909243Z [info] Após scroll inicial: 21 linhas
+2026-03-30T02:58:24.3104830Z [info]   · linhas tr.card-list-item: 21 (estável após scroll)
+2026-03-30T02:58:25.7183217Z [success] Decklist: 21 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:25.7183917Z [success] OK: StormLibHybrid (21 linhas, 60 cópias)
+2026-03-30T02:58:25.7184295Z [info] Deck 3/10: K8 loves purple
+2026-03-30T02:58:27.7195082Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-k8-loves-purple-508279
+2026-03-30T02:58:28.3121927Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:29.8370290Z [info] Tamanho do HTML (deck): 216571 caracteres
+2026-03-30T02:58:35.1440425Z [info] Após scroll inicial: 20 linhas
+2026-03-30T02:58:35.1596428Z [info]   · linhas tr.card-list-item: 20 (estável após scroll)
+2026-03-30T02:58:36.5706563Z [success] Decklist: 20 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:36.5707239Z [success] OK: K8 loves purple (20 linhas, 60 cópias)
+2026-03-30T02:58:36.5707625Z [info] Deck 4/10: Raging Mufasa
+2026-03-30T02:58:38.5716021Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-raging-mufasa-508278
+2026-03-30T02:58:39.1129286Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:40.6221251Z [info] Tamanho do HTML (deck): 218542 caracteres
+2026-03-30T02:58:45.9240283Z [info] Após scroll inicial: 21 linhas
+2026-03-30T02:58:45.9422470Z [info]   · linhas tr.card-list-item: 21 (estável após scroll)
+2026-03-30T02:58:47.4537807Z [success] Decklist: 21 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:47.4538612Z [success] OK: Raging Mufasa (21 linhas, 60 cópias)
+2026-03-30T02:58:47.4538989Z [info] Deck 5/10: Songz
+2026-03-30T02:58:49.4539399Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-songz-508277
+2026-03-30T02:58:50.0143220Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:51.5473377Z [info] Tamanho do HTML (deck): 215461 caracteres
+2026-03-30T02:58:56.6881038Z [info] Após scroll inicial: 20 linhas
+2026-03-30T02:58:56.7038613Z [info]   · linhas tr.card-list-item: 20 (estável após scroll)
+2026-03-30T02:58:58.1189651Z [success] Decklist: 20 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:58.1190609Z [success] OK: Songz (20 linhas, 60 cópias)
+2026-03-30T02:58:58.1191006Z [info] Deck 6/10: Jasmin’s allies
+2026-03-30T02:59:00.1186425Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-jasmin-s-allies-508276
+2026-03-30T02:59:01.0680061Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:02.7340979Z [info] Tamanho do HTML (deck): 211917 caracteres
+2026-03-30T02:59:07.9663502Z [info] Após scroll inicial: 19 linhas
+2026-03-30T02:59:07.9796060Z [info]   · linhas tr.card-list-item: 19 (estável após scroll)
+2026-03-30T02:59:09.3789177Z [success] Decklist: 19 tipos (linhas), 62 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:09.3790055Z [success] OK: Jasmin’s allies (19 linhas, 62 cópias)
+2026-03-30T02:59:09.3790411Z [info] Deck 7/10: Queen Burning
+2026-03-30T02:59:11.3787795Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-queen-burning-508275
+2026-03-30T02:59:11.9743477Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:13.5750875Z [info] Tamanho do HTML (deck): 207038 caracteres
+2026-03-30T02:59:18.4783599Z [info] Após scroll inicial: 17 linhas
+2026-03-30T02:59:18.4904294Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T02:59:19.9527574Z [success] Decklist: 17 tipos (linhas), 61 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:19.9528195Z [success] OK: Queen Burning (17 linhas, 61 cópias)
+2026-03-30T02:59:19.9528509Z [info] Deck 8/10: Blurple
+2026-03-30T02:59:21.9531948Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-blurple-508274
+2026-03-30T02:59:22.5535154Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:24.1110694Z [info] Tamanho do HTML (deck): 211354 caracteres
+2026-03-30T02:59:29.1889187Z [info] Após scroll inicial: 18 linhas
+2026-03-30T02:59:29.2020296Z [info]   · linhas tr.card-list-item: 18 (estável após scroll)
+2026-03-30T02:59:30.7134136Z [success] Decklist: 18 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:30.7135037Z [success] OK: Blurple (18 linhas, 60 cópias)
+2026-03-30T02:59:30.7135635Z [info] Deck 9/10: Josh McDonald AS Aggro
+2026-03-30T02:59:32.7144012Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-josh-mcdonald-as-aggro-508273
+2026-03-30T02:59:33.3215137Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:34.8878077Z [info] Tamanho do HTML (deck): 198287 caracteres
+2026-03-30T02:59:39.8721932Z [info] Após scroll inicial: 16 linhas
+2026-03-30T02:59:39.8833990Z [info]   · linhas tr.card-list-item: 16 (estável após scroll)
+2026-03-30T02:59:41.3053905Z [success] Decklist: 16 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:41.3054607Z [success] OK: Josh McDonald AS Aggro (16 linhas, 60 cópias)
+2026-03-30T02:59:41.3054989Z [info] Deck 10/10: Ryan S's Deck
+2026-03-30T02:59:43.3057096Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-ryan-s-s-deck-508272
+2026-03-30T02:59:43.9161521Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:45.4396367Z [info] Tamanho do HTML (deck): 205026 caracteres
+2026-03-30T02:59:50.4170442Z [info] Após scroll inicial: 17 linhas
+2026-03-30T02:59:50.4303909Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T02:59:51.8280286Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:51.8281487Z [success] OK: Ryan S's Deck (17 linhas, 60 cópias)
+2026-03-30T02:59:53.3538034Z 
+2026-03-30T02:59:53.3539161Z ═══════════════════════════════════════════════════
+2026-03-30T02:59:53.3539940Z 📊 SCRAPING SUMMARY
+2026-03-30T02:59:53.3540396Z ═══════════════════════════════════════════════════
+2026-03-30T02:59:53.3540824Z ✅ Decks scraped: 10
+2026-03-30T02:59:53.3541179Z 💾 Decks saved to Supabase: 10
+2026-03-30T02:59:53.3541554Z 📈 Total decks in database: 10
+2026-03-30T02:59:53.3541898Z ⏱️  Execution time: 116.7s
+2026-03-30T02:59:53.3542345Z ═══════════════════════════════════════════════════
+2026-03-30T02:59:53.3542578Z 
+2026-03-30T02:59:53.3703536Z ##[group]Run echo "📊 Scraping step finished. See logs above."
+2026-03-30T02:59:53.3703988Z [36;1mecho "📊 Scraping step finished. See logs above."[0m
+2026-03-30T02:59:53.3731481Z shell: /usr/bin/bash -e {0}
+2026-03-30T02:59:53.3731711Z ##[endgroup]
+2026-03-30T02:59:53.3778481Z 📊 Scraping step finished. See logs above.
+2026-03-30T02:59:53.3847203Z Post job cleanup.
+2026-03-30T02:59:53.5538072Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/lorcana_repo/lorcana_repo --files-from manifest.txt --use-compress-program zstdmt
+2026-03-30T02:59:55.0308951Z Sent 27983872 of 87789021 (31.9%), 26.7 MBs/sec
+2026-03-30T02:59:56.0317541Z Sent 87789021 of 87789021 (100.0%), 41.8 MBs/sec
+2026-03-30T02:59:56.4477340Z Cache saved with the key: node-cache-Linux-x64-npm-19ad7018a66bdaa00d7ae7214d132fd9d4fdf363f0f49c27e8b10aacf78775a8
+2026-03-30T02:59:56.4616540Z Post job cleanup.
+2026-03-30T02:59:56.5575141Z [command]/usr/bin/git version
+2026-03-30T02:59:56.5611008Z git version 2.53.0
+2026-03-30T02:59:56.5654610Z Temporarily overriding HOME='/home/runner/work/_temp/640c5024-5e93-4377-8ed3-b66b7190d488' before making global git config changes
+2026-03-30T02:59:56.5656120Z Adding repository directory to the temporary git global config as a safe directory
+2026-03-30T02:59:56.5660200Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lorcana_repo/lorcana_repo
+2026-03-30T02:59:56.5694750Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-03-30T02:59:56.5726324Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-03-30T02:59:56.5981897Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-03-30T02:59:56.6003048Z http.https://github.com/.extraheader
+2026-03-30T02:59:56.6015086Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-03-30T02:59:56.6044706Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-03-30T02:59:56.6296110Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-03-30T02:59:56.6328592Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-03-30T02:59:56.6702337Z Cleaning up orphan processes
+2026-03-30T02:59:56.7110095Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4, actions/setup-node@v4. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

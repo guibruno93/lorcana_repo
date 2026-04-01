@@ -172,6 +172,15 @@
   gap: 16px;
 }
 
+.logo-container.logo-size-header {
+  gap: 14px;
+}
+
+.logo-container.logo-size-header .logo-labs {
+  font-size: 0.58em;
+  letter-spacing: 0.22em;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════════ */

@@ -1,0 +1,5 @@
+﻿2026-03-30T02:59:53.3847193Z Post job cleanup.
+2026-03-30T02:59:53.5538027Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/lorcana_repo/lorcana_repo --files-from manifest.txt --use-compress-program zstdmt
+2026-03-30T02:59:55.0308910Z Sent 27983872 of 87789021 (31.9%), 26.7 MBs/sec
+2026-03-30T02:59:56.0317502Z Sent 87789021 of 87789021 (100.0%), 41.8 MBs/sec
+2026-03-30T02:59:56.4477294Z Cache saved with the key: node-cache-Linux-x64-npm-19ad7018a66bdaa00d7ae7214d132fd9d4fdf363f0f49c27e8b10aacf78775a8

@@ -15,6 +15,9 @@ const { sendVerificationEmail, sendPasswordResetEmail } = require('../services/e
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
+/** Beta: cadastros sem email de verificação; login não exige email_verified. */
+const AUTO_APPROVE_USERS = String(process.env.AUTO_APPROVE_USERS || '').toLowerCase() === 'true';
+
 // Supabase Client
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -35,16 +38,36 @@ function generateVerificationToken() {
 /**
  * Buscar usuário por email
  */
+function normalizeEmail(email) {
+  return String(email || '').trim().toLowerCase();
+}
+
 async function findUserByEmail(email) {
+  const q = normalizeEmail(email);
   const { data, error } = await supabase
     .from('users')
     .select('*')
-    .eq('email', email)
+    .eq('email', q)
     .single();
 
   if (error && error.code !== 'PGRST116') {
     // PGRST116 = not found (é esperado)
     console.error('Error finding user:', error);
+    return null;
+  }
+
+  return data;
+}
+
+async function findUserByUsername(username) {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('username', username)
+    .maybeSingle();
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('Error finding username:', error);
     return null;
   }
 
@@ -86,13 +109,14 @@ function authenticateToken(req, res, next) {
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password, country } = req.body;
+    const emailNorm = normalizeEmail(email);
 
     // Validações
     if (!username || username.length < 3) {
       return res.status(400).json({ error: 'Usuário deve ter no mínimo 3 caracteres' });
     }
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!emailNorm || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNorm)) {
       return res.status(400).json({ error: 'Email inválido' });
     }
 
@@ -111,22 +135,83 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Senha deve conter pelo menos um número' });
     }
 
-    // Verificar se email já existe
-    const existingUser = await findUserByEmail(email);
+    const existingUsername = await findUserByUsername(username);
+    if (existingUsername) {
+      return res.status(400).json({ error: 'Nome de usuário já em uso' });
+    }
+
+    const existingUser = await findUserByEmail(emailNorm);
     if (existingUser) {
       return res.status(400).json({ error: 'Email já cadastrado' });
     }
 
-    // Hash da senha
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Criar usuário no Supabase
+    if (AUTO_APPROVE_USERS) {
+      const now = new Date().toISOString();
+      const { data: newUser, error: insertError } = await supabase
+        .from('users')
+        .insert([
+          {
+            username,
+            email: emailNorm,
+            password_hash: passwordHash,
+            country: country || null,
+            email_verified: true,
+            verified_at: now,
+          },
+        ])
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error('Insert error (auto-approve):', insertError);
+        return res.status(500).json({ error: 'Erro ao criar usuário' });
+      }
+
+      await supabase
+        .from('users')
+        .update({
+          last_login_at: now,
+          login_count: (newUser.login_count || 0) + 1,
+        })
+        .eq('id', newUser.id);
+
+      const token = jwt.sign(
+        { id: newUser.id, email: newUser.email },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES_IN }
+      );
+
+      const userPayload = {
+        id: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+        country: newUser.country,
+        emailVerified: true,
+      };
+
+      console.log('✅ User registered (auto-approved):', {
+        userId: newUser.id,
+        username: newUser.username,
+        email: newUser.email,
+      });
+
+      return res.status(201).json({
+        success: true,
+        message: 'Conta criada com sucesso!',
+        autoApproved: true,
+        token,
+        user: userPayload,
+      });
+    }
+
     const { data: newUser, error: insertError } = await supabase
       .from('users')
       .insert([
         {
           username,
-          email,
+          email: emailNorm,
           password_hash: passwordHash,
           country: country || null,
           email_verified: false,
@@ -140,9 +225,8 @@ router.post('/register', async (req, res) => {
       return res.status(500).json({ error: 'Erro ao criar usuário' });
     }
 
-    // Gerar token de verificação
     const verificationToken = generateVerificationToken();
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     const { error: tokenError } = await supabase
       .from('verification_tokens')
@@ -151,14 +235,13 @@ router.post('/register', async (req, res) => {
           user_id: newUser.id,
           token: verificationToken,
           token_type: 'email_verification',
-          email: email,
+          email: emailNorm,
           expires_at: expiresAt.toISOString(),
         },
       ]);
 
     if (tokenError) {
       console.error('Token error:', tokenError);
-      // Não falhar o registro se token não criar
     }
 
     let emailResult = {
@@ -166,11 +249,7 @@ router.post('/register', async (req, res) => {
       hint: 'Serviço de email indisponível.',
     };
     try {
-      emailResult = await sendVerificationEmail(
-        email,
-        username,
-        verificationToken
-      );
+      emailResult = await sendVerificationEmail(emailNorm, username, verificationToken);
     } catch (emailErr) {
       console.error('Register: exceção ao enviar email (versão antiga do serviço?):', emailErr.message);
       emailResult = {
@@ -181,17 +260,29 @@ router.post('/register', async (req, res) => {
       };
     }
 
-    res.json({
+    const payload = {
       success: true,
+      autoApproved: false,
       message: emailResult.sent
         ? 'Usuário criado com sucesso! Verifique seu email.'
-        : 'Conta criada, mas o email de verificação não foi enviado. Configura o envio no servidor (ex.: RESEND_API_KEY no Render) ou usa o link de debug se estiver ativo.',
+        : 'Conta criada, mas o email de verificação não foi enviado.',
       userId: newUser.id,
       emailSent: emailResult.sent,
-      ...(emailResult.hint && { emailHint: emailResult.hint }),
-      ...(emailResult.debugLink && { debugVerificationLink: emailResult.debugLink }),
+      emailMethod: emailResult.method,
+      ...(emailResult.hint != null && emailResult.hint !== '' && { emailHint: emailResult.hint }),
+      ...(emailResult.debugVerificationLink && {
+        debugVerificationLink: emailResult.debugVerificationLink,
+      }),
+    };
+
+    console.log('Registration response:', {
+      userId: newUser.id,
+      emailSent: emailResult.sent,
+      method: emailResult.method,
+      hint: emailResult.hint,
     });
 
+    res.status(200).json(payload);
   } catch (err) {
     console.error('Register error:', err);
     res.status(500).json({ error: 'Erro ao criar usuário' });
@@ -222,8 +313,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Email ou senha incorretos' });
     }
 
-    // Verificar se email foi verificado
-    if (!user.email_verified) {
+    if (!AUTO_APPROVE_USERS && !user.email_verified) {
       return res.status(403).json({
         error: 'Email não verificado. Verifique sua caixa de entrada.',
         emailVerified: false,
@@ -430,15 +520,19 @@ router.post('/resend-verification', async (req, res) => {
       };
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       emailSent: emailResult.sent,
+      emailMethod: emailResult.method,
       message: emailResult.sent
         ? 'Email de verificação reenviado!'
         : 'Não foi possível enviar o email. Verifica RESEND_API_KEY ou SMTP no servidor.',
-      ...(emailResult.hint && { hint: emailResult.hint }),
-      ...(emailResult.code && !emailResult.sent && { code: emailResult.code }),
-      ...(emailResult.debugLink && { debugVerificationLink: emailResult.debugLink }),
+      ...(emailResult.hint != null && emailResult.hint !== '' && { hint: emailResult.hint }),
+      ...(emailResult.hint != null && emailResult.hint !== '' && { emailHint: emailResult.hint }),
+      ...(emailResult.error && !emailResult.sent && { code: emailResult.error }),
+      ...(emailResult.debugVerificationLink && {
+        debugVerificationLink: emailResult.debugVerificationLink,
+      }),
     });
 
   } catch (err) {

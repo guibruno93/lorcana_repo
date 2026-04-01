@@ -1,6 +1,8 @@
 /**
  * Envio de emails: Resend (HTTP, recomendado no Render) ou SMTP (nodemailer).
- * No Render, ligações SMTP para gmail:587 costumam dar ETIMEDOUT — use RESEND_API_KEY.
+ * No Render, SMTP para :587 costuma dar ETIMEDOUT — use RESEND_API_KEY.
+ * Se RESEND_API_KEY estiver definido e a API falhar, NÃO faz fallback para SMTP
+ * (evita mascarar o erro real e timeouts longos).
  */
 
 const nodemailer = require('nodemailer');
@@ -14,21 +16,21 @@ function smtpCredentials() {
   return { user, pass };
 }
 
-function isSmtpConfigured() {
+/** SMTP só entra no fluxo com host explícito + credenciais (evita “metade” Gmail). */
+function isFullSmtpConfigured() {
+  const host = (process.env.SMTP_HOST || '').trim();
   const { user, pass } = smtpCredentials();
-  return Boolean(user && pass);
+  return Boolean(host && user && pass);
 }
 
 function isResendConfigured() {
   return Boolean(process.env.RESEND_API_KEY && String(process.env.RESEND_API_KEY).trim());
 }
 
-/** O Render define RENDER=true — SMTP outbound para :587 costuma dar ETIMEDOUT. */
 function isRenderRuntime() {
   return String(process.env.RENDER || '').toLowerCase() === 'true';
 }
 
-/** No Render, só tentamos SMTP se o operador optar explicitamente (pode continuar a falhar). */
 function smtpAllowedOnRender() {
   return !isRenderRuntime() || String(process.env.SMTP_ALLOW_ON_RENDER || '').toLowerCase() === 'true';
 }
@@ -42,12 +44,13 @@ function smtpTimeoutMs() {
 
 function createTransporter() {
   const { user, pass } = smtpCredentials();
+  const host = (process.env.SMTP_HOST || '').trim();
   const port = parseInt(process.env.SMTP_PORT, 10);
   const usePort = Number.isFinite(port) ? port : 587;
   const secure = usePort === 465;
 
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    host,
     port: usePort,
     secure,
     connectionTimeout: smtpTimeoutMs(),
@@ -63,7 +66,7 @@ function resolveResendFrom() {
     process.env.RESEND_FROM ||
     process.env.EMAIL_FROM ||
     process.env.SMTP_USER ||
-    'onboarding@resend.dev';
+    'Inkwell Labs <onboarding@resend.dev>';
   let s = String(raw).trim();
   if (
     (s.startsWith('"') && s.endsWith('"')) ||
@@ -72,6 +75,19 @@ function resolveResendFrom() {
     s = s.slice(1, -1).trim();
   }
   return s;
+}
+
+/**
+ * Link no email: prefere FRONTEND_URL/APP_URL (/verify-email?token=) para abrir no Vercel;
+ * senão usa o endpoint direto da API (compatível com deploys antigos).
+ */
+function buildVerificationLink(token) {
+  const fe = (process.env.FRONTEND_URL || process.env.APP_URL || '').trim().replace(/\/$/, '');
+  if (fe) {
+    return `${fe}/verify-email?token=${encodeURIComponent(token)}`;
+  }
+  const api = API_URL.trim().replace(/\/$/, '');
+  return `${api}/api/auth/verify-email/${token}`;
 }
 
 async function sendWithResend({ to, subject, html, text }) {
@@ -92,9 +108,11 @@ async function sendWithResend({ to, subject, html, text }) {
     console.error('[email] Resend resposta:', res.status, bodyText);
     const err = new Error(bodyText || `Resend HTTP ${res.status}`);
     err.code = 'RESEND_HTTP_ERROR';
+    err.status = res.status;
+    err.body = bodyText;
     throw err;
   }
-  return { channel: 'resend' };
+  return { method: 'resend' };
 }
 
 function getVerificationEmailTemplate(username, verificationLink) {
@@ -104,7 +122,7 @@ function getVerificationEmailTemplate(username, verificationLink) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verificar Email - Lorcana AI</title>
+  <title>Verificar Email - Inkwell Labs</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6; padding: 40px 20px;">
@@ -113,15 +131,15 @@ function getVerificationEmailTemplate(username, verificationLink) {
         <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
           <tr>
             <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
-              <div style="font-size: 48px; margin-bottom: 16px;">🃏</div>
-              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Lorcana AI</h1>
+              <div style="font-size: 48px; margin-bottom: 16px;">🪶</div>
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Inkwell Labs</h1>
             </td>
           </tr>
           <tr>
             <td style="padding: 40px 40px 20px;">
               <h2 style="color: #1f2937; margin: 0 0 16px 0; font-size: 24px;">Olá, ${username}! 👋</h2>
               <p style="color: #6b7280; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
-                Obrigado por se cadastrar no <strong>Lorcana AI</strong>! Para completar seu cadastro, verifique seu email.
+                Obrigado por se cadastrar no <strong>Inkwell Labs</strong>! Para completar seu cadastro, verifique seu email.
               </p>
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
@@ -151,7 +169,7 @@ function getPasswordResetEmailTemplate(username, resetLink) {
   return `
 <!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><title>Recuperar Senha</title></head>
+<head><meta charset="utf-8"><title>Recuperar Senha - Inkwell Labs</title></head>
 <body style="font-family: Arial, sans-serif; padding: 24px;">
   <h2>Olá, ${username}!</h2>
   <p>Redefina sua senha clicando no link:</p>
@@ -161,150 +179,192 @@ function getPasswordResetEmailTemplate(username, resetLink) {
   `;
 }
 
+function attachDebugLink(base) {
+  if (process.env.AUTH_DEBUG_VERIFICATION_LINK !== 'true') return {};
+  return { debugVerificationLink: base };
+}
+
 /**
- * @returns {Promise<{ sent: boolean, channel?: string, code?: string, hint?: string, debugLink?: string }>}
+ * @returns {Promise<{ sent: boolean, method?: string, hint?: string, error?: string, debugVerificationLink?: string }>}
  */
 async function sendVerificationEmail(email, username, token) {
-  const verificationLink = `${API_URL}/api/auth/verify-email/${token}`;
-  const subject = '✅ Verifique seu email - Lorcana AI';
+  const verificationLink = buildVerificationLink(token);
+  const subject = '✅ Verifique seu email - Inkwell Labs';
   const html = getVerificationEmailTemplate(username, verificationLink);
   const text = `Olá ${username}!\n\nVerifique: ${verificationLink}\n\nLink válido por 24h.`;
-
-  const debugLink =
-    process.env.AUTH_DEBUG_VERIFICATION_LINK === 'true'
-      ? verificationLink
-      : undefined;
 
   if (process.env.AUTH_SKIP_EMAIL === 'true') {
     console.warn('[email] AUTH_SKIP_EMAIL: link de verificação (não enviado):', verificationLink);
     return {
       sent: false,
-      code: 'SKIP_EMAIL',
-      hint: 'AUTH_SKIP_EMAIL=true — email não enviado; use o link nos logs do servidor.',
-      debugLink,
+      method: 'skip',
+      hint:
+        'AUTH_SKIP_EMAIL=true — email não enviado; use o link nos logs do servidor ou ative o envio real.',
+      ...attachDebugLink(verificationLink),
     };
   }
 
+  // 1) Resend primeiro — se configurado e falhar, NÃO faz fallback SMTP
   if (isResendConfigured()) {
     try {
-      const r = await sendWithResend({ to: email, subject, html, text });
+      await sendWithResend({ to: email, subject, html, text });
       console.log('✅ Verification email (Resend):', email);
-      return { sent: true, channel: r.channel };
+      return {
+        sent: true,
+        method: 'resend',
+        hint: 'Email enviado via Resend.',
+      };
     } catch (err) {
-      console.error('❌ Resend verification:', err.message);
+      const detail = err.body || err.message || String(err);
+      console.error('❌ Resend verification:', detail);
+      return {
+        sent: false,
+        method: 'resend',
+        hint: `Erro na API Resend: ${detail}`,
+        error: detail,
+        ...attachDebugLink(verificationLink),
+      };
     }
   }
 
-  if (!isSmtpConfigured()) {
-    console.warn(
-      '[email] SMTP não configurado (SMTP_USER/SMTP_PASS ou EMAIL_USER/EMAIL_PASS). Link:',
-      verificationLink
-    );
+  // 2) SMTP (host + user + pass obrigatórios)
+  if (isFullSmtpConfigured()) {
+    if (!smtpAllowedOnRender()) {
+      console.warn(
+        '[email] Render: SMTP não será tentado (evita ETIMEDOUT). Usa RESEND_API_KEY ou SMTP_ALLOW_ON_RENDER=true. Link:',
+        verificationLink
+      );
+      return {
+        sent: false,
+        method: 'smtp',
+        hint:
+          'No Render, SMTP na porta 587 costuma ser bloqueado ou dar timeout. Configure RESEND_API_KEY nas variáveis de ambiente.',
+        error: 'RENDER_SMTP_SKIPPED',
+        ...attachDebugLink(verificationLink),
+      };
+    }
+
+    const mailOptions = {
+      from: `"Inkwell Labs" <${smtpCredentials().user}>`,
+      to: email,
+      subject,
+      html,
+      text,
+    };
+
+    try {
+      const transporter = createTransporter();
+      const info = await transporter.sendMail(mailOptions);
+      console.log('✅ Verification email (SMTP):', info.messageId);
+      return {
+        sent: true,
+        method: 'smtp',
+        hint: 'Email enviado via SMTP.',
+      };
+    } catch (err) {
+      console.error('❌ SMTP verification:', err.message, err.code || '');
+      const hint =
+        err.code === 'ETIMEDOUT' || String(err.message).includes('timeout')
+          ? 'Timeout ao ligar ao SMTP. Em hospedagens como o Render use Resend (RESEND_API_KEY) em vez da porta 587.'
+          : 'Falha ao enviar por SMTP. Verifique SMTP_HOST, SMTP_PORT e credenciais.';
+      return {
+        sent: false,
+        method: 'smtp',
+        hint,
+        error: err.message || err.code || 'SMTP_ERROR',
+        ...attachDebugLink(verificationLink),
+      };
+    }
+  }
+
+  // 3) Modo debug — sem transporte configurado
+  if (process.env.AUTH_DEBUG_VERIFICATION_LINK === 'true') {
+    console.log('🔗 DEBUG verification link:', verificationLink);
     return {
       sent: false,
-      code: 'NO_MAIL_TRANSPORT',
-      hint:
-        'Configure RESEND_API_KEY (recomendado no Render) ou SMTP_USER + SMTP_PASS. SMTP direto no Render costuma dar timeout.',
-      debugLink,
+      method: 'debug',
+      hint: 'Nenhum serviço de email configurado — use o link abaixo ou configure RESEND_API_KEY.',
+      debugVerificationLink: verificationLink,
     };
   }
 
-  if (!smtpAllowedOnRender()) {
-    console.warn(
-      '[email] Render: SMTP não será tentado (evita ETIMEDOUT). Usa RESEND_API_KEY ou SMTP_ALLOW_ON_RENDER=true. Link:',
-      verificationLink
-    );
-    return {
-      sent: false,
-      code: 'RENDER_SMTP_SKIPPED',
-      hint:
-        'No Render, adiciona RESEND_API_KEY nas Environment Variables. SMTP na porta 587 costuma ser bloqueado/timeout.',
-      debugLink,
-    };
-  }
-
-  const mailOptions = {
-    from: `"Lorcana AI" <${smtpCredentials().user}>`,
-    to: email,
-    subject,
-    html,
-    text,
+  console.error('[email] Nenhum serviço de email configurado. Link:', verificationLink);
+  return {
+    sent: false,
+    method: 'none',
+    hint: 'Nenhum serviço de email configurado. Defina RESEND_API_KEY ou SMTP_HOST + SMTP_USER + SMTP_PASS.',
+    error: 'EMAIL_SERVICE_NOT_CONFIGURED',
+    ...attachDebugLink(verificationLink),
   };
-
-  try {
-    const transporter = createTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log('✅ Verification email (SMTP):', info.messageId);
-    return { sent: true, channel: 'smtp' };
-  } catch (err) {
-    console.error('❌ SMTP verification:', err.message, err.code || '');
-    const hint =
-      err.code === 'ETIMEDOUT' || String(err.message).includes('timeout')
-        ? 'Timeout ao ligar ao SMTP. Em hospedagens como o Render use Resend (RESEND_API_KEY) em vez de porta 587.'
-        : 'Falha ao enviar por SMTP. Verifique SMTP_HOST/PORT e credenciais.';
-
-    return {
-      sent: false,
-      code: err.code || 'SMTP_ERROR',
-      hint,
-      debugLink,
-    };
-  }
 }
 
 /**
- * @returns {Promise<{ sent: boolean, channel?: string, code?: string, hint?: string }>}
+ * @returns {Promise<{ sent: boolean, method?: string, hint?: string, error?: string }>}
  */
 async function sendPasswordResetEmail(email, username, token) {
   const resetLink = `${APP_URL}/reset-password?token=${token}`;
-  const subject = '🔐 Recuperar senha - Lorcana AI';
+  const subject = '🔐 Recuperar senha - Inkwell Labs';
   const html = getPasswordResetEmailTemplate(username, resetLink);
   const text = `Recuperação de senha: ${resetLink}`;
 
   if (process.env.AUTH_SKIP_EMAIL === 'true') {
     console.warn('[email] AUTH_SKIP_EMAIL reset link:', resetLink);
-    return { sent: false, code: 'SKIP_EMAIL', hint: 'Email desativado (AUTH_SKIP_EMAIL).' };
+    return { sent: false, method: 'skip', hint: 'Email desativado (AUTH_SKIP_EMAIL).' };
   }
 
   if (isResendConfigured()) {
     try {
       await sendWithResend({ to: email, subject, html, text });
-      return { sent: true, channel: 'resend' };
+      return { sent: true, method: 'resend', hint: 'Email enviado via Resend.' };
     } catch (err) {
-      console.error('❌ Resend reset:', err.message);
+      const detail = err.body || err.message || String(err);
+      console.error('❌ Resend reset:', detail);
+      return {
+        sent: false,
+        method: 'resend',
+        hint: `Erro na API Resend: ${detail}`,
+        error: detail,
+      };
     }
   }
 
-  if (!isSmtpConfigured()) {
+  if (!isFullSmtpConfigured()) {
     console.warn('[email] reset: sem transporte, link:', resetLink);
-    return { sent: false, code: 'NO_MAIL_TRANSPORT', hint: 'Configure Resend ou SMTP.' };
+    return {
+      sent: false,
+      method: 'none',
+      hint: 'Configure RESEND_API_KEY ou SMTP_HOST + credenciais.',
+      error: 'NO_MAIL_TRANSPORT',
+    };
   }
 
   if (!smtpAllowedOnRender()) {
     console.warn('[email] Render: reset por SMTP ignorado. Link:', resetLink);
     return {
       sent: false,
-      code: 'RENDER_SMTP_SKIPPED',
-      hint: 'Define RESEND_API_KEY no Render para enviar emails.',
+      method: 'smtp',
+      hint: 'No Render, adicione RESEND_API_KEY para enviar emails.',
+      error: 'RENDER_SMTP_SKIPPED',
     };
   }
 
   try {
     const transporter = createTransporter();
     await transporter.sendMail({
-      from: `"Lorcana AI" <${smtpCredentials().user}>`,
+      from: `"Inkwell Labs" <${smtpCredentials().user}>`,
       to: email,
       subject,
       html,
       text,
     });
-    return { sent: true, channel: 'smtp' };
+    return { sent: true, method: 'smtp', hint: 'Email enviado via SMTP.' };
   } catch (err) {
     console.error('❌ SMTP reset:', err.message);
     return {
       sent: false,
-      code: err.code || 'SMTP_ERROR',
+      method: 'smtp',
       hint: 'Falha SMTP; em produção use RESEND_API_KEY.',
+      error: err.message || err.code || 'SMTP_ERROR',
     };
   }
 }
@@ -314,8 +374,8 @@ async function verifyEmailConfig() {
     console.log('✅ Email: Resend API key presente');
     return true;
   }
-  if (!isSmtpConfigured()) {
-    console.warn('⚠️ Email: nem Resend nem SMTP configurados');
+  if (!isFullSmtpConfigured()) {
+    console.warn('⚠️ Email: nem Resend nem SMTP completos (SMTP requer SMTP_HOST + credenciais)');
     return false;
   }
   if (!smtpAllowedOnRender()) {
@@ -333,7 +393,6 @@ async function verifyEmailConfig() {
   }
 }
 
-/** Uma linha no boot para perceberes o que o deploy está a usar. */
 function logEmailBootstrap() {
   if (isResendConfigured()) {
     const from = resolveResendFrom();
@@ -345,9 +404,9 @@ function logEmailBootstrap() {
     }
     return;
   }
-  if (!isSmtpConfigured()) {
+  if (!isFullSmtpConfigured()) {
     console.warn(
-      '📧 Email: sem RESEND_API_KEY nem SMTP — emails de verificação não serão enviados até configurares.'
+      '📧 Email: sem RESEND_API_KEY nem SMTP completo — emails de verificação não serão enviados até configurares.'
     );
     return;
   }
@@ -359,7 +418,7 @@ function logEmailBootstrap() {
   }
   console.log(
     '📧 Email: SMTP',
-    process.env.SMTP_HOST || 'smtp.gmail.com',
+    process.env.SMTP_HOST,
     '— em Render pode falhar com ETIMEDOUT; prefere Resend.'
   );
 }
@@ -369,6 +428,7 @@ module.exports = {
   sendPasswordResetEmail,
   verifyEmailConfig,
   logEmailBootstrap,
-  isSmtpConfigured,
+  isSmtpConfigured: isFullSmtpConfigured,
   isResendConfigured,
+  buildVerificationLink,
 };

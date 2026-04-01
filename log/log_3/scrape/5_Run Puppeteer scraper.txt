@@ -1,0 +1,215 @@
+﻿2026-03-30T15:13:25.7285184Z ##[group]Run LIMIT="${LIMIT:-50}"
+2026-03-30T15:13:25.7285517Z [36;1mLIMIT="${LIMIT:-50}"[0m
+2026-03-30T15:13:25.7285848Z [36;1mecho "🚀 Starting scraper (limit: $LIMIT decks)..."[0m
+2026-03-30T15:13:25.7286243Z [36;1mnode scripts/local-scraper.js "$LIMIT"[0m
+2026-03-30T15:13:25.7313199Z shell: /usr/bin/bash -e {0}
+2026-03-30T15:13:25.7313447Z env:
+2026-03-30T15:13:25.7313846Z   SUPABASE_URL: ***
+2026-03-30T15:13:25.7315365Z   SUPABASE_SERVICE_KEY: ***
+2026-03-30T15:13:25.7315623Z   PUPPETEER_HEADLESS: true
+2026-03-30T15:13:25.7315855Z   GITHUB_ACTIONS: true
+2026-03-30T15:13:25.7316059Z   LIMIT: 100
+2026-03-30T15:13:25.7316238Z ##[endgroup]
+2026-03-30T15:13:25.7366838Z 🚀 Starting scraper (limit: 100 decks)...
+2026-03-30T15:13:25.9237888Z 🚀 Inkwell Labs Scraper - Starting...
+2026-03-30T15:13:25.9242794Z 📍 Environment: GitHub Actions
+2026-03-30T15:13:25.9246956Z 📊 Target limit: 100 decks
+2026-03-30T15:13:25.9247270Z 
+2026-03-30T15:13:25.9418233Z 🔧 Initializing Puppeteer scraper…
+2026-03-30T15:13:25.9427685Z 🚀 Launching browser with: /home/runner/.cache/puppeteer/chrome/linux-146.0.7680.153/chrome-linux64/chrome
+2026-03-30T15:13:27.3869355Z ✅ Browser launched successfully
+2026-03-30T15:13:27.4412640Z [info] Abrindo listagem Inkdecks (Puppeteer)…
+2026-03-30T15:13:27.4414076Z [info] Navegação (1/3): https://inkdecks.com/lorcana-decks/core
+2026-03-30T15:13:28.8391656Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:13:28.8392535Z [info] Aguardando possível verificação Cloudflare…
+2026-03-30T15:13:33.8825103Z [success] Encontrados 20 decks na listagem.
+2026-03-30T15:13:33.8827232Z [info] Deck 1/20: Amethyst Emerald Burn
+2026-03-30T15:13:33.8828852Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-amethyst-emerald-burn-508356
+2026-03-30T15:13:34.4056717Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:13:36.3006757Z [info] Tamanho do HTML (deck): 209192 caracteres
+2026-03-30T15:13:42.0740939Z [info] Após scroll inicial: 19 linhas
+2026-03-30T15:13:42.0907092Z [info]   · linhas tr.card-list-item: 19 (estável após scroll)
+2026-03-30T15:13:43.5040232Z [success] Decklist: 19 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:13:43.5067192Z [info] 📊 Performance Data: Standing: Top16 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:13:43.5072008Z [success] OK: Amethyst Emerald Burn (19 linhas, 60 cópias)
+2026-03-30T15:13:43.5073458Z [info] Deck 2/20: Poca Agro
+2026-03-30T15:13:45.5070452Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-poca-agro-508355
+2026-03-30T15:13:46.0490434Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:13:47.9644916Z [info] Tamanho do HTML (deck): 266497 caracteres
+2026-03-30T15:13:55.6645783Z [info] Após scroll inicial: 15 linhas
+2026-03-30T15:13:55.6822819Z [info]   · linhas tr.card-list-item: 15 (estável após scroll)
+2026-03-30T15:13:57.1370991Z [success] Decklist: 15 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:13:57.1387776Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:13:57.1389009Z [success] OK: Poca Agro (15 linhas, 60 cópias)
+2026-03-30T15:13:57.1389395Z [info] Deck 3/20: Terror Quack
+2026-03-30T15:13:59.1395968Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-terror-quack-508354
+2026-03-30T15:14:00.0848225Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:14:01.7560998Z [info] Tamanho do HTML (deck): 216125 caracteres
+2026-03-30T15:14:07.1464286Z [info] Após scroll inicial: 20 linhas
+2026-03-30T15:14:07.1634095Z [info]   · linhas tr.card-list-item: 20 (estável após scroll)
+2026-03-30T15:14:08.5648170Z [success] Decklist: 20 tipos (linhas), 64 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:14:08.5661525Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:14:08.5663672Z [success] OK: Terror Quack (20 linhas, 64 cópias)
+2026-03-30T15:14:08.5664054Z [info] Deck 4/20: Copy Pasta
+2026-03-30T15:14:10.5657766Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-copy-pasta-508353
+2026-03-30T15:14:11.1172710Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:14:12.7101833Z [info] Tamanho do HTML (deck): 213757 caracteres
+2026-03-30T15:14:18.3445579Z [info] Após scroll inicial: 19 linhas
+2026-03-30T15:14:18.3580294Z [info]   · linhas tr.card-list-item: 19 (estável após scroll)
+2026-03-30T15:14:19.7895150Z [success] Decklist: 19 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:14:19.7907482Z [info] 📊 Performance Data: Standing: Top32 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:14:19.7908730Z [success] OK: Copy Pasta (19 linhas, 60 cópias)
+2026-03-30T15:14:19.7909405Z [info] Deck 5/20: Amethyst Ruby
+2026-03-30T15:14:21.7908748Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-amethyst-ruby-508352
+2026-03-30T15:14:22.3743621Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:14:23.8986429Z [info] Tamanho do HTML (deck): 206203 caracteres
+2026-03-30T15:14:28.7972372Z [info] Após scroll inicial: 17 linhas
+2026-03-30T15:14:28.8117720Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T15:14:30.2858647Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:14:30.2876355Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:14:30.2877192Z [success] OK: Amethyst Ruby (17 linhas, 60 cópias)
+2026-03-30T15:14:30.2877566Z [info] Deck 6/20: Amethyst Ruby
+2026-03-30T15:14:32.2880292Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-amethyst-ruby-508351
+2026-03-30T15:14:32.8233546Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:14:34.3310179Z [info] Tamanho do HTML (deck): 205946 caracteres
+2026-03-30T15:14:39.3892813Z [info] Após scroll inicial: 17 linhas
+2026-03-30T15:14:39.4036523Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T15:14:40.8639686Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:14:40.8653694Z [info] 📊 Performance Data: Standing: Top32 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:14:40.8655924Z [success] OK: Amethyst Ruby (17 linhas, 60 cópias)
+2026-03-30T15:14:40.8656332Z [info] Deck 7/20: Amethyst Ruby
+2026-03-30T15:14:42.8659521Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-amethyst-ruby-508350
+2026-03-30T15:14:43.3813290Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:14:44.8898685Z [info] Tamanho do HTML (deck): 222540 caracteres
+2026-03-30T15:14:50.4687769Z [info] Após scroll inicial: 22 linhas
+2026-03-30T15:14:50.5077853Z [info]   · linhas tr.card-list-item: 22 (estável após scroll)
+2026-03-30T15:14:51.9176770Z [success] Decklist: 22 tipos (linhas), 64 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:14:51.9188495Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:14:51.9189333Z [success] OK: Amethyst Ruby (22 linhas, 64 cópias)
+2026-03-30T15:14:51.9189675Z [info] Deck 8/20: Detectives
+2026-03-30T15:14:53.9192522Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-detectives-508349
+2026-03-30T15:14:54.4605843Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:14:56.0333349Z [info] Tamanho do HTML (deck): 204753 caracteres
+2026-03-30T15:15:01.5728120Z [info] Após scroll inicial: 16 linhas
+2026-03-30T15:15:01.6169760Z [info]   · linhas tr.card-list-item: 16 (estável após scroll)
+2026-03-30T15:15:03.0490552Z [success] Decklist: 16 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:15:03.0502707Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:15:03.0503556Z [success] OK: Detectives (16 linhas, 60 cópias)
+2026-03-30T15:15:03.0503928Z [info] Deck 9/20: Sapphire Steel Midrange
+2026-03-30T15:15:05.0514818Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-sapphire-steel-midrange-508348
+2026-03-30T15:15:05.6377363Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:15:07.1752571Z [info] Tamanho do HTML (deck): 206525 caracteres
+2026-03-30T15:15:12.0716088Z [info] Após scroll inicial: 17 linhas
+2026-03-30T15:15:12.0835725Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T15:15:13.4797205Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:15:13.4808737Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:15:13.4810046Z [success] OK: Sapphire Steel Midrange (17 linhas, 60 cópias)
+2026-03-30T15:15:13.4810709Z [info] Deck 10/20: Sapphire Steel
+2026-03-30T15:15:15.4811917Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-sapphire-steel-508347
+2026-03-30T15:15:16.0140121Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:15:17.6417976Z [info] Tamanho do HTML (deck): 213071 caracteres
+2026-03-30T15:15:22.9591543Z [info] Após scroll inicial: 19 linhas
+2026-03-30T15:15:22.9734633Z [info]   · linhas tr.card-list-item: 19 (estável após scroll)
+2026-03-30T15:15:24.3801342Z [success] Decklist: 19 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:15:24.3814535Z [info] 📊 Performance Data: Standing: Top32 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:15:24.3815971Z [success] OK: Sapphire Steel (19 linhas, 60 cópias)
+2026-03-30T15:15:24.3816450Z [info] Deck 11/20: Sapphire Steel
+2026-03-30T15:15:26.3825853Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-sapphire-steel-508346
+2026-03-30T15:15:26.9045516Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:15:28.7305954Z [info] Tamanho do HTML (deck): 213208 caracteres
+2026-03-30T15:15:34.1437494Z [info] Após scroll inicial: 19 linhas
+2026-03-30T15:15:34.1616946Z [info]   · linhas tr.card-list-item: 19 (estável após scroll)
+2026-03-30T15:15:35.5680074Z [success] Decklist: 19 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:15:35.5692351Z [info] 📊 Performance Data: Standing: Top32 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:15:35.5693234Z [success] OK: Sapphire Steel (19 linhas, 60 cópias)
+2026-03-30T15:15:35.5693575Z [info] Deck 12/20: Geyser
+2026-03-30T15:15:37.5715618Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-geyser-508345
+2026-03-30T15:15:38.1903905Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:15:39.6987739Z [info] Tamanho do HTML (deck): 203268 caracteres
+2026-03-30T15:15:45.0877609Z [info] Após scroll inicial: 16 linhas
+2026-03-30T15:15:45.1900071Z [info]   · linhas tr.card-list-item: 16 (estável após scroll)
+2026-03-30T15:15:46.5942674Z [success] Decklist: 16 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:15:46.5955536Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:15:46.5956847Z [success] OK: Geyser (16 linhas, 60 cópias)
+2026-03-30T15:15:46.5957309Z [info] Deck 13/20: Emerald Sapphire
+2026-03-30T15:15:48.5967005Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-emerald-sapphire-508344
+2026-03-30T15:15:49.2136819Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:15:50.7960047Z [info] Tamanho do HTML (deck): 201745 caracteres
+2026-03-30T15:15:55.7089446Z [info] Após scroll inicial: 16 linhas
+2026-03-30T15:15:55.7210489Z [info]   · linhas tr.card-list-item: 16 (estável após scroll)
+2026-03-30T15:15:57.1144745Z [success] Decklist: 16 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:15:57.1159309Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:15:57.1160199Z [success] OK: Emerald Sapphire (16 linhas, 60 cópias)
+2026-03-30T15:15:57.1160577Z [info] Deck 14/20: Emerald Sapphire
+2026-03-30T15:15:59.1162471Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-emerald-sapphire-508343
+2026-03-30T15:15:59.6528825Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:16:01.2710867Z [info] Tamanho do HTML (deck): 205801 caracteres
+2026-03-30T15:16:06.1862665Z [info] Após scroll inicial: 17 linhas
+2026-03-30T15:16:06.2036174Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T15:16:07.6008833Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:16:07.6021429Z [info] 📊 Performance Data: Standing: 1st | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:16:07.6022309Z [success] OK: Emerald Sapphire (17 linhas, 60 cópias)
+2026-03-30T15:16:07.6022684Z [info] Deck 15/20: GoodBye Lorcana
+2026-03-30T15:16:09.6036991Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-goodbye-lorcana-508342
+2026-03-30T15:16:10.1064766Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:16:11.6902052Z [info] Tamanho do HTML (deck): 207134 caracteres
+2026-03-30T15:16:16.5866584Z [info] Após scroll inicial: 17 linhas
+2026-03-30T15:16:16.5991547Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T15:16:17.9934047Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:16:17.9946187Z [info] 📊 Performance Data: Standing: 3rd | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:16:17.9947712Z [success] OK: GoodBye Lorcana (17 linhas, 60 cópias)
+2026-03-30T15:16:17.9948373Z [info] Deck 16/20: Rat that swims
+2026-03-30T15:16:19.9951891Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-rat-that-swims-508341
+2026-03-30T15:16:20.4654472Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:16:22.0514838Z [info] Tamanho do HTML (deck): 206033 caracteres
+2026-03-30T15:16:27.0354275Z [info] Após scroll inicial: 17 linhas
+2026-03-30T15:16:27.0479007Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T15:16:28.4434563Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:16:28.4448649Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:16:28.4449500Z [success] OK: Rat that swims (17 linhas, 60 cópias)
+2026-03-30T15:16:28.4449906Z [info] Deck 17/20: Emerald Sapphire
+2026-03-30T15:16:30.4450201Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-emerald-sapphire-508340
+2026-03-30T15:16:30.9754247Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:16:32.4849589Z [info] Tamanho do HTML (deck): 202860 caracteres
+2026-03-30T15:16:37.3822177Z [info] Após scroll inicial: 16 linhas
+2026-03-30T15:16:37.3950846Z [info]   · linhas tr.card-list-item: 16 (estável após scroll)
+2026-03-30T15:16:38.7899882Z [success] Decklist: 16 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:16:38.7912352Z [info] 📊 Performance Data: Standing: Top32 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:16:38.7913217Z [success] OK: Emerald Sapphire (16 linhas, 60 cópias)
+2026-03-30T15:16:38.7913625Z [info] Deck 18/20: Emerald Sapphire
+2026-03-30T15:16:40.7936407Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-emerald-sapphire-508339
+2026-03-30T15:16:41.3009995Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:16:43.2586320Z [info] Tamanho do HTML (deck): 271094 caracteres
+2026-03-30T15:16:48.6167515Z [info] Após scroll inicial: 17 linhas
+2026-03-30T15:16:48.6668481Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T15:16:50.0655774Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:16:50.0669174Z [info] 📊 Performance Data: Standing: Top32 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:16:50.0670527Z [success] OK: Emerald Sapphire (17 linhas, 60 cópias)
+2026-03-30T15:16:50.0671519Z [info] Deck 19/20: Emerald Sapphire
+2026-03-30T15:16:52.0670009Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-emerald-sapphire-508338
+2026-03-30T15:16:52.6706475Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:16:54.2166721Z [info] Tamanho do HTML (deck): 203335 caracteres
+2026-03-30T15:16:59.4952474Z [info] Após scroll inicial: 16 linhas
+2026-03-30T15:16:59.5087088Z [info]   · linhas tr.card-list-item: 16 (estável após scroll)
+2026-03-30T15:17:00.9045209Z [success] Decklist: 16 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:17:00.9057011Z [info] 📊 Performance Data: Standing: Top64 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:17:00.9057902Z [success] OK: Emerald Sapphire (16 linhas, 60 cópias)
+2026-03-30T15:17:00.9058281Z [info] Deck 20/20: Amber Sapphire
+2026-03-30T15:17:02.9064906Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-amber-sapphire-508337
+2026-03-30T15:17:03.8193371Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T15:17:05.3393182Z [info] Tamanho do HTML (deck): 212744 caracteres
+2026-03-30T15:17:10.6362664Z [info] Após scroll inicial: 19 linhas
+2026-03-30T15:17:10.6500603Z [info]   · linhas tr.card-list-item: 19 (estável após scroll)
+2026-03-30T15:17:12.0489475Z [success] Decklist: 19 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T15:17:12.0502999Z [info] 📊 Performance Data: Standing: Top8 | Event: Down the Inkwell Win-a-Case 1.5K Tournament                                        @ShibeTCG
+2026-03-30T15:17:12.0503887Z [success] OK: Amber Sapphire (19 linhas, 60 cópias)
+2026-03-30T15:17:13.3808152Z 
+2026-03-30T15:17:13.3809499Z ═══════════════════════════════════════════════════
+2026-03-30T15:17:13.3810266Z 📊 SCRAPING SUMMARY
+2026-03-30T15:17:13.3811383Z ═══════════════════════════════════════════════════
+2026-03-30T15:17:13.3812203Z ✅ Decks scraped: 20
+2026-03-30T15:17:13.3812797Z 💾 Decks saved to Supabase: 20
+2026-03-30T15:17:13.3813443Z 📈 Total decks in database: 40
+2026-03-30T15:17:13.3814030Z ⏱️  Execution time: 227.5s
+2026-03-30T15:17:13.3814806Z ═══════════════════════════════════════════════════
+2026-03-30T15:17:13.3815259Z 

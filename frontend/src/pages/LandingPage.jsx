@@ -121,13 +121,12 @@ function LandingPage() {
   const navigate = useNavigate();
 
   const goRegister = () => navigate('/register?next=/deck');
-  const goLoginDemo = () => navigate('/login?next=/meta');
 
   return (
     <div className="landing-page">
       <header className="landing-nav">
         <Link to="/" className="landing-nav-brand" aria-label="Inkwell Labs — início">
-          <Logo size="small" />
+          <Logo size="header" />
         </Link>
         <div className="landing-nav-actions">
           <Link to="/login" className="landing-link">
@@ -143,22 +142,16 @@ function LandingPage() {
         <div className="landing-hero-bg" aria-hidden />
         <div className="landing-container landing-hero-grid">
           <div className="landing-hero-content">
-            <div className="landing-hero-logo-wrap">
-              <Logo size="large" animated />
-            </div>
             <h1 id="landing-hero-title">
-               Faça parte do competitivo de <span className="landing-gradient">Lorcana</span>
+              Faça parte do competitivo de <span className="landing-gradient">Lorcana</span>
             </h1>
             <p className="landing-tagline">
               Análise de meta em tempo real, ferramenta inteligente feita por jogadores para
-              jogadores competitivos de Disney Lorcana TCG.
+              jogadores de Disney Lorcana TCG.
             </p>
             <div className="landing-cta-row">
               <button type="button" className="landing-btn-primary" onClick={goRegister}>
-                Começar grátis
-              </button>
-              <button type="button" className="landing-btn-secondary" onClick={goLoginDemo}>
-                Ver demo
+                Fazer cadastro
               </button>
             </div>
             <div className="landing-stats" role="list">
@@ -216,7 +209,7 @@ function LandingPage() {
       <section className="landing-section landing-shots" aria-labelledby="shots-title">
         <div className="landing-container">
           <h2 id="shots-title" className="landing-section-title">
-            Vê a ferramenta em ação
+            Veja algumas features que existem na ferramenta:
           </h2>
           <p className="landing-section-lead">
             Alterar para prints reais{' '}

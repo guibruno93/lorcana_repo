@@ -1,0 +1,23 @@
+﻿2026-03-30T03:28:26.0836602Z ##[group]Run actions/setup-node@v4
+2026-03-30T03:28:26.0836909Z with:
+2026-03-30T03:28:26.0837113Z   node-version: 20
+2026-03-30T03:28:26.0837324Z   cache: npm
+2026-03-30T03:28:26.0837572Z   cache-dependency-path: backend/package-lock.json
+2026-03-30T03:28:26.0837903Z   always-auth: false
+2026-03-30T03:28:26.0838128Z   check-latest: false
+2026-03-30T03:28:26.0838580Z   token: ***
+2026-03-30T03:28:26.0838783Z ##[endgroup]
+2026-03-30T03:28:26.6827525Z Found in cache @ /opt/hostedtoolcache/node/20.20.1/x64
+2026-03-30T03:28:26.6837383Z ##[group]Environment details
+2026-03-30T03:28:29.3951724Z node: v20.20.1
+2026-03-30T03:28:29.3952155Z npm: 10.8.2
+2026-03-30T03:28:29.3952667Z yarn: 1.22.22
+2026-03-30T03:28:29.3954100Z ##[endgroup]
+2026-03-30T03:28:29.3977803Z [command]/opt/hostedtoolcache/node/20.20.1/x64/bin/npm config get cache
+2026-03-30T03:28:29.6451586Z /home/runner/.npm
+2026-03-30T03:28:29.7883975Z Cache hit for: node-cache-Linux-x64-npm-19ad7018a66bdaa00d7ae7214d132fd9d4fdf363f0f49c27e8b10aacf78775a8
+2026-03-30T03:28:30.7341803Z Received 87789021 of 87789021 (100.0%), 101.5 MBs/sec
+2026-03-30T03:28:30.7343749Z Cache Size: ~84 MB (87789021 B)
+2026-03-30T03:28:30.7382914Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d99f3fe7-c181-4635-b3b2-ac93e0b8aa7a/cache.tzst -P -C /home/runner/work/lorcana_repo/lorcana_repo --use-compress-program unzstd
+2026-03-30T03:28:30.9472469Z Cache restored successfully
+2026-03-30T03:28:30.9521110Z Cache restored from key: node-cache-Linux-x64-npm-19ad7018a66bdaa00d7ae7214d132fd9d4fdf363f0f49c27e8b10aacf78775a8

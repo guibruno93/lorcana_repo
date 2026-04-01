@@ -12,7 +12,7 @@
   padding: 0 1.5rem;
 }
 
-/* —— Nav —— */
+/* —— Nav (barra alta — logo legível, área estendida) —— */
 .landing-nav {
   position: sticky;
   top: 0;
@@ -20,10 +20,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 1.5rem;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  min-height: 5.5rem;
+  padding: 1.25rem 1.75rem 1.75rem;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  box-sizing: border-box;
 }
 
 .landing-nav-brand {
@@ -87,17 +89,13 @@
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
-  padding: 4rem 1.5rem 5rem;
+  padding: 2.75rem 1.5rem 5rem;
   max-width: 1280px;
   margin: 0 auto;
 }
 
 .landing-hero-content {
   text-align: left;
-}
-
-.landing-hero-logo-wrap {
-  margin-bottom: 1.25rem;
 }
 
 .landing-hero-content h1 {
@@ -519,6 +517,11 @@ a.landing-btn-anchor {
 }
 
 @media (max-width: 600px) {
+  .landing-nav {
+    min-height: 4.75rem;
+    padding: 1rem 1.1rem 1.25rem;
+  }
+
   .landing-cta-row {
     flex-direction: column;
   }

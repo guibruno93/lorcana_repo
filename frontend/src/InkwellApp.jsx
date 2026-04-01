@@ -8,6 +8,7 @@ import './LoadingSpinner.css';
 import Login from './Login';
 import LandingPage from './pages/LandingPage';
 import LegalPage from './pages/LegalPage';
+import VerifyEmail from './pages/VerifyEmail';
 import AuthenticatedLayout from './components/AuthenticatedLayout';
 import Footer from './components/Footer';
 import FirstVisitModal from './components/FirstVisitModal';
@@ -107,6 +108,7 @@ export default function App() {
           path="/register"
           element={<Login onLoginSuccess={setUser} initialMode="register" />}
         />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/legal" element={<LegalDisclaimer />} />
         <Route
           path="/terms"

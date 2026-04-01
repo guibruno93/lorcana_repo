@@ -1,0 +1,5 @@
+﻿2026-03-30T15:17:13.3978173Z ##[group]Run echo "📊 Scraping step finished. See logs above."
+2026-03-30T15:17:13.3978667Z [36;1mecho "📊 Scraping step finished. See logs above."[0m
+2026-03-30T15:17:13.4006064Z shell: /usr/bin/bash -e {0}
+2026-03-30T15:17:13.4006506Z ##[endgroup]
+2026-03-30T15:17:13.4052930Z 📊 Scraping step finished. See logs above.

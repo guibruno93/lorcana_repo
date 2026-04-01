@@ -1,0 +1,89 @@
+# INKWELL LABS - CURSOR AI RULES
+
+## 🎯 PROJECT CONTEXT
+Full-stack Lorcana TCG competitive analysis platform.
+Stack: React 18 + Express.js + Supabase + TensorFlow.js
+
+## 📝 DEVELOPMENT PHILOSOPHY
+1. ✅ ALWAYS analyze complete files before suggesting changes
+2. ✅ Create COMPLETE corrected files (not just snippets)
+3. ✅ Include error handling in ALL async operations
+4. ✅ Follow existing code style (comments with ═══, ───)
+5. ✅ NO code duplication - DRY principle
+6. ✅ Mobile-first responsive design
+7. ✅ Loading states for EVERYTHING
+8. ✅ User-friendly error messages (not stack traces)
+9. ✅ Validations client-side AND server-side
+10. ✅ i18n for all user-facing text (PT-BR + EN)
+
+## 🏗️ FILE STRUCTURE
+backend/
+  routes/ - Express routes (auth, deck, meta-analysis, ai)
+  services/ - Business logic (meta-scraper, ml-model)
+  middleware/ - Auth, validation
+  server.js - Main entry
+
+frontend/
+  src/
+    components/ - Reusable React components
+    pages/ - Route pages
+    hooks/ - Custom hooks
+    i18n/ - Translations
+    App.jsx - Main router
+
+## 🎨 DESIGN SYSTEM
+Colors:
+  --primary: #667eea → #764ba2 (gradient)
+  --glass-bg: rgba(255, 255, 255, 0.95)
+  --error: #ef4444
+  --success: #10b981
+
+Components:
+  .card - Glassmorphism container
+  .btn-primary - Main action button
+  .loading-spinner - Loading indicator
+
+## 🗄️ DATABASE (SUPABASE)
+users, verification_tokens, decks, deck_cards, meta_analysis, scraped_decks
+
+## 🔧 COMMON PATTERNS
+// API calls
+const res = await fetch(`${API}/endpoint`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(data)
+});
+
+// Error handling
+try {
+  // operation
+} catch (err) {
+  console.error('Context:', err);
+  setError('User-friendly message');
+}
+
+// Loading states
+const [loading, setLoading] = useState(false);
+setLoading(true);
+try { /* operation */ } finally { setLoading(false); }
+
+## 🚫 ANTI-PATTERNS (NEVER DO)
+❌ Code without try/catch
+❌ Missing loading states
+❌ Hardcoded strings (use i18n)
+❌ Duplicate code
+❌ Generic variable names (x, temp, data)
+❌ console.log in production code
+❌ Mixing Portuguese and English
+
+## 🎯 CURRENT PRIORITIES
+1. Fix App.jsx duplication (lines 189-429)
+2. Complete Meta Scraper (Inkdecks.com)
+3. Implement Deck vs Meta Analyzer
+4. Test all features end-to-end
+
+When suggesting changes:
+- Show COMPLETE file with all imports
+- Explain WHY the change is needed
+- Consider impact on other files
+- Suggest PowerShell commands to apply

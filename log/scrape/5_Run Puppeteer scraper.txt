@@ -1,0 +1,115 @@
+﻿2026-03-30T02:57:56.4271167Z ##[group]Run LIMIT="${LIMIT:-50}"
+2026-03-30T02:57:56.4271489Z [36;1mLIMIT="${LIMIT:-50}"[0m
+2026-03-30T02:57:56.4271807Z [36;1mecho "🚀 Starting scraper (limit: $LIMIT decks)..."[0m
+2026-03-30T02:57:56.4272430Z [36;1mnode scripts/local-scraper.js "$LIMIT"[0m
+2026-03-30T02:57:56.4300288Z shell: /usr/bin/bash -e {0}
+2026-03-30T02:57:56.4300515Z env:
+2026-03-30T02:57:56.4300885Z   SUPABASE_URL: ***
+2026-03-30T02:57:56.4302294Z   SUPABASE_SERVICE_KEY: ***
+2026-03-30T02:57:56.4302531Z   PUPPETEER_HEADLESS: true
+2026-03-30T02:57:56.4302744Z   GITHUB_ACTIONS: true
+2026-03-30T02:57:56.4302933Z   LIMIT: 10
+2026-03-30T02:57:56.4303104Z ##[endgroup]
+2026-03-30T02:57:56.4353032Z 🚀 Starting scraper (limit: 10 decks)...
+2026-03-30T02:57:56.6143165Z 🚀 Inkwell Labs Scraper - Starting...
+2026-03-30T02:57:56.6147390Z 📍 Environment: GitHub Actions
+2026-03-30T02:57:56.6151856Z 📊 Target limit: 10 decks
+2026-03-30T02:57:56.6152352Z 
+2026-03-30T02:57:56.6321995Z 🔧 Initializing Puppeteer scraper…
+2026-03-30T02:57:56.6329991Z 🚀 Launching browser…
+2026-03-30T02:57:58.1202354Z ✅ Browser launched successfully
+2026-03-30T02:57:58.1773650Z [info] Abrindo listagem Inkdecks (Puppeteer)…
+2026-03-30T02:57:58.1775255Z [info] Navegação (1/3): https://inkdecks.com/lorcana-decks/core
+2026-03-30T02:57:59.8755667Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:57:59.8757919Z [info] Aguardando possível verificação Cloudflare…
+2026-03-30T02:58:04.9162231Z [success] Encontrados 10 decks na listagem.
+2026-03-30T02:58:04.9164832Z [info] Deck 1/10: Cory BS
+2026-03-30T02:58:04.9166006Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-cory-bs-508281
+2026-03-30T02:58:05.4002022Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:07.4219972Z [info] Tamanho do HTML (deck): 208151 caracteres
+2026-03-30T02:58:13.1528789Z [info] Após scroll inicial: 18 linhas
+2026-03-30T02:58:13.1730189Z [info]   · linhas tr.card-list-item: 18 (estável após scroll)
+2026-03-30T02:58:14.5849392Z [success] Decklist: 18 tipos (linhas), 61 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:14.5851036Z [success] OK: Cory BS (18 linhas, 61 cópias)
+2026-03-30T02:58:14.5851574Z [info] Deck 2/10: StormLibHybrid
+2026-03-30T02:58:16.5866550Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-stormlibhybrid-508280
+2026-03-30T02:58:17.2975870Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:18.8741523Z [info] Tamanho do HTML (deck): 220544 caracteres
+2026-03-30T02:58:24.2909202Z [info] Após scroll inicial: 21 linhas
+2026-03-30T02:58:24.3104800Z [info]   · linhas tr.card-list-item: 21 (estável após scroll)
+2026-03-30T02:58:25.7183175Z [success] Decklist: 21 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:25.7183913Z [success] OK: StormLibHybrid (21 linhas, 60 cópias)
+2026-03-30T02:58:25.7184292Z [info] Deck 3/10: K8 loves purple
+2026-03-30T02:58:27.7195040Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-k8-loves-purple-508279
+2026-03-30T02:58:28.3121829Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:29.8370239Z [info] Tamanho do HTML (deck): 216571 caracteres
+2026-03-30T02:58:35.1440383Z [info] Após scroll inicial: 20 linhas
+2026-03-30T02:58:35.1596387Z [info]   · linhas tr.card-list-item: 20 (estável após scroll)
+2026-03-30T02:58:36.5706519Z [success] Decklist: 20 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:36.5707235Z [success] OK: K8 loves purple (20 linhas, 60 cópias)
+2026-03-30T02:58:36.5707621Z [info] Deck 4/10: Raging Mufasa
+2026-03-30T02:58:38.5715973Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-raging-mufasa-508278
+2026-03-30T02:58:39.1129244Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:40.6221202Z [info] Tamanho do HTML (deck): 218542 caracteres
+2026-03-30T02:58:45.9240241Z [info] Após scroll inicial: 21 linhas
+2026-03-30T02:58:45.9422435Z [info]   · linhas tr.card-list-item: 21 (estável após scroll)
+2026-03-30T02:58:47.4537292Z [success] Decklist: 21 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:47.4538608Z [success] OK: Raging Mufasa (21 linhas, 60 cópias)
+2026-03-30T02:58:47.4538986Z [info] Deck 5/10: Songz
+2026-03-30T02:58:49.4539360Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-songz-508277
+2026-03-30T02:58:50.0143183Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:58:51.5473341Z [info] Tamanho do HTML (deck): 215461 caracteres
+2026-03-30T02:58:56.6880999Z [info] Após scroll inicial: 20 linhas
+2026-03-30T02:58:56.7038572Z [info]   · linhas tr.card-list-item: 20 (estável após scroll)
+2026-03-30T02:58:58.1189602Z [success] Decklist: 20 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:58:58.1190593Z [success] OK: Songz (20 linhas, 60 cópias)
+2026-03-30T02:58:58.1191002Z [info] Deck 6/10: Jasmin’s allies
+2026-03-30T02:59:00.1186388Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-jasmin-s-allies-508276
+2026-03-30T02:59:01.0679975Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:02.7340686Z [info] Tamanho do HTML (deck): 211917 caracteres
+2026-03-30T02:59:07.9663466Z [info] Após scroll inicial: 19 linhas
+2026-03-30T02:59:07.9796029Z [info]   · linhas tr.card-list-item: 19 (estável após scroll)
+2026-03-30T02:59:09.3789135Z [success] Decklist: 19 tipos (linhas), 62 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:09.3790050Z [success] OK: Jasmin’s allies (19 linhas, 62 cópias)
+2026-03-30T02:59:09.3790407Z [info] Deck 7/10: Queen Burning
+2026-03-30T02:59:11.3787759Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-queen-burning-508275
+2026-03-30T02:59:11.9743435Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:13.5750840Z [info] Tamanho do HTML (deck): 207038 caracteres
+2026-03-30T02:59:18.4783551Z [info] Após scroll inicial: 17 linhas
+2026-03-30T02:59:18.4904269Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T02:59:19.9527501Z [success] Decklist: 17 tipos (linhas), 61 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:19.9528191Z [success] OK: Queen Burning (17 linhas, 61 cópias)
+2026-03-30T02:59:19.9528507Z [info] Deck 8/10: Blurple
+2026-03-30T02:59:21.9531884Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-blurple-508274
+2026-03-30T02:59:22.5535112Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:24.1110647Z [info] Tamanho do HTML (deck): 211354 caracteres
+2026-03-30T02:59:29.1889125Z [info] Após scroll inicial: 18 linhas
+2026-03-30T02:59:29.2020265Z [info]   · linhas tr.card-list-item: 18 (estável após scroll)
+2026-03-30T02:59:30.7134099Z [success] Decklist: 18 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:30.7135028Z [success] OK: Blurple (18 linhas, 60 cópias)
+2026-03-30T02:59:30.7135631Z [info] Deck 9/10: Josh McDonald AS Aggro
+2026-03-30T02:59:32.7143968Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-josh-mcdonald-as-aggro-508273
+2026-03-30T02:59:33.3215062Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:34.8878035Z [info] Tamanho do HTML (deck): 198287 caracteres
+2026-03-30T02:59:39.8721884Z [info] Após scroll inicial: 16 linhas
+2026-03-30T02:59:39.8833948Z [info]   · linhas tr.card-list-item: 16 (estável após scroll)
+2026-03-30T02:59:41.3053863Z [success] Decklist: 16 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:41.3054603Z [success] OK: Josh McDonald AS Aggro (16 linhas, 60 cópias)
+2026-03-30T02:59:41.3054986Z [info] Deck 10/10: Ryan S's Deck
+2026-03-30T02:59:43.3057049Z [info] Navegação (1/3): https://inkdecks.com/lorcana-metagame/deck-ryan-s-s-deck-508272
+2026-03-30T02:59:43.9161477Z [info] Navegação concluída (domcontentloaded)
+2026-03-30T02:59:45.4396325Z [info] Tamanho do HTML (deck): 205026 caracteres
+2026-03-30T02:59:50.4170403Z [info] Após scroll inicial: 17 linhas
+2026-03-30T02:59:50.4303870Z [info]   · linhas tr.card-list-item: 17 (estável após scroll)
+2026-03-30T02:59:51.8279447Z [success] Decklist: 17 tipos (linhas), 60 cópias no total — alvo Lorcana ~60 cópias
+2026-03-30T02:59:51.8281467Z [success] OK: Ryan S's Deck (17 linhas, 60 cópias)
+2026-03-30T02:59:53.3537971Z 
+2026-03-30T02:59:53.3539138Z ═══════════════════════════════════════════════════
+2026-03-30T02:59:53.3539934Z 📊 SCRAPING SUMMARY
+2026-03-30T02:59:53.3540385Z ═══════════════════════════════════════════════════
+2026-03-30T02:59:53.3540820Z ✅ Decks scraped: 10
+2026-03-30T02:59:53.3541175Z 💾 Decks saved to Supabase: 10
+2026-03-30T02:59:53.3541551Z 📈 Total decks in database: 10
+2026-03-30T02:59:53.3541895Z ⏱️  Execution time: 116.7s
+2026-03-30T02:59:53.3542336Z ═══════════════════════════════════════════════════
+2026-03-30T02:59:53.3542574Z 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import './Login.css';
 
@@ -16,6 +17,7 @@ const ALLOWED_POST_LOGIN = new Set([
 ]);
 
 function Login({ onLoginSuccess, initialMode = 'login' }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [mode, setMode] = useState(initialMode);
@@ -33,10 +35,15 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+  const [postRegisterRedirect, setPostRegisterRedirect] = useState(false);
 
   useEffect(() => {
     setMode(initialMode);
   }, [initialMode]);
+
+  useEffect(() => {
+    if (mode !== 'register') setPostRegisterRedirect(false);
+  }, [mode]);
 
   useEffect(() => {
     if (searchParams.get('verified') === '1') {
@@ -170,6 +177,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
     setMessage('');
     setErrors({});
 
+    let deferLoadingOff = false;
     try {
       const response = await axios.post(`${API_BASE}/api/auth/register`, {
         username: formData.username,
@@ -178,40 +186,68 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
         country: formData.country || null,
       });
 
-      const { emailSent, message: apiMsg, emailHint } = response.data || {};
-      if (emailSent === false) {
-        setMessageType('info');
-        setMessage(
-          [apiMsg, emailHint].filter(Boolean).join(' ') ||
-            'Conta criada, mas o email não foi enviado. Tenta “Reenviar” ou verifica a configuração do servidor.'
-        );
-      } else {
-        setMessageType('success');
-        setMessage(
-          apiMsg || 'Cadastro realizado! Verifique seu email para confirmar sua conta.'
-        );
-      }
-      setMode('verify');
-      
-      setFormData({
-        username: '',
-        email: formData.email,
-        password: '',
-        confirmPassword: '',
-        country: '',
-      });
+      const data = response.data || {};
 
+      if (data.autoApproved && data.token && data.user) {
+        deferLoadingOff = true;
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        if (onLoginSuccess) {
+          onLoginSuccess(data.user);
+        }
+        setPostRegisterRedirect(true);
+        setMessageType('success');
+        setMessage(t('auth.accountCreatedAndLoggedIn'));
+        setFormData({
+          username: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          country: '',
+        });
+        const dest = resolvePostLoginPath();
+        setTimeout(() => {
+          setLoading(false);
+          navigate(dest, { replace: true });
+        }, 900);
+      } else {
+        const {
+          emailSent,
+          emailHint,
+          emailMethod,
+          debugVerificationLink,
+        } = data;
+
+        navigate('/verify-email', {
+          state: {
+            email: formData.email,
+            emailSent: !!emailSent,
+            emailHint,
+            emailMethod,
+            debugVerificationLink,
+          },
+        });
+
+        setFormData({
+          username: '',
+          email: formData.email,
+          password: '',
+          confirmPassword: '',
+          country: '',
+        });
+      }
     } catch (err) {
       console.error('Register error:', err);
+      setPostRegisterRedirect(false);
       setMessageType('error');
-      
+
       if (err.response?.data?.error) {
         setMessage(err.response.data.error);
       } else {
-        setMessage('Erro ao criar conta. Tente novamente.');
+        setMessage(t('auth.registrationFailed'));
       }
     } finally {
-      setLoading(false);
+      if (!deferLoadingOff) setLoading(false);
     }
   };
 
@@ -232,13 +268,6 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
         password: formData.password,
       });
 
-      if (!response.data.user.emailVerified) {
-        setMessageType('info');
-        setMessage('Por favor, verifique seu email antes de fazer login.');
-        setMode('verify');
-        return;
-      }
-
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
@@ -250,47 +279,24 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
     } catch (err) {
       console.error('Login error:', err);
       setMessageType('error');
-      
+
+      if (err.response?.status === 403 && err.response?.data?.emailVerified === false) {
+        navigate('/verify-email', {
+          state: {
+            email: formData.email,
+            emailSent: false,
+            emailHint: err.response.data.error,
+            emailMethod: 'none',
+          },
+        });
+        return;
+      }
+
       if (err.response?.data?.error) {
         setMessage(err.response.data.error);
       } else {
         setMessage('Erro ao fazer login. Verifique suas credenciais.');
       }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleResendVerification = async () => {
-    if (!formData.email) {
-      setMessage('Digite seu email');
-      setMessageType('error');
-      return;
-    }
-
-    setLoading(true);
-    setMessage('');
-
-    try {
-      const { data } = await axios.post(`${API_BASE}/api/auth/resend-verification`, {
-        email: formData.email,
-      });
-
-      if (data.emailSent === false) {
-        setMessageType('info');
-        setMessage(
-          [data.message, data.hint].filter(Boolean).join(' ') ||
-            'Não foi possível enviar o email. O servidor pode estar com SMTP bloqueado (comum no Render).'
-        );
-      } else {
-        setMessageType('success');
-        setMessage(
-          data.message || 'Email de verificação reenviado! Verifique sua caixa de entrada.'
-        );
-      }
-    } catch (err) {
-      setMessageType('error');
-      setMessage(err.response?.data?.error || 'Erro ao reenviar email');
     } finally {
       setLoading(false);
     }
@@ -363,14 +369,28 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
           <p className="login-subtitle">
             {mode === 'login' && 'Bem-vindo de volta!'}
             {mode === 'register' && 'Criar sua conta'}
-            {mode === 'verify' && 'Verificar Email'}
             {mode === 'forgot' && 'Recuperar Senha'}
           </p>
         </div>
 
+        {(mode === 'login' || mode === 'register') && (
+          <div className="beta-notice" role="status">
+            <span className="beta-icon" aria-hidden>
+              ℹ️
+            </span>
+            <div className="beta-text">
+              <strong>{t('auth.betaMode')}</strong>
+              <p>{t('auth.betaModeDescription')}</p>
+            </div>
+          </div>
+        )}
+
         {message && (
           <div className={`message ${messageType}`}>
             {message}
+            {postRegisterRedirect && (
+              <p className="redirect-hint">{t('auth.redirecting')}…</p>
+            )}
           </div>
         )}
 
@@ -597,41 +617,6 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
               </button>
             </div>
           </form>
-        )}
-
-        {/* VERIFY EMAIL SCREEN */}
-        {mode === 'verify' && (
-          <div className="verify-screen">
-            <div className="verify-icon">📧</div>
-            <p className="verify-text">
-              Um e-mail de verificação foi enviado para <strong>{formData.email}</strong>
-            </p>
-            <p className="verify-subtext">
-              Clique no link do email para ativar sua conta.
-            </p>
-
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={handleResendVerification}
-              disabled={loading}
-            >
-              {loading ? 'Reenviando...' : 'Reenviar email'}
-            </button>
-
-            <div className="form-footer">
-              <button
-                type="button"
-                className="link-button"
-                onClick={() => {
-                  setMode('login');
-                  setMessage('');
-                }}
-              >
-                Voltar para login
-              </button>
-            </div>
-          </div>
         )}
 
         {/* FORGOT PASSWORD FORM */}

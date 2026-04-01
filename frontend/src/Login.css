@@ -187,6 +187,45 @@
   color: #065f46;
 }
 
+.message .redirect-hint {
+  margin: 10px 0 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Beta notice (login / register) */
+.beta-notice {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.beta-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.beta-text strong {
+  display: block;
+  color: #0891b2;
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.beta-text p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.45;
+}
+
 .message.error,
 .message-error {
   background: rgba(239, 68, 68, 0.1);

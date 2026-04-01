@@ -1,0 +1,152 @@
+﻿2026-03-30T02:57:26.9283839Z ##[group]Run actions/checkout@v4
+2026-03-30T02:57:26.9284686Z with:
+2026-03-30T02:57:26.9285105Z   repository: guibruno93/lorcana_repo
+2026-03-30T02:57:26.9285786Z   token: ***
+2026-03-30T02:57:26.9286165Z   ssh-strict: true
+2026-03-30T02:57:26.9286555Z   ssh-user: git
+2026-03-30T02:57:26.9286952Z   persist-credentials: true
+2026-03-30T02:57:26.9287402Z   clean: true
+2026-03-30T02:57:26.9287812Z   sparse-checkout-cone-mode: true
+2026-03-30T02:57:26.9288285Z   fetch-depth: 1
+2026-03-30T02:57:26.9288663Z   fetch-tags: false
+2026-03-30T02:57:26.9289063Z   show-progress: true
+2026-03-30T02:57:26.9289465Z   lfs: false
+2026-03-30T02:57:26.9290046Z   submodules: false
+2026-03-30T02:57:26.9290454Z   set-safe-directory: true
+2026-03-30T02:57:26.9291137Z ##[endgroup]
+2026-03-30T02:57:27.0371431Z Syncing repository: guibruno93/lorcana_repo
+2026-03-30T02:57:27.0373192Z ##[group]Getting Git version info
+2026-03-30T02:57:27.0373934Z Working directory is '/home/runner/work/lorcana_repo/lorcana_repo'
+2026-03-30T02:57:27.0374981Z [command]/usr/bin/git version
+2026-03-30T02:57:27.0410871Z git version 2.53.0
+2026-03-30T02:57:27.0436734Z ##[endgroup]
+2026-03-30T02:57:27.0451048Z Temporarily overriding HOME='/home/runner/work/_temp/a33853d8-65e5-45bc-9261-b9a20bc01103' before making global git config changes
+2026-03-30T02:57:27.0452496Z Adding repository directory to the temporary git global config as a safe directory
+2026-03-30T02:57:27.0463821Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lorcana_repo/lorcana_repo
+2026-03-30T02:57:27.0494443Z Deleting the contents of '/home/runner/work/lorcana_repo/lorcana_repo'
+2026-03-30T02:57:27.0497956Z ##[group]Initializing the repository
+2026-03-30T02:57:27.0502241Z [command]/usr/bin/git init /home/runner/work/lorcana_repo/lorcana_repo
+2026-03-30T02:57:27.0594842Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-03-30T02:57:27.0597221Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-03-30T02:57:27.0598782Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-03-30T02:57:27.0600082Z hint: call:
+2026-03-30T02:57:27.0600494Z hint:
+2026-03-30T02:57:27.0600994Z hint: 	git config --global init.defaultBranch <name>
+2026-03-30T02:57:27.0601932Z hint:
+2026-03-30T02:57:27.0602669Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-03-30T02:57:27.0603682Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-03-30T02:57:27.0604431Z hint:
+2026-03-30T02:57:27.0604830Z hint: 	git branch -m <name>
+2026-03-30T02:57:27.0605293Z hint:
+2026-03-30T02:57:27.0605908Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-03-30T02:57:27.0607415Z Initialized empty Git repository in /home/runner/work/lorcana_repo/lorcana_repo/.git/
+2026-03-30T02:57:27.0609171Z [command]/usr/bin/git remote add origin https://github.com/guibruno93/lorcana_repo
+2026-03-30T02:57:27.0636457Z ##[endgroup]
+2026-03-30T02:57:27.0637206Z ##[group]Disabling automatic garbage collection
+2026-03-30T02:57:27.0640955Z [command]/usr/bin/git config --local gc.auto 0
+2026-03-30T02:57:27.0669023Z ##[endgroup]
+2026-03-30T02:57:27.0670184Z ##[group]Setting up auth
+2026-03-30T02:57:27.0675781Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-03-30T02:57:27.0707056Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-03-30T02:57:27.0992957Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-03-30T02:57:27.1022912Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-03-30T02:57:27.1237743Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-03-30T02:57:27.1267958Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-03-30T02:57:27.1498125Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-03-30T02:57:27.1545426Z ##[endgroup]
+2026-03-30T02:57:27.1546161Z ##[group]Fetching the repository
+2026-03-30T02:57:27.1554273Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +40462bb7f59e10071fce260b66e5f3bc54dc80c7:refs/remotes/origin/main
+2026-03-30T02:57:33.6612908Z From https://github.com/guibruno93/lorcana_repo
+2026-03-30T02:57:33.6614232Z  * [new ref]           40462bb7f59e10071fce260b66e5f3bc54dc80c7 -> origin/main
+2026-03-30T02:57:33.6643027Z ##[endgroup]
+2026-03-30T02:57:33.6643513Z ##[group]Determining the checkout info
+2026-03-30T02:57:33.6645535Z ##[endgroup]
+2026-03-30T02:57:33.6651072Z [command]/usr/bin/git sparse-checkout disable
+2026-03-30T02:57:33.6697740Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-03-30T02:57:33.6722638Z ##[group]Checking out the ref
+2026-03-30T02:57:33.6726314Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-03-30T02:57:34.7233807Z Updating files:  24% (10446/42820)
+2026-03-30T02:57:34.7480639Z Updating files:  25% (10705/42820)
+2026-03-30T02:57:34.7651359Z Updating files:  26% (11134/42820)
+2026-03-30T02:57:34.7794124Z Updating files:  27% (11562/42820)
+2026-03-30T02:57:34.7930878Z Updating files:  28% (11990/42820)
+2026-03-30T02:57:34.8062739Z Updating files:  29% (12418/42820)
+2026-03-30T02:57:34.8203496Z Updating files:  30% (12846/42820)
+2026-03-30T02:57:34.8362505Z Updating files:  31% (13275/42820)
+2026-03-30T02:57:34.8535576Z Updating files:  32% (13703/42820)
+2026-03-30T02:57:34.8698212Z Updating files:  33% (14131/42820)
+2026-03-30T02:57:34.8837982Z Updating files:  34% (14559/42820)
+2026-03-30T02:57:34.8974219Z Updating files:  35% (14987/42820)
+2026-03-30T02:57:34.9115060Z Updating files:  36% (15416/42820)
+2026-03-30T02:57:34.9251322Z Updating files:  37% (15844/42820)
+2026-03-30T02:57:34.9386419Z Updating files:  38% (16272/42820)
+2026-03-30T02:57:34.9519097Z Updating files:  39% (16700/42820)
+2026-03-30T02:57:34.9689986Z Updating files:  40% (17128/42820)
+2026-03-30T02:57:34.9858690Z Updating files:  41% (17557/42820)
+2026-03-30T02:57:35.0001192Z Updating files:  42% (17985/42820)
+2026-03-30T02:57:35.0240344Z Updating files:  43% (18413/42820)
+2026-03-30T02:57:35.0520745Z Updating files:  44% (18841/42820)
+2026-03-30T02:57:35.0742331Z Updating files:  45% (19269/42820)
+2026-03-30T02:57:35.0952199Z Updating files:  46% (19698/42820)
+2026-03-30T02:57:35.1178735Z Updating files:  47% (20126/42820)
+2026-03-30T02:57:35.1367317Z Updating files:  48% (20554/42820)
+2026-03-30T02:57:35.1524977Z Updating files:  49% (20982/42820)
+2026-03-30T02:57:35.1683436Z Updating files:  50% (21410/42820)
+2026-03-30T02:57:35.1840914Z Updating files:  51% (21839/42820)
+2026-03-30T02:57:35.1997679Z Updating files:  52% (22267/42820)
+2026-03-30T02:57:35.2173765Z Updating files:  53% (22695/42820)
+2026-03-30T02:57:35.2406352Z Updating files:  54% (23123/42820)
+2026-03-30T02:57:35.2646082Z Updating files:  55% (23551/42820)
+2026-03-30T02:57:35.2833689Z Updating files:  56% (23980/42820)
+2026-03-30T02:57:35.3099059Z Updating files:  57% (24408/42820)
+2026-03-30T02:57:35.3394727Z Updating files:  58% (24836/42820)
+2026-03-30T02:57:35.3625843Z Updating files:  59% (25264/42820)
+2026-03-30T02:57:35.3833569Z Updating files:  60% (25692/42820)
+2026-03-30T02:57:35.4044908Z Updating files:  61% (26121/42820)
+2026-03-30T02:57:35.4477983Z Updating files:  62% (26549/42820)
+2026-03-30T02:57:35.4733072Z Updating files:  63% (26977/42820)
+2026-03-30T02:57:35.5010995Z Updating files:  64% (27405/42820)
+2026-03-30T02:57:35.5288093Z Updating files:  65% (27833/42820)
+2026-03-30T02:57:35.5647986Z Updating files:  66% (28262/42820)
+2026-03-30T02:57:35.5906425Z Updating files:  67% (28690/42820)
+2026-03-30T02:57:35.6138854Z Updating files:  68% (29118/42820)
+2026-03-30T02:57:35.6332579Z Updating files:  69% (29546/42820)
+2026-03-30T02:57:35.6548007Z Updating files:  70% (29974/42820)
+2026-03-30T02:57:35.6767741Z Updating files:  71% (30403/42820)
+2026-03-30T02:57:35.7075550Z Updating files:  72% (30831/42820)
+2026-03-30T02:57:35.7110148Z Updating files:  72% (31237/42820)
+2026-03-30T02:57:35.7451235Z Updating files:  73% (31259/42820)
+2026-03-30T02:57:35.7676639Z Updating files:  74% (31687/42820)
+2026-03-30T02:57:35.7968686Z Updating files:  75% (32115/42820)
+2026-03-30T02:57:35.8437310Z Updating files:  76% (32544/42820)
+2026-03-30T02:57:35.8689050Z Updating files:  77% (32972/42820)
+2026-03-30T02:57:35.8945555Z Updating files:  78% (33400/42820)
+2026-03-30T02:57:35.9223465Z Updating files:  79% (33828/42820)
+2026-03-30T02:57:35.9594066Z Updating files:  80% (34256/42820)
+2026-03-30T02:57:35.9824849Z Updating files:  81% (34685/42820)
+2026-03-30T02:57:36.0040041Z Updating files:  82% (35113/42820)
+2026-03-30T02:57:36.0367614Z Updating files:  83% (35541/42820)
+2026-03-30T02:57:36.0670234Z Updating files:  84% (35969/42820)
+2026-03-30T02:57:36.2422739Z Updating files:  85% (36397/42820)
+2026-03-30T02:57:36.2621960Z Updating files:  86% (36826/42820)
+2026-03-30T02:57:36.2798747Z Updating files:  87% (37254/42820)
+2026-03-30T02:57:36.3105355Z Updating files:  88% (37682/42820)
+2026-03-30T02:57:36.3374354Z Updating files:  89% (38110/42820)
+2026-03-30T02:57:36.3598751Z Updating files:  90% (38538/42820)
+2026-03-30T02:57:36.7161340Z Updating files:  91% (38967/42820)
+2026-03-30T02:57:36.7281794Z Updating files:  91% (39193/42820)
+2026-03-30T02:57:36.7536507Z Updating files:  92% (39395/42820)
+2026-03-30T02:57:36.8873247Z Updating files:  93% (39823/42820)
+2026-03-30T02:57:36.9065534Z Updating files:  94% (40251/42820)
+2026-03-30T02:57:36.9336643Z Updating files:  95% (40679/42820)
+2026-03-30T02:57:36.9520111Z Updating files:  96% (41108/42820)
+2026-03-30T02:57:36.9840046Z Updating files:  97% (41536/42820)
+2026-03-30T02:57:37.0046386Z Updating files:  98% (41964/42820)
+2026-03-30T02:57:37.0405252Z Updating files:  99% (42392/42820)
+2026-03-30T02:57:37.0406027Z Updating files: 100% (42820/42820)
+2026-03-30T02:57:37.0406519Z Updating files: 100% (42820/42820), done.
+2026-03-30T02:57:37.1749848Z Switched to a new branch 'main'
+2026-03-30T02:57:37.1752041Z branch 'main' set up to track 'origin/main'.
+2026-03-30T02:57:37.1840479Z ##[endgroup]
+2026-03-30T02:57:37.1880786Z [command]/usr/bin/git log -1 --format=%H
+2026-03-30T02:57:37.1902407Z 40462bb7f59e10071fce260b66e5f3bc54dc80c7

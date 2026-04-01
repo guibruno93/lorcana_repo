@@ -7,15 +7,18 @@ const Logo = ({ size = 'medium', animated = false }) => {
     small: { imgHeight: 32, fontSize: '0.85rem' },
     medium: { imgHeight: 44, fontSize: '1.05rem' },
     large: { imgHeight: 56, fontSize: '1.25rem' },
+    header: { imgHeight: 64, fontSize: '1.22rem' },
   };
 
-  const { imgHeight, fontSize } = sizes[size];
+  const { imgHeight, fontSize } = sizes[size] || sizes.medium;
   const [useImage, setUseImage] = useState(true);
   const pub = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
   const logoSrc = pub ? `${pub}/logo.png` : '/logo.png';
 
   return (
-    <div className={`logo-container ${animated ? 'animated' : ''}`}>
+    <div
+      className={`logo-container logo-size-${size} ${animated ? 'animated' : ''}`}
+    >
       {useImage ? (
         <img
           src={logoSrc}
@@ -23,7 +26,11 @@ const Logo = ({ size = 'medium', animated = false }) => {
           width={imgHeight}
           height={imgHeight}
           className="logo-image"
-          style={{ height: imgHeight, width: 'auto', maxWidth: imgHeight * 2.2 }}
+          style={{
+            height: imgHeight,
+            width: 'auto',
+            maxWidth: size === 'header' ? imgHeight * 3.2 : imgHeight * 2.2,
+          }}
           onError={() => setUseImage(false)}
           decoding="async"
         />

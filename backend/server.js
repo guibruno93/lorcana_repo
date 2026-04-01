@@ -14,6 +14,16 @@ try {
   console.warn('📧 Email bootstrap:', e.message);
 }
 
+if (String(process.env.AUTO_APPROVE_USERS || '').toLowerCase() === 'true') {
+  console.log(
+    '🔓 Auth: AUTO_APPROVE_USERS=true — novos cadastros são aprovados sem email; JWT devolvido no registo.'
+  );
+} else {
+  console.log(
+    '🔒 Auth: verificação por email no registo/login (defina AUTO_APPROVE_USERS=true para beta sem Resend).'
+  );
+}
+
 const express = require("express");
 const cors = require("cors");
 const userRoutes = require('./routes/user');
