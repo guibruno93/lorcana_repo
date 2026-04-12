@@ -131,13 +131,13 @@ function getVerificationEmailTemplate(username, verificationLink) {
         <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
           <tr>
             <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
-              <div style="font-size: 48px; margin-bottom: 16px;">🪶</div>
+              <div style="font-size: 14px; margin-bottom: 8px; letter-spacing: 0.2em; color: rgba(255,255,255,0.85);">INKWELL LABS</div>
               <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Inkwell Labs</h1>
             </td>
           </tr>
           <tr>
             <td style="padding: 40px 40px 20px;">
-              <h2 style="color: #1f2937; margin: 0 0 16px 0; font-size: 24px;">Olá, ${username}! 👋</h2>
+              <h2 style="color: #1f2937; margin: 0 0 16px 0; font-size: 24px;">Olá, ${username}!</h2>
               <p style="color: #6b7280; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
                 Obrigado por se cadastrar no <strong>Inkwell Labs</strong>! Para completar seu cadastro, verifique seu email.
               </p>
@@ -189,7 +189,7 @@ function attachDebugLink(base) {
  */
 async function sendVerificationEmail(email, username, token) {
   const verificationLink = buildVerificationLink(token);
-  const subject = '✅ Verifique seu email - Inkwell Labs';
+  const subject = 'Verifique seu email - Inkwell Labs';
   const html = getVerificationEmailTemplate(username, verificationLink);
   const text = `Olá ${username}!\n\nVerifique: ${verificationLink}\n\nLink válido por 24h.`;
 
@@ -208,7 +208,7 @@ async function sendVerificationEmail(email, username, token) {
   if (isResendConfigured()) {
     try {
       await sendWithResend({ to: email, subject, html, text });
-      console.log('✅ Verification email (Resend):', email);
+      console.log('Verification email (Resend):', email);
       return {
         sent: true,
         method: 'resend',
@@ -216,7 +216,7 @@ async function sendVerificationEmail(email, username, token) {
       };
     } catch (err) {
       const detail = err.body || err.message || String(err);
-      console.error('❌ Resend verification:', detail);
+      console.error('Resend verification:', detail);
       return {
         sent: false,
         method: 'resend',
@@ -255,14 +255,14 @@ async function sendVerificationEmail(email, username, token) {
     try {
       const transporter = createTransporter();
       const info = await transporter.sendMail(mailOptions);
-      console.log('✅ Verification email (SMTP):', info.messageId);
+      console.log('Verification email (SMTP):', info.messageId);
       return {
         sent: true,
         method: 'smtp',
         hint: 'Email enviado via SMTP.',
       };
     } catch (err) {
-      console.error('❌ SMTP verification:', err.message, err.code || '');
+      console.error('SMTP verification:', err.message, err.code || '');
       const hint =
         err.code === 'ETIMEDOUT' || String(err.message).includes('timeout')
           ? 'Timeout ao ligar ao SMTP. Em hospedagens como o Render use Resend (RESEND_API_KEY) em vez da porta 587.'
@@ -279,7 +279,7 @@ async function sendVerificationEmail(email, username, token) {
 
   // 3) Modo debug — sem transporte configurado
   if (process.env.AUTH_DEBUG_VERIFICATION_LINK === 'true') {
-    console.log('🔗 DEBUG verification link:', verificationLink);
+    console.log('DEBUG verification link:', verificationLink);
     return {
       sent: false,
       method: 'debug',
@@ -303,7 +303,7 @@ async function sendVerificationEmail(email, username, token) {
  */
 async function sendPasswordResetEmail(email, username, token) {
   const resetLink = `${APP_URL}/reset-password?token=${token}`;
-  const subject = '🔐 Recuperar senha - Inkwell Labs';
+  const subject = 'Recuperar senha - Inkwell Labs';
   const html = getPasswordResetEmailTemplate(username, resetLink);
   const text = `Recuperação de senha: ${resetLink}`;
 
@@ -318,7 +318,7 @@ async function sendPasswordResetEmail(email, username, token) {
       return { sent: true, method: 'resend', hint: 'Email enviado via Resend.' };
     } catch (err) {
       const detail = err.body || err.message || String(err);
-      console.error('❌ Resend reset:', detail);
+      console.error('Resend reset:', detail);
       return {
         sent: false,
         method: 'resend',
@@ -359,7 +359,7 @@ async function sendPasswordResetEmail(email, username, token) {
     });
     return { sent: true, method: 'smtp', hint: 'Email enviado via SMTP.' };
   } catch (err) {
-    console.error('❌ SMTP reset:', err.message);
+    console.error('SMTP reset:', err.message);
     return {
       sent: false,
       method: 'smtp',
@@ -371,24 +371,24 @@ async function sendPasswordResetEmail(email, username, token) {
 
 async function verifyEmailConfig() {
   if (isResendConfigured()) {
-    console.log('✅ Email: Resend API key presente');
+    console.log('Email: Resend API key presente');
     return true;
   }
   if (!isFullSmtpConfigured()) {
-    console.warn('⚠️ Email: nem Resend nem SMTP completos (SMTP requer SMTP_HOST + credenciais)');
+    console.warn('Email: nem Resend nem SMTP completos (SMTP requer SMTP_HOST + credenciais)');
     return false;
   }
   if (!smtpAllowedOnRender()) {
-    console.warn('⚠️ Email: SMTP no Render desativado (usa RESEND_API_KEY)');
+    console.warn('Email: SMTP no Render desativado (usa RESEND_API_KEY)');
     return false;
   }
   try {
     const transporter = createTransporter();
     await transporter.verify();
-    console.log('✅ Email: SMTP OK');
+    console.log('Email: SMTP OK');
     return true;
   } catch (err) {
-    console.error('❌ Email SMTP verify:', err.message);
+    console.error('Email SMTP verify:', err.message);
     return false;
   }
 }
@@ -396,28 +396,28 @@ async function verifyEmailConfig() {
 function logEmailBootstrap() {
   if (isResendConfigured()) {
     const from = resolveResendFrom();
-    console.log('📧 Email: Resend ativo. Remetente (From):', from);
+    console.log('Email: Resend ativo. Remetente (From):', from);
     if (/@gmail\.com/i.test(from) && !/@resend\.dev/i.test(from)) {
       console.warn(
-        '📧 Aviso: Resend normalmente não envia como @gmail.com até verificares um domínio próprio. Usa um domínio verificado em resend.com/domains ou onboarding@resend.dev para testes.'
+        'Aviso: Resend normalmente não envia como @gmail.com até verificares um domínio próprio. Usa um domínio verificado em resend.com/domains ou onboarding@resend.dev para testes.'
       );
     }
     return;
   }
   if (!isFullSmtpConfigured()) {
     console.warn(
-      '📧 Email: sem RESEND_API_KEY nem SMTP completo — emails de verificação não serão enviados até configurares.'
+      'Email: sem RESEND_API_KEY nem SMTP completo — emails de verificação não serão enviados até configurares.'
     );
     return;
   }
   if (!smtpAllowedOnRender()) {
     console.warn(
-      '📧 Email: SMTP definido mas ignorado no Render (evita timeout). Adiciona RESEND_API_KEY no dashboard.'
+      'Email: SMTP definido mas ignorado no Render (evita timeout). Adiciona RESEND_API_KEY no dashboard.'
     );
     return;
   }
   console.log(
-    '📧 Email: SMTP',
+    'Email: SMTP',
     process.env.SMTP_HOST,
     '— em Render pode falhar com ETIMEDOUT; prefere Resend.'
   );

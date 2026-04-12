@@ -3,7 +3,7 @@
 /**
  * server-COMPLETE.js
  * Backend completo com todas as rotas necessárias
- * ✅ CORREÇÃO: Auth carregado ANTES de Deck
+ * Auth carregado antes de Deck (deck.js usa authenticateToken).
  */
 require('dotenv').config();
 
@@ -11,16 +11,16 @@ try {
   const { logEmailBootstrap } = require('./services/email-service');
   logEmailBootstrap();
 } catch (e) {
-  console.warn('📧 Email bootstrap:', e.message);
+  console.warn('Email bootstrap:', e.message);
 }
 
 if (String(process.env.AUTO_APPROVE_USERS || '').toLowerCase() === 'true') {
   console.log(
-    '🔓 Auth: AUTO_APPROVE_USERS=true — novos cadastros são aprovados sem email; JWT devolvido no registo.'
+    'Auth: AUTO_APPROVE_USERS=true — novos cadastros são aprovados sem email; JWT devolvido no registo.'
   );
 } else {
   console.log(
-    '🔒 Auth: verificação por email no registo/login (defina AUTO_APPROVE_USERS=true para beta sem Resend).'
+    'Auth: verificação por email no registo/login (defina AUTO_APPROVE_USERS=true para beta sem Resend).'
   );
 }
 
@@ -93,15 +93,14 @@ app.use((req, res, next) => {
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
 // ══════════════════════════════════════════════════════════════════════════════
-// TODAS AS ROTAS - ORDEM CORRETA! ✅
-// Auth PRECISA ser carregado ANTES de Deck (deck.js importa authenticateToken)
+// Todas as rotas — ordem: Auth antes de Deck (deck.js importa authenticateToken).
 // ══════════════════════════════════════════════════════════════════════════════
 
-// ✅ 1. AUTH 
+// 1. Auth
 try {
   const auth = require('./routes/auth');
   app.use('/api/auth', auth);
-  console.log("✅ Auth carregado: /api/auth");
+  console.log("Auth carregado: /api/auth");
   
   // Rotas protegidas
   const { authenticateToken } = require('./routes/auth');
@@ -109,23 +108,23 @@ try {
     res.json({ message: 'Protected route', user: req.user });
   });
 } catch (e) {
-  console.error("❌ Auth não carregado:", e.message);
+  console.error("Auth não carregado:", e.message);
 }
 
-// ✅ 2. DECK 
+// 2. Deck
 try {
   const deckRouter = require("./routes/deck");
   app.use("/api/deck", deckRouter);
-  console.log("✅ Deck router carregado: /api/deck");
+  console.log("Deck router carregado: /api/deck");
 } catch (e) {
-  console.error("❌ Deck router não carregado:", e.message);
+  console.error("Deck router não carregado:", e.message);
 }
 
 // 3. AI services
 try {
   const aiRouter = require("./routes/ai");
   app.use("/api/ai", aiRouter);
-  console.log("✅ AI router carregado: /api/ai");
+  console.log("AI router carregado: /api/ai");
   
   // Test if shuffle endpoint exists
   const endpoints = aiRouter.stack
@@ -136,7 +135,7 @@ try {
   endpoints.forEach(e => console.log(`   - ${e}`));
   
 } catch (e) {
-  console.error("❌ AI router não carregado:", e.message);
+  console.error("AI router não carregado:", e.message);
 }
 
 // 4. Meta analyzer (/state) + análise scraped_decks (/share, /tier-list, /stats)
@@ -146,64 +145,64 @@ try {
   const scrapedMetaRouter = require("./routes/scraped-meta");
   app.use("/api/meta", scrapedMetaRouter);
   console.log(
-    "✅ Meta router carregado: /api/meta (state + share, tier-list, stats)"
+    "Meta router carregado: /api/meta (state + share, tier-list, stats)"
   );
 } catch (e) {
-  console.warn("⚠️  Meta router não carregado:", e.message);
+  console.warn("Meta router não carregado:", e.message);
 }
 
 // 5. Deck Comparison
 try {
   const deckComparison = require('./routes/deckComparison');
   app.use('/api/deck-comparison', deckComparison);
-  console.log("✅ Deck Comparison carregado: /api/deck-comparison");
+  console.log("Deck Comparison carregado: /api/deck-comparison");
 } catch (e) {
-  console.warn("⚠️  Deck Comparison não carregado:", e.message);
+  console.warn("Deck Comparison não carregado:", e.message);
 }
 
 // 6. Meta Analysis
 try {
   const metaAnalysisRoutes = require('./routes/meta-analysis');
   app.use('/api/meta-analysis', metaAnalysisRoutes);
-  console.log("✅ Meta Analysis carregado: /api/meta-analysis");
+  console.log("Meta Analysis carregado: /api/meta-analysis");
 } catch (e) {
-  console.warn("⚠️  Meta Analysis não carregado:", e.message);
+  console.warn("Meta Analysis não carregado:", e.message);
 }
 
 // 7. Tier lists (personalizadas + comunidade)
 try {
   const tierListsRouter = require("./routes/tier-lists");
   app.use("/api/tier-lists", tierListsRouter);
-  console.log("✅ Tier lists: /api/tier-lists");
+  console.log("Tier lists: /api/tier-lists");
 } catch (e) {
-  console.warn("⚠️  Tier lists não carregado:", e.message);
+  console.warn("Tier lists não carregado:", e.message);
 }
 
 // 8. Coleção + wishlist (ficheiro local por utilizador autenticado)
 try {
   const collectionRouter = require("./routes/collection");
   app.use("/api/collection", collectionRouter);
-  console.log("✅ Collection: /api/collection");
+  console.log("Collection: /api/collection");
 } catch (e) {
-  console.warn("⚠️  Collection não carregado:", e.message);
+  console.warn("Collection não carregado:", e.message);
 }
 
 // 9. Busca de cartas (cards.json local)
 try {
   const cardsRouter = require("./routes/cards");
   app.use("/api/cards", cardsRouter);
-  console.log("✅ Cards: /api/cards");
+  console.log("Cards: /api/cards");
 } catch (e) {
-  console.warn("⚠️  Cards API não carregado:", e.message);
+  console.warn("Cards API não carregado:", e.message);
 }
 
 // 10. Torneios (Swiss simplificado, ficheiro local)
 try {
   const tournamentsRouter = require("./routes/tournaments");
   app.use("/api/tournaments", tournamentsRouter);
-  console.log("✅ Tournaments: /api/tournaments");
+  console.log("Tournaments: /api/tournaments");
 } catch (e) {
-  console.warn("⚠️  Tournaments não carregado:", e.message);
+  console.warn("Tournaments não carregado:", e.message);
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -212,7 +211,7 @@ try {
 
 // ── Catch-all 404 ────────────────────────────────────────────────────────────
 app.use((req, res) => {
-  console.warn(`⚠️  404 Not Found: ${req.method} ${req.path}`);
+  console.warn(`404 Not Found: ${req.method} ${req.path}`);
   res.status(404).json({ 
     error: 'Not Found',
     path: req.path,
@@ -234,7 +233,7 @@ app.use((req, res) => {
 
 // ── Error handler ────────────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
-  console.error('❌ Server error:', err);
+  console.error('Server error:', err);
   res.status(500).json({ 
     error: 'Internal Server Error',
     message: err.message 
@@ -248,8 +247,8 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3002;
 
 const server = app.listen(PORT, () => {
-  console.log(`\n✅ API on: http://localhost:${PORT}\n`);
-  console.log('📋 Available routes:');
+  console.log(`\nAPI on: http://localhost:${PORT}\n`);
+  console.log('Available routes:');
   console.log('   - /api/auth/*');
   console.log('   - /api/deck/*');
   console.log('   - /api/ai/*');
@@ -262,16 +261,16 @@ const server = app.listen(PORT, () => {
   if (process.env.ENABLE_CRON !== 'false') {
     //metaCron.init();
   } else {
-    console.log('⚠️  Cron jobs desabilitados');
+    console.log('Cron jobs desabilitados');
   }
 });
 
 server.on("error", (e) => {
   if (e && e.code === "EADDRINUSE") {
     console.error(
-      `❌ Porta ${PORT} já está em uso. Feche o processo anterior ou altere PORT.`
+      `Porta ${PORT} já está em uso. Feche o processo anterior ou altere PORT.`
     );
   } else {
-    console.error("❌ Server error:", e);
+    console.error("Server error:", e);
   }
 });
