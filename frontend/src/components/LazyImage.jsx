@@ -110,7 +110,7 @@ const LazyImage = ({
       {/* Fallback em caso de erro */}
       {hasError && (
         <div className="lazy-image-error">
-          <span className="lazy-image-error-icon">🖼️</span>
+          <span className="lazy-image-error-icon" aria-hidden="true">IMG</span>
           <span className="lazy-image-error-text">Imagem não disponível</span>
         </div>
       )}

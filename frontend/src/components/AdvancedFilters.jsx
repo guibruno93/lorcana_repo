@@ -233,7 +233,7 @@ export default function AdvancedFilters({
                           <span className="advanced-filters__sugg-name">{card.name}</span>
                           <span className="advanced-filters__sugg-meta">
                             <InkBadge ink={card.color} size="sm" />
-                            {card.cost != null ? ` ${card.cost} 💧` : ''}{' '}
+                            {card.cost != null ? ` ${card.cost}` : ''}{' '}
                             {card.type}
                           </span>
                         </span>

@@ -82,7 +82,6 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
     return re.test(email);
   };
 
-  // ✅ MELHORADO: Validação de username
   const validateUsername = (username) => {
     if (!username || username.length < 3) {
       return 'Usuário deve ter no mínimo 3 caracteres';
@@ -360,30 +359,19 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
 
   return (
     <div className="login-page">
-      <div className="login-card">
+      <div className="login-main">
+        <div className="login-card">
         <div className="login-breadcrumb">
           <Link to="/">← Voltar ao início</Link>
         </div>
         <div className="login-header">
-          <h1>🪶 Inkwell Labs</h1>
+          <h1>Inkwell Labs</h1>
           <p className="login-subtitle">
             {mode === 'login' && 'Bem-vindo de volta!'}
             {mode === 'register' && 'Criar sua conta'}
             {mode === 'forgot' && 'Recuperar Senha'}
           </p>
         </div>
-
-        {(mode === 'login' || mode === 'register') && (
-          <div className="beta-notice" role="status">
-            <span className="beta-icon" aria-hidden>
-              ℹ️
-            </span>
-            <div className="beta-text">
-              <strong>{t('auth.betaMode')}</strong>
-              <p>{t('auth.betaModeDescription')}</p>
-            </div>
-          </div>
-        )}
 
         {message && (
           <div className={`message ${messageType}`}>
@@ -452,7 +440,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={-1}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? t('common.hidePassword') : t('common.showPassword')}
                 </button>
               </div>
               {errors.password && <span className="error-text">{errors.password}</span>}
@@ -497,7 +485,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   tabIndex={-1}
                 >
-                  {showConfirmPassword ? '🙈' : '👁️'}
+                  {showConfirmPassword ? t('common.hidePassword') : t('common.showPassword')}
                 </button>
               </div>
               {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
@@ -578,7 +566,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
                   onClick={() => setShowPassword(!showPassword)}
                   tabIndex={-1}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? t('common.hidePassword') : t('common.showPassword')}
                 </button>
               </div>
               {errors.password && <span className="error-text">{errors.password}</span>}
@@ -657,38 +645,42 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
             </div>
           </form>
         )}
+        </div>
       </div>
 
-      {/* Rodapé com botão estilizado */}
-      <div className="login-footer">
-        <button
-          type="button"
-          className="link-button-small"
-          onClick={() => setShowDisclaimer(true)}
-        >
-          ⚠️ Avisos Importantes
-        </button>
-        <p>© 2026 Inkwell Labs. Projeto de fãs, não oficial.</p>
-      </div>
+      <footer className="login-footer" role="contentinfo">
+        <div className="login-footer-inner">
+          <button
+            type="button"
+            className="login-footer-disclaimer-btn"
+            onClick={() => setShowDisclaimer(true)}
+          >
+            Avisos importantes
+          </button>
+          <p className="login-footer-copy">
+            © 2026 Inkwell Labs. Projeto de fãs, não oficial.
+          </p>
+        </div>
+      </footer>
 
       {/* MODAL DE DISCLAIMER */}
       {showDisclaimer && (
         <div className="disclaimer-overlay" onClick={() => setShowDisclaimer(false)}>
           <div className="disclaimer-modal" onClick={(e) => e.stopPropagation()}>
             <div className="disclaimer-header">
-              <h2>⚠️ Avisos Legais e Importantes</h2>
+              <h2>Avisos legais e importantes</h2>
               <button 
                 className="close-button"
                 onClick={() => setShowDisclaimer(false)}
                 aria-label="Fechar"
               >
-                ✕
+                ×
               </button>
             </div>
 
             <div className="disclaimer-content">
               <section className="disclaimer-section">
-                <h3>🎴 Sobre o Conteúdo</h3>
+                <h3>Sobre o conteúdo</h3>
                 <p>
                   <strong>Inkwell Labs</strong> é um projeto de fãs, não oficial e sem fins lucrativos. 
                   Disney Lorcana™ é uma marca registrada da Disney Enterprises, Inc. 
@@ -702,7 +694,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
               </section>
 
               <section className="disclaimer-section">
-                <h3>📊 Dados e Privacidade</h3>
+                <h3>Dados e privacidade</h3>
                 <ul>
                   <li>Seus dados de deck são armazenados de forma segura</li>
                   <li>Não vendemos ou compartilhamos suas informações pessoais</li>
@@ -712,7 +704,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
               </section>
 
               <section className="disclaimer-section">
-                <h3>🤖 Meta-Análise e IA</h3>
+                <h3>Meta-análise e IA</h3>
                 <p>
                   As análises de meta e sugestões de deck são geradas por algoritmos 
                   baseados em dados da comunidade. <strong>Não garantimos precisão absoluta</strong> 
@@ -725,7 +717,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
               </section>
 
               <section className="disclaimer-section">
-                <h3>⚖️ Termos de Uso</h3>
+                <h3>Termos de uso</h3>
                 <ul>
                   <li>Você é responsável pelo conteúdo que publica (nomes de deck, comentários)</li>
                   <li>Não toleramos discurso de ódio ou comportamento abusivo</li>
@@ -735,7 +727,7 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
               </section>
 
               <section className="disclaimer-section">
-                <h3>🚧 Beta e Bugs</h3>
+                <h3>Beta e bugs</h3>
                 <p>
                   Inkwell Labs está em desenvolvimento ativo. Bugs podem ocorrer e 
                   funcionalidades podem mudar sem aviso prévio. Agradecemos seu feedback 

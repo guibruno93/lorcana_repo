@@ -7,35 +7,35 @@ const pub = process.env.PUBLIC_URL || '';
 
 const FEATURES = [
   {
-    icon: '📊',
+    iconLabel: 'Meta',
     title: 'Análise de meta em tempo real',
     description:
       'Tier lists automáticos com dados reais de torneios. Veja quais arquétipos dominam o meta competitivo.',
     screenshot: `${pub}/screenshots/tier-list.svg`,
   },
   {
-    icon: '🃏',
+    iconLabel: 'Deck',
     title: 'Deckbuilder visual',
     description:
       'Monte decks com interface intuitiva. Filtros por tinta, custo e raridade, com validação de regras.',
     screenshot: `${pub}/screenshots/deckbuilder-full.svg`,
   },
   {
-    icon: '🎲',
+    iconLabel: 'Mão',
     title: 'Simulador de mulligan',
     description:
       'Teste mãos iniciais e mulligans alinhados às regras do Lorcana, com visualização das cartas.',
     screenshot: `${pub}/screenshots/mulligan.svg`,
   },
   {
-    icon: '🔍',
+    iconLabel: 'DB',
     title: 'Base de cartas',
     description:
       'Explore o card database com busca, filtros e estatísticas de uso no meta.',
     screenshot: `${pub}/screenshots/card-database.svg`,
   },
   {
-    icon: '⚔️',
+    iconLabel: 'VS',
     title: 'Matchups e análise de deck',
     description:
       'Cole sua decklist e veja a análise, curva de mana e ferramentas de preparação.',
@@ -190,7 +190,7 @@ function LandingPage() {
             {FEATURES.map((f) => (
               <article key={f.title} className="landing-feature-card">
                 <div className="landing-feature-icon" aria-hidden>
-                  {f.icon}
+                  {f.iconLabel}
                 </div>
                 <h3>{f.title}</h3>
                 <p>{f.description}</p>
@@ -267,7 +267,7 @@ function LandingPage() {
       <section className="landing-cta-final" aria-labelledby="cta-final-title">
         <div className="landing-container landing-cta-inner">
           <h2 id="cta-final-title">Faça parte da história de Lorcana</h2>
-          <p>Junte-se á outros jogadores competitivos com o Inkwell Labs.</p>
+          <p>Junte-se a outros jogadores competitivos com o Inkwell Labs.</p>
           <div className="landing-cta-row landing-cta-row--center">
             <button type="button" className="landing-btn-primary landing-btn-on-accent" onClick={goRegister}>
               Criar conta grátis
@@ -280,7 +280,7 @@ function LandingPage() {
             </a>
           </div>
           <p className="landing-cta-note">
-            ✓ Sem cartão de crédito &nbsp;✓ Configuração rápida &nbsp;✓ Gratuito
+            Sem cartão de crédito · Configuração rápida · Gratuito
           </p>
         </div>
       </section>

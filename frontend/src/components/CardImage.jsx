@@ -22,25 +22,29 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
         setLoading(true);
         setError(null);
         
-        // ✅ CACHE: Verificar se já temos essa carta
         const cacheKey = `${cardName}-${size}`;
         if (cardCache.has(cacheKey)) {
-          console.log(`💾 Cache HIT: "${cardName}"`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`Cache hit: "${cardName}"`);
+          }
           setCard(cardCache.get(cacheKey));
           setLoading(false);
           return;
         }
         
-        // ✅ DEDUPLICAÇÃO: Verificar se já tem requisição em andamento
         if (pendingRequests.has(cardName)) {
-          console.log(`⏳ Aguardando requisição existente: "${cardName}"`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`Awaiting in-flight request: "${cardName}"`);
+          }
           const existingRequest = await pendingRequests.get(cardName);
           setCard(existingRequest);
           setLoading(false);
           return;
         }
         
-        console.log(`🔍 Fetching card: "${cardName}"`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`Fetching card: "${cardName}"`);
+        }
         
         // Criar promise e adicionar ao pending
         const requestPromise = (async () => {
@@ -54,7 +58,6 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
             headers['Authorization'] = `Bearer ${token}`;
           }
           
-          // ✅ CORRIGIDO: Usa API variável de ambiente
           const response = await fetch(
             `${API}/api/deck/search-card?q=${encodeURIComponent(cardName)}`,
             { headers }
@@ -86,15 +89,14 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
         // Aguardar resultado
         const foundCard = await requestPromise;
         
-        console.log(`✅ Card found:`, foundCard.name, '-', foundCard.version);
-        console.log(`🖼️ Image URL:`, foundCard.image_uris.digital[size]);
-        
-        // ✅ SALVAR NO CACHE
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Card found:', foundCard.name, '-', foundCard.version);
+        }
         cardCache.set(cacheKey, foundCard);
         setCard(foundCard);
         
       } catch (err) {
-        console.error(`❌ Error fetching "${cardName}":`, err);
+        console.error(`Error fetching "${cardName}":`, err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -104,7 +106,6 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
     };
     
     if (cardName) {
-      // ✅ DEBOUNCE: Aguardar 100ms antes de fazer requisição
       const timer = setTimeout(() => {
         fetchCard();
       }, 100);
@@ -124,7 +125,7 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
         borderRadius: '12px',
         background: 'rgba(0,0,0,0.3)'
       }}>
-        <div style={{ fontSize: '24px', marginBottom: '10px' }}>⏳</div>
+        <div style={{ fontSize: '14px', marginBottom: '10px', opacity: 0.85 }}>…</div>
         <div style={{ fontSize: '14px' }}>Loading...</div>
         <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
           {cardName}
@@ -144,7 +145,7 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
         borderRadius: '12px',
         background: 'rgba(231, 76, 60, 0.1)'
       }}>
-        <div style={{ fontSize: '24px', marginBottom: '10px' }}>❌</div>
+        <div style={{ fontSize: '14px', marginBottom: '10px', fontWeight: 700 }}>Erro</div>
         <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '8px' }}>
           Card not found
         </div>
@@ -201,7 +202,7 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
             e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
           }}
           onError={(e) => {
-            console.error(`❌ Image failed to load: ${imageUrl}`);
+            console.error(`Image failed to load: ${imageUrl}`);
             e.currentTarget.style.display = 'none';
           }}
         />
@@ -239,9 +240,9 @@ export const CardImage = ({ cardName, size = 'normal' }) => {
           gap: '8px',
           flexWrap: 'wrap'
         }}>
-          {card.cost && <span>💎 {card.cost}</span>}
+          {card.cost != null && <span>Custo {card.cost}</span>}
           {card.ink && <span>{card.ink}</span>}
-          {card.rarity && <span>⭐ {card.rarity}</span>}
+          {card.rarity && <span>{card.rarity}</span>}
         </div>
       </div>
     </div>

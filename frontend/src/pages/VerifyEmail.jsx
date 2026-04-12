@@ -127,7 +127,7 @@ export default function VerifyEmail() {
       return (
         <div className="verify-email-page">
           <div className="verify-email-card">
-            <div className="verify-email-icon">⚠️</div>
+            <div className="verify-email-icon verify-email-icon--error" aria-hidden="true" />
             <h1>{t('auth.verifyFailed')}</h1>
             <p className="verify-email-hint">{tokenError}</p>
             <div className="verify-email-actions">
@@ -176,7 +176,7 @@ export default function VerifyEmail() {
 
         {emailSent ? (
           <>
-            <div className="verify-email-icon">✅</div>
+            <div className="verify-email-icon verify-email-icon--success" aria-hidden="true" />
             <p className="lead">{t('auth.emailSentTo', { email })}</p>
             <p className="lead">{t('auth.checkInbox')}</p>
             <p className="lead" style={{ fontSize: '0.95rem' }}>
@@ -185,7 +185,7 @@ export default function VerifyEmail() {
           </>
         ) : (
           <>
-            <div className="verify-email-icon">⚠️</div>
+            <div className="verify-email-icon verify-email-icon--error" aria-hidden="true" />
             <p className="lead">{t('auth.accountCreatedButNoEmail')}</p>
             <p className="lead">
               <strong>{t('auth.registeredEmail')}:</strong> {email}

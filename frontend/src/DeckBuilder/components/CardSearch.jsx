@@ -66,7 +66,7 @@ const CardSearch = ({ onAddCard }) => {
   return (
     <div className="card-search">
       <div className="search-header">
-        <h2>🔍 {t('deckBuilder.searchCards')}</h2>
+        <h2>{t('deckBuilder.searchCards')}</h2>
       </div>
 
       {/* Search Input */}
@@ -79,7 +79,7 @@ const CardSearch = ({ onAddCard }) => {
           onChange={(e) => setQuery(e.target.value)}
         />
         {loading && (
-          <div className="search-loading">⏳</div>
+          <div className="search-loading" aria-hidden="true">…</div>
         )}
       </div>
 
@@ -148,7 +148,7 @@ const CardSearch = ({ onAddCard }) => {
               )}
               <div className="result-meta">
                 {card.ink_cost !== null && (
-                  <span className="result-cost">💧 {card.ink_cost}</span>
+                  <span className="result-cost">{card.ink_cost}</span>
                 )}
                 {card.ink_type && (
                   <span className={`result-ink ink-${card.ink_type.toLowerCase()}`}>

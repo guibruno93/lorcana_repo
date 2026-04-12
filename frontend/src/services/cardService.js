@@ -86,19 +86,19 @@ function getMockCards() {
  */
 export async function fetchAllCards() {
   if (USE_MOCK_DATA) {
-    console.log('🔧 Using MOCK data');
+    console.log('Using MOCK data');
     return getMockCards();
   }
 
   const now = Date.now();
   
   if (cache.cards && cache.timestamp && (now - cache.timestamp) < cache.TTL) {
-    console.log('📦 Using cached cards');
+    console.log('Using cached cards');
     return cache.cards;
   }
 
   try {
-    console.log('🌐 Fetching cards from Lorcast API...');
+    console.log('Fetching cards from Lorcast API...');
     
     // Buscar por cada set (API rejeita query vazia)
     const SET_CODES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'P1', 'P2'];
@@ -120,11 +120,11 @@ export async function fetchAllCards() {
               }
             });
             
-            console.log(`  ✅ Set ${setCode}: ${data.results.length} cards`);
+            console.log(`  Set ${setCode}: ${data.results.length} cards`);
           }
         }
       } catch (error) {
-        console.warn(`  ⚠️ Set ${setCode}:`, error.message);
+        console.warn(`  Set ${setCode}:`, error.message);
       }
     }
     
@@ -134,21 +134,21 @@ export async function fetchAllCards() {
     
     const normalizedCards = allCards.map(normalizeCard);
     
-    console.log(`✅ Loaded ${normalizedCards.length} total cards from API`);
+    console.log(`Loaded ${normalizedCards.length} total cards from API`);
     
     cache.cards = normalizedCards;
     cache.timestamp = now;
     
     return normalizedCards;
   } catch (error) {
-    console.error('❌ Error fetching cards:', error);
+    console.error('Error fetching cards:', error);
     
     if (cache.cards) {
-      console.warn('⚠️ Using cached data');
+      console.warn('Using cached data');
       return cache.cards;
     }
     
-    console.warn('⚠️ Using MOCK data as fallback');
+    console.warn('Using MOCK data as fallback');
     return getMockCards();
   }
 }
@@ -215,7 +215,7 @@ export async function fetchSets() {
     }
     
     if (sets.length > 0) {
-      console.log(`✅ Loaded ${sets.length} sets`);
+      console.log(`Loaded ${sets.length} sets`);
       cache.sets = sets;
       return sets;
     }

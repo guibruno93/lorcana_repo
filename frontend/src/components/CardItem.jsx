@@ -48,7 +48,7 @@ const CardItem = React.memo(({ card, onClick }) => {
 />
         ) : (
           <div className="card-item-placeholder">
-            <span className="card-item-placeholder-icon">🃏</span>
+            <span className="card-item-placeholder-icon" aria-hidden="true">—</span>
           </div>
         )}
       </div>
@@ -63,7 +63,6 @@ const CardItem = React.memo(({ card, onClick }) => {
         <div className="card-item-stats">
           {card.ink_cost !== null && card.ink_cost !== undefined && (
             <span className="card-item-cost">
-              <span className="card-item-cost-icon">💧</span>
               {card.ink_cost}
             </span>
           )}

@@ -69,7 +69,7 @@ const DeckStats = ({ deck }) => {
   return (
     <div className="deck-stats">
       <div className="stats-header">
-        <h2>📊 {t('deckBuilder.statistics')}</h2>
+        <h2>{t('deckBuilder.statistics')}</h2>
       </div>
 
       {/* Mana Curve */}

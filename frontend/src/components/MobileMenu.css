@@ -115,8 +115,13 @@
   gap: 12px;
 }
 
-.logo-icon {
-  font-size: 28px;
+.mobile-menu-logo .logo-icon {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .logo-text {

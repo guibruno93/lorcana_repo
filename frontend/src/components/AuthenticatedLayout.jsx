@@ -59,7 +59,7 @@ export default function AuthenticatedLayout({
               if (e.key === 'Enter' || e.key === ' ') navigate('/profile');
             }}
           >
-            👤 {user.username || user.name}
+            {user.username || user.name}
           </span>
           <button type="button" onClick={handleLogout} className="btn btn-ghost">
             {t('auth.logout')}
@@ -73,14 +73,14 @@ export default function AuthenticatedLayout({
           onClick={() => navigate('/deck')}
           className={`tab ${activeTab === 'deck' ? 'tab-active' : ''}`}
         >
-          📋 {t('tabs.deck')}
+          {t('tabs.deck')}
         </button>
         <button
           type="button"
           onClick={() => navigate('/hand')}
           className={`tab ${activeTab === 'hand' ? 'tab-active' : ''}`}
         >
-          🎴 {t('tabs.hand')}
+          {t('tabs.hand')}
         </button>
         <button
           type="button"
@@ -94,42 +94,42 @@ export default function AuthenticatedLayout({
           onClick={() => navigate('/collection')}
           className={`tab ${activeTab === 'collection' ? 'tab-active' : ''}`}
         >
-          📚 {t('tabs.collection')}
+          {t('tabs.collection')}
         </button>
         <button
           type="button"
           onClick={() => navigate('/deck-builder')}
           className={`tab ${activeTab === 'deck-builder' ? 'tab-active' : ''}`}
         >
-          🎨 {t('tabs.deckBuilder')}
+          {t('tabs.deckBuilder')}
         </button>
         <button
           type="button"
           onClick={() => navigate('/ai-deck')}
           className={`tab ${activeTab === 'ai-deck' ? 'tab-active' : ''}`}
         >
-          🤖 {t('tabs.aiDeck')}
+          {t('tabs.aiDeck')}
         </button>
         <button
           type="button"
           onClick={() => navigate('/matchups')}
           className={`tab ${activeTab === 'matchups' ? 'tab-active' : ''}`}
         >
-          ⚔️ {t('tabs.matchups')}
+          {t('tabs.matchups')}
         </button>
         <button
           type="button"
           onClick={() => navigate('/meta')}
           className={`tab ${activeTab === 'meta' ? 'tab-active' : ''}`}
         >
-          📊 {t('tabs.meta')}
+          {t('tabs.meta')}
         </button>
         <button
           type="button"
           onClick={() => navigate('/tournaments')}
           className={`tab ${activeTab === 'tournaments' ? 'tab-active' : ''}`}
         >
-          🏆 {t('tabs.tournaments')}
+          {t('tabs.tournaments')}
         </button>
       </nav>
 

@@ -47,7 +47,6 @@ export default function CardDatabase() {
     try {
       setLoading(true);
       const cards = await fetchAllCards();
-      console.log('📦 Cards loaded:', cards.length);
       setAllCards(cards);
     } catch (error) {
       console.error('Error loading cards:', error);
@@ -59,7 +58,6 @@ export default function CardDatabase() {
   const loadSets = async () => {
     try {
       const sets = await fetchSets();
-      console.log('📦 Sets loaded:', sets.length);
       setAvailableSets(sets);
     } catch (error) {
       console.error('Error loading sets:', error);
@@ -68,12 +66,10 @@ export default function CardDatabase() {
 
   // Memoized calculations
   const filteredCards = useMemo(() => {
-    console.log('🔄 Filtering cards...');
     return filterAndSortCards(allCards, filters, sortBy);
   }, [allCards, filters, sortBy]);
 
   const paginatedData = useMemo(() => {
-    console.log('📄 Paginating cards...');
     return paginateCards(filteredCards, currentPage, pageSize);
   }, [filteredCards, currentPage, pageSize]);
 
@@ -91,7 +87,6 @@ export default function CardDatabase() {
 
   // Event handlers
   const handleFilterChange = useCallback((newFilters) => {
-    console.log('🔍 Filters changed:', newFilters);
     setFilters(newFilters);
     setCurrentPage(1);
   }, []);
@@ -114,18 +109,15 @@ export default function CardDatabase() {
   }, []);
 
   const handleSortChange = useCallback((newSort) => {
-    console.log('🔄 Sort changed:', newSort);
     setSortBy(newSort);
   }, []);
 
   const handlePageChange = useCallback((newPage) => {
-    console.log('📄 Page changed:', newPage);
     setCurrentPage(newPage);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const handleCardClick = useCallback((card) => {
-    console.log('🃏 Card clicked:', card.name);
     setSelectedCard(card);
     setModalOpen(true);
   }, []);
@@ -227,7 +219,7 @@ export default function CardDatabase() {
                     />
                   ) : (
                     <div className="card-item-placeholder">
-                      <span>🃏</span>
+                      <span className="card-item-placeholder-text">—</span>
                     </div>
                   )}
                 </div>
@@ -242,7 +234,7 @@ export default function CardDatabase() {
                   <div className="card-item-stats">
                     {card.ink_cost !== null && card.ink_cost !== undefined && (
                       <span className="card-item-cost">
-                        💧 {card.ink_cost}
+                        {card.ink_cost}
                       </span>
                     )}
                     

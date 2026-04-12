@@ -27,6 +27,42 @@
   backdrop-filter: blur(10px);
 }
 
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 16px;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.app-logo .logo-icon {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.app-logo .logo-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .header-left {
   display: flex;
   align-items: center;
@@ -229,6 +265,18 @@
   font-size: 48px;
   margin-bottom: 12px;
   opacity: 0.5;
+}
+
+.empty-icon--muted {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  font-size: 0;
+  margin-bottom: 12px;
+  opacity: 1;
+  border-radius: 12px;
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px dashed rgba(148, 163, 184, 0.35);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

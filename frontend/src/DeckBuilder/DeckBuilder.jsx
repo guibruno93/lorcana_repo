@@ -190,7 +190,7 @@ const DeckBuilder = () => {
             className="btn-export"
             disabled={!isValid}
           >
-            📤 {t('deckBuilder.export')}
+            {t('deckBuilder.export')}
           </button>
 
           <button
@@ -198,7 +198,7 @@ const DeckBuilder = () => {
             onClick={() => setSaveModalOpen(true)}
             className="btn-save"
           >
-            💾 {t('deckBuilder.save')}
+            {t('deckBuilder.save')}
           </button>
 
           <button
@@ -206,7 +206,7 @@ const DeckBuilder = () => {
             onClick={handleClearDeck}
             className="btn-clear"
           >
-            🗑️ {t('deckBuilder.clear')}
+            {t('deckBuilder.clear')}
           </button>
         </div>
       </div>
@@ -215,12 +215,12 @@ const DeckBuilder = () => {
         <div className="validation-summary">
           {validation.errors.map((error, i) => (
             <div key={i} className="validation-error">
-              ❌ {error}
+              {error}
             </div>
           ))}
           {validation.warnings.map((warning, i) => (
             <div key={i} className="validation-warning">
-              ⚠️ {warning}
+              {warning}
             </div>
           ))}
         </div>
@@ -275,7 +275,7 @@ const DeckBuilder = () => {
           onClick={saveDeckLocal}
           disabled={totalCards === 0}
         >
-          💾 {t('deckBuilder.saveDeck')}
+          {t('deckBuilder.saveDeck')}
         </button>
       </footer>
 

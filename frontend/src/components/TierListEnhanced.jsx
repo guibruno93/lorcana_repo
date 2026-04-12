@@ -356,7 +356,7 @@ const ArchetypeRow = ({
       {isExpanded && (
         <div className="cards-expanded-section slide-in-up">
           <div className="cards-section-header">
-            <span>🃏</span>
+            <span aria-hidden="true" />
             <span>Top 8 Cards</span>
             {isLoading && (
               <span className="loading-indicator">
@@ -365,7 +365,7 @@ const ArchetypeRow = ({
             )}
             {!isOnline && !isLoading && (
               <span style={{ fontSize: '12px', color: '#ffa502', marginLeft: 'auto' }}>
-                📡 Offline
+                Offline
               </span>
             )}
           </div>
@@ -386,7 +386,7 @@ const ArchetypeRow = ({
             <div className="no-cards-message fade-in">
               {isOnline 
                 ? 'No card data available' 
-                : '📡 No cached card data - Connect to internet to view cards'}
+                : 'Sem dados em cache — ligue-se à internet para ver as cartas'}
             </div>
           )}
         </div>

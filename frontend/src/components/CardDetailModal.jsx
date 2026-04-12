@@ -40,8 +40,8 @@ export default function CardDetailModal({ card, onClose }) {
   return (
     <div className="card-modal-overlay" onClick={onClose}>
       <div className="card-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>
-          ✕
+        <button type="button" className="modal-close" onClick={onClose} aria-label={t('common.close')}>
+          ×
         </button>
 
         <div className="modal-content">
@@ -55,7 +55,7 @@ export default function CardDetailModal({ card, onClose }) {
               />
             ) : (
               <div className="modal-image-placeholder">
-                <span>🃏</span>
+                <span aria-hidden="true">—</span>
                 <span>{card.name}</span>
               </div>
             )}
@@ -120,21 +120,21 @@ export default function CardDetailModal({ card, onClose }) {
                 <div className="character-stats-grid">
                   {card.strength !== undefined && (
                     <div className="character-stat">
-                      <span className="stat-icon">⚔️</span>
+                      <span className="stat-icon stat-icon--abbr">S</span>
                       <span className="stat-label">{t('cardDatabase.details.strength')}</span>
                       <span className="stat-value">{card.strength}</span>
                     </div>
                   )}
                   {card.willpower !== undefined && (
                     <div className="character-stat">
-                      <span className="stat-icon">🛡️</span>
+                      <span className="stat-icon stat-icon--abbr">W</span>
                       <span className="stat-label">{t('cardDatabase.details.willpower')}</span>
                       <span className="stat-value">{card.willpower}</span>
                     </div>
                   )}
                   {card.lore !== undefined && (
                     <div className="character-stat">
-                      <span className="stat-icon">📖</span>
+                      <span className="stat-icon stat-icon--abbr">L</span>
                       <span className="stat-label">{t('cardDatabase.details.lore')}</span>
                       <span className="stat-value">{card.lore}</span>
                     </div>

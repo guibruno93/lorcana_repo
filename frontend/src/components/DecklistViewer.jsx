@@ -51,19 +51,16 @@ export default function DecklistViewer({ decklists }) {
             <div className="deck-meta">
               {selectedDeck.author && (
                 <span className="deck-author">
-                  <span className="meta-icon">👤</span>
                   {selectedDeck.author}
                 </span>
               )}
               {selectedDeck.event && (
                 <span className="deck-event">
-                  <span className="meta-icon">🏆</span>
                   {selectedDeck.event}
                 </span>
               )}
               {selectedDeck.date && (
                 <span className="deck-date">
-                  <span className="meta-icon">📅</span>
                   {new Date(selectedDeck.date).toLocaleDateString()}
                 </span>
               )}
@@ -85,17 +82,7 @@ export default function DecklistViewer({ decklists }) {
               onClick={handleCopy}
               className={`copy-button ${copied ? 'copied' : ''}`}
             >
-              {copied ? (
-                <>
-                  <span className="copy-icon">✓</span>
-                  {t('archetypePage.copied')}
-                </>
-              ) : (
-                <>
-                  <span className="copy-icon">📋</span>
-                  {t('archetypePage.copy')}
-                </>
-              )}
+              {copied ? t('archetypePage.copied') : t('archetypePage.copy')}
             </button>
           </div>
 

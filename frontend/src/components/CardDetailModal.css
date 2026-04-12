@@ -235,6 +235,19 @@
   font-size: 24px;
 }
 
+.character-stat .stat-icon--abbr {
+  font-size: 12px;
+  font-weight: 800;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(139, 92, 246, 0.25);
+  color: #e9d5ff;
+}
+
 .character-stat .stat-label {
   font-size: 11px;
   text-transform: uppercase;

@@ -167,8 +167,16 @@
 }
 
 .stat-icon {
-  font-size: 32px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.45),
+    rgba(168, 85, 247, 0.35)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .stat-content {
@@ -212,7 +220,15 @@
 }
 
 .section-icon {
-  font-size: 20px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.section-icon--accent {
+  width: 4px;
+  height: 20px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #a78bfa, #6366f1);
 }
 
 .section-title {
@@ -581,7 +597,8 @@
   }
 
   .stat-icon {
-    font-size: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .stat-number {

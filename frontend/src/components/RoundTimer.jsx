@@ -103,10 +103,10 @@ export default function RoundTimer({ durationMinutes, onTimeUp, roundNumber }) {
           onClick={() => setIsPaused((p) => !p)}
           aria-label={isPaused ? t('tournamentsOrg.timerResume') : t('tournamentsOrg.timerPause')}
         >
-          {isPaused ? '▶️' : '⏸️'}
+          {isPaused ? t('tournamentsOrg.timerResume') : t('tournamentsOrg.timerPause')}
         </button>
         <button type="button" className="btn-timer" onClick={reset} aria-label={t('tournamentsOrg.timerReset')}>
-          🔄
+          {t('tournamentsOrg.timerReset')}
         </button>
         <button type="button" className="btn-timer" onClick={() => addMinutes(5)}>
           +5 {t('tournamentsOrg.min')}

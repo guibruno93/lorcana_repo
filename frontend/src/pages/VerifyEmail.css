@@ -30,9 +30,21 @@
 }
 
 .verify-email-icon {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: 12px;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.verify-email-icon--success {
+  border: 3px solid #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+}
+
+.verify-email-icon--error {
+  border: 3px solid #ca8a04;
+  background: rgba(202, 138, 4, 0.12);
 }
 
 .verify-email-hint {

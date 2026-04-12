@@ -56,9 +56,14 @@
 }
 
 .lazy-image-error-icon {
-  font-size: 3rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   margin-bottom: 8px;
-  opacity: 0.5;
+  opacity: 0.55;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .lazy-image-error-text {

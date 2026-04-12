@@ -27,7 +27,7 @@ export default function Header() {
 
         {/* Logo */}
         <div className="header-logo" onClick={() => navigate('/')}>
-          <span className="logo-icon">🎴</span>
+          <span className="logo-icon" aria-hidden="true" />
           <span className="logo-text">Inkwell Labs</span>
         </div>
 
@@ -46,8 +46,8 @@ export default function Header() {
 
         {/* Right Actions */}
         <div className="header-actions">
-          <button className="header-action-button" aria-label="Language">
-            🌍
+          <button type="button" className="header-action-button" aria-label="Idioma">
+            Lang
           </button>
         </div>
       </div>

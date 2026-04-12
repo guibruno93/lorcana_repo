@@ -97,7 +97,7 @@ export default function MetaEvolutionChart({ evolution }) {
       {/* Insights */}
       <div className="evolution-insights">
         <div className="insight-card">
-          <div className="insight-icon">📈</div>
+          <div className="insight-icon" aria-hidden="true" />
           <div className="insight-content">
             <div className="insight-label">{t('archetypePage.trend')}</div>
             <div className="insight-value">
@@ -109,7 +109,7 @@ export default function MetaEvolutionChart({ evolution }) {
         </div>
 
         <div className="insight-card">
-          <div className="insight-icon">🎯</div>
+          <div className="insight-icon" aria-hidden="true" />
           <div className="insight-content">
             <div className="insight-label">{t('archetypePage.peakWinRate')}</div>
             <div className="insight-value">
@@ -119,7 +119,7 @@ export default function MetaEvolutionChart({ evolution }) {
         </div>
 
         <div className="insight-card">
-          <div className="insight-icon">👥</div>
+          <div className="insight-icon" aria-hidden="true" />
           <div className="insight-content">
             <div className="insight-label">{t('archetypePage.peakPlayRate')}</div>
             <div className="insight-value">

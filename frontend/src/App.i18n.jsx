@@ -92,11 +92,11 @@ function HandAnalyzerTab({ deckText }) {
     <div className="tab-layout">
       <div className="panel">
         <div className="panel-header">
-          <span className="panel-title">🎴 {t('handAnalyzer.title')}</span>
+          <span className="panel-title">{t('handAnalyzer.title')}</span>
         </div>
         <div className="panel-body">
           <button onClick={shuffle} disabled={loading} className="btn btn-primary">
-            {loading ? `⏳ ${t('handAnalyzer.shuffling')}` : `🔀 ${t('handAnalyzer.shuffle')}`}
+            {loading ? t('handAnalyzer.shuffling') : t('handAnalyzer.shuffle')}
           </button>
 
           {err && <div className="err-box">{err}</div>}
@@ -121,7 +121,7 @@ function HandAnalyzerTab({ deckText }) {
 
               {!advice && (
                 <button onClick={analyze} disabled={loading} className="btn btn-primary">
-                  {loading ? `⏳ ${t('handAnalyzer.analyzing')}` : `🤖 ${t('handAnalyzer.analyze')}`}
+                  {loading ? t('handAnalyzer.analyzing') : t('handAnalyzer.analyze')}
                 </button>
               )}
 
@@ -135,7 +135,7 @@ function HandAnalyzerTab({ deckText }) {
 
                   {advice.mulligan && advice.mulligan.length > 0 && !simulated && (
                     <button onClick={simulateMulligan} disabled={loading} className="btn btn-primary">
-                      {loading ? `⏳ ${t('handAnalyzer.simulating')}` : `🔄 ${t('handAnalyzer.simulate')}`}
+                      {loading ? t('handAnalyzer.simulating') : t('handAnalyzer.simulate')}
                     </button>
                   )}
 
@@ -159,7 +159,7 @@ function HandAnalyzerTab({ deckText }) {
           {!deckText.trim() && (
             <div className="panel">
               <div className="empty-state">
-                <div className="empty-icon">📋</div>
+                <div className="empty-icon empty-icon--muted" aria-hidden="true" />
                 {t('handAnalyzer.emptyState')}
               </div>
             </div>
@@ -239,9 +239,9 @@ function MatchupsTab({ deckText }) {
     <div className="tab-layout">
       <div className="panel">
         <div className="panel-header">
-          <span className="panel-title">⚔️ {t('matchups.title')}</span>
+          <span className="panel-title">{t('matchups.title')}</span>
           <button className="btn btn-primary btn-sm" onClick={run} disabled={loading}>
-            {loading ? `⏳ ${t('matchups.calculating')}` : `🔄 ${t('matchups.recalculate')}`}
+            {loading ? t('matchups.calculating') : t('matchups.recalculate')}
           </button>
         </div>
 
@@ -336,7 +336,7 @@ function MatchupsTab({ deckText }) {
         {normalizedMatchups.length === 0 && !loading && !err && (
           <div className="panel-body">
             <div className="empty-state">
-              <div className="empty-icon">⚔️</div>
+              <div className="empty-icon empty-icon--muted" aria-hidden="true" />
               {deckText.trim()
                 ? t('matchups.clickToRecalculate')
                 : t('matchups.emptyState')}
@@ -418,10 +418,10 @@ export default function App() {
   }
 
   const tabs = [
-    { id: "deck", label: t('tabs.deck'), icon: "🃏" },
-    { id: "hand", label: t('tabs.hand'), icon: "🎴" },
-    { id: "matchups", label: t('tabs.matchups'), icon: "⚔️" },
-    { id: "meta", label: t('tabs.meta'), icon: "📊" },
+    { id: "deck", label: t('tabs.deck') },
+    { id: "hand", label: t('tabs.hand') },
+    { id: "matchups", label: t('tabs.matchups') },
+    { id: "meta", label: t('tabs.meta') },
   ];
 
   return (
@@ -431,7 +431,7 @@ export default function App() {
           <MobileMenu tabs={tabs} activeTab={tab} onTabChange={setTab} />
           
           <h1 className="app-logo">
-            <span className="logo-icon">🃏</span>
+            <span className="logo-icon" aria-hidden="true" />
             <span className="logo-text">{t('app.title')}</span>
           </h1>
           
@@ -459,7 +459,7 @@ export default function App() {
               className={`tab-btn ${tab === t.id ? "active" : ""}`}
               onClick={() => setTab(t.id)}
             >
-              {t.icon} {t.label}
+              {t.label}
             </button>
           ))}
         </div>

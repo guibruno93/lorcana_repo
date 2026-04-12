@@ -56,7 +56,7 @@ export default function MobileMenu({ tabs, activeTab, onTabChange }) {
       <nav className={`mobile-menu-drawer ${isOpen ? 'open' : ''}`}>
         <div className="mobile-menu-header">
           <div className="mobile-menu-logo">
-            <span className="logo-icon">🃏</span>
+            <span className="logo-icon" aria-hidden="true" />
             <span className="logo-text">LORCANA AI</span>
           </div>
           <button 
@@ -64,7 +64,7 @@ export default function MobileMenu({ tabs, activeTab, onTabChange }) {
             onClick={() => setIsOpen(false)}
             aria-label="Close menu"
           >
-            ✕
+            ×
           </button>
         </div>
 
@@ -75,7 +75,9 @@ export default function MobileMenu({ tabs, activeTab, onTabChange }) {
               className={`mobile-menu-item ${activeTab === tab.id ? 'active' : ''}`}
               onClick={() => handleTabClick(tab.id)}
             >
-              <span className="menu-item-icon">{tab.icon}</span>
+              {tab.icon ? (
+                <span className="menu-item-icon">{tab.icon}</span>
+              ) : null}
               <span className="menu-item-label">{tab.label}</span>
             </button>
           ))}

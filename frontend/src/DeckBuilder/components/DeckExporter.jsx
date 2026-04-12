@@ -37,8 +37,8 @@ const DeckExporter = ({ deck, deckName, onExport, onClose }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>📤 {t('deckBuilder.exportDeck')}</h2>
-          <button onClick={onClose} className="btn-close">✕</button>
+          <h2>{t('deckBuilder.exportDeck')}</h2>
+          <button type="button" onClick={onClose} className="btn-close" aria-label={t('common.close')}>×</button>
         </div>
 
         <div className="modal-body">
@@ -49,19 +49,19 @@ const DeckExporter = ({ deck, deckName, onExport, onClose }) => {
                 onClick={() => setFormat('text')}
                 className={`btn-format ${format === 'text' ? 'active' : ''}`}
               >
-                📄 Text
+                Text
               </button>
               <button
                 onClick={() => setFormat('pixelborn')}
                 className={`btn-format ${format === 'pixelborn' ? 'active' : ''}`}
               >
-                🎮 Pixelborn
+                Pixelborn
               </button>
               <button
                 onClick={() => setFormat('dreamborn')}
                 className={`btn-format ${format === 'dreamborn' ? 'active' : ''}`}
               >
-                💭 Dreamborn
+                Dreamborn
               </button>
             </div>
           </div>
@@ -70,7 +70,7 @@ const DeckExporter = ({ deck, deckName, onExport, onClose }) => {
             <div className="preview-header">
               <span>{t('deckBuilder.preview')}:</span>
               <button onClick={handleCopy} className="btn-copy">
-                {copied ? '✅ Copied!' : '📋 Copy'}
+                {copied ? t('common.copied') : t('common.copy')}
               </button>
             </div>
             <pre className="export-text">{exportedText}</pre>
@@ -79,7 +79,7 @@ const DeckExporter = ({ deck, deckName, onExport, onClose }) => {
 
         <div className="modal-footer">
           <button onClick={handleDownload} className="btn-download">
-            💾 Download
+            Download
           </button>
           <button onClick={onClose} className="btn-cancel">
             Cancel

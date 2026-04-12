@@ -3,26 +3,26 @@ import { useTranslation } from 'react-i18next';
 import './CoreCardsList.css';
 
 const IMPORTANCE_CONFIG = {
-  essential: { 
+  essential: {
     label: { 'pt-BR': 'Essencial', 'en': 'Essential' },
     color: '#ef4444',
-    icon: '⭐'
+    badgeClass: 'group-icon--essential',
   },
-  core: { 
+  core: {
     label: { 'pt-BR': 'Core', 'en': 'Core' },
     color: '#f59e0b',
-    icon: '🔶'
+    badgeClass: 'group-icon--core',
   },
-  flex: { 
+  flex: {
     label: { 'pt-BR': 'Flex', 'en': 'Flex' },
     color: '#3b82f6',
-    icon: '🔷'
+    badgeClass: 'group-icon--flex',
   },
-  tech: { 
+  tech: {
     label: { 'pt-BR': 'Tech', 'en': 'Tech' },
     color: '#8b5cf6',
-    icon: '⚙️'
-  }
+    badgeClass: 'group-icon--tech',
+  },
 };
 
 const ROLE_LABELS = {
@@ -57,7 +57,10 @@ export default function CoreCardsList({ cards }) {
         return (
           <div key={importance} className="card-group">
             <div className="group-header">
-              <span className="group-icon">{config.icon}</span>
+              <span
+                className={`group-icon ${config.badgeClass}`}
+                aria-hidden="true"
+              />
               <h3 className="group-title" style={{ color: config.color }}>
                 {config.label[currentLang] || config.label['en']}
               </h3>

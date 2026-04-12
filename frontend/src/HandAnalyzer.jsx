@@ -83,11 +83,11 @@ export default function HandAnalyzer(props) {
     <div className="tab-layout">
       <div className="panel">
         <div className="panel-header">
-          <span className="panel-title">🎴 {t('handAnalyzer.title')}</span>
+          <span className="panel-title">{t('handAnalyzer.title')}</span>
         </div>
         <div className="panel-body">
           <button onClick={shuffle} disabled={loading} className="btn btn-primary">
-            {loading ? `⏳ ${t('handAnalyzer.shuffling')}` : `🔀 ${t('handAnalyzer.shuffle')}`}
+            {loading ? t('handAnalyzer.shuffling') : t('handAnalyzer.shuffle')}
           </button>
 
           {err && <div className="err-box">{err}</div>}
@@ -112,7 +112,7 @@ export default function HandAnalyzer(props) {
 
               {!advice && (
                 <button onClick={analyze} disabled={loading} className="btn btn-primary">
-                  {loading ? `⏳ ${t('handAnalyzer.analyzing')}` : `🤖 ${t('handAnalyzer.analyze')}`}
+                  {loading ? t('handAnalyzer.analyzing') : t('handAnalyzer.analyze')}
                 </button>
               )}
 
@@ -126,7 +126,7 @@ export default function HandAnalyzer(props) {
 
                   {advice.mulligan && advice.mulligan.length > 0 && !simulated && (
                     <button onClick={simulateMulligan} disabled={loading} className="btn btn-primary">
-                      {loading ? `⏳ ${t('handAnalyzer.simulating')}` : `🔄 ${t('handAnalyzer.simulate')}`}
+                      {loading ? t('handAnalyzer.simulating') : t('handAnalyzer.simulate')}
                     </button>
                   )}
 
@@ -150,7 +150,7 @@ export default function HandAnalyzer(props) {
           {!deckText.trim() && (
             <div className="panel">
               <div className="empty-state">
-                <div className="empty-icon">📋</div>
+                <div className="empty-icon empty-icon--muted" aria-hidden="true" />
                 {t('handAnalyzer.emptyState')}
               </div>
             </div>

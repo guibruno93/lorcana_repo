@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { getCardImageUrl } from '../services/cardService';
 import './CardGrid.css';
-import CardItem from './components/CardItem';
+import CardItem from './CardItem';
 
 export default function CardGrid({ 
   cards, 
@@ -78,7 +78,7 @@ export default function CardGrid({
   if (!cards || cards.length === 0) {
     return (
       <div className="card-grid-empty">
-        <div className="empty-icon">🔍</div>
+        <div className="empty-icon empty-icon--muted" aria-hidden="true" />
         <h3>{t('cardDatabase.noResults')}</h3>
         <p>{t('cardDatabase.tryDifferentFilters')}</p>
       </div>

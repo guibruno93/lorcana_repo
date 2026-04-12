@@ -228,7 +228,7 @@ const UserProfile = (props) => {
               )}
             </div>
             <label className="btn-upload-avatar">
-              📷 {t('userProfile.changeAvatar')}
+              {t('userProfile.changeAvatar')}
               <input
                 type="file"
                 accept="image/*"
@@ -243,19 +243,19 @@ const UserProfile = (props) => {
               onClick={() => setActiveTab('profile')}
               className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
             >
-              👤 {t('userProfile.profile')}
+              {t('userProfile.profile')}
             </button>
             <button
               onClick={() => setActiveTab('password')}
               className={`nav-item ${activeTab === 'password' ? 'active' : ''}`}
             >
-              🔒 {t('userProfile.security')}
+              {t('userProfile.security')}
             </button>
             <button
               onClick={() => setActiveTab('danger')}
               className={`nav-item ${activeTab === 'danger' ? 'active' : ''}`}
             >
-              ⚠️ {t('userProfile.dangerZone')}
+              {t('userProfile.dangerZone')}
             </button>
           </nav>
         </div>

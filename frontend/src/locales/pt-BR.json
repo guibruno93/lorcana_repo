@@ -60,7 +60,12 @@
     "back": "Voltar",
     "next": "Próximo",
     "search": "Buscar",
-    "filter": "Filtrar"
+    "filter": "Filtrar",
+    "showPassword": "Mostrar",
+    "hidePassword": "Ocultar",
+    "inkCost": "{{n}} tinta",
+    "copy": "Copiar",
+    "copied": "Copiado"
   },
   "deckAnalyzer": {
     "title": "Analisador de Decks",
@@ -332,7 +337,7 @@
     "deleteFailed": "Erro ao deletar conta"
   },
   "tierList": {
-    "title": "📊 Gerador de Tier Lists",
+    "title": "Gerador de Tier Lists",
     "tabCreate": "Nova",
     "tabMine": "Minhas",
     "tabCommunity": "Comunidade",

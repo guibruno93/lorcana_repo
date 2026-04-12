@@ -527,7 +527,7 @@ export default function TournamentOrganizer() {
                 )}
                 {canEnd && (
                   <button type="button" className="btn-end-tournament" onClick={handleEndTournament}>
-                    🏁 {t('tournamentsOrg.endTournament')}
+                    {t('tournamentsOrg.endTournament')}
                   </button>
                 )}
               </div>

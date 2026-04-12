@@ -529,17 +529,17 @@ export default function TierListGenerator() {
         </div>
         <div className="public-votes">
           <button type="button" className="btn-primary" onClick={() => vote('agree')}>
-            👍 {t('tierList.agree', 'Concordo')} ({voteStats.agree})
+            {t('tierList.agree', 'Concordo')} ({voteStats.agree})
           </button>
           <button
             type="button"
             className="btn-secondary"
             onClick={() => vote('disagree')}
           >
-            👎 {t('tierList.disagree', 'Discordo')} ({voteStats.disagree})
+            {t('tierList.disagree', 'Discordo')} ({voteStats.disagree})
           </button>
           <button type="button" className="btn-secondary" onClick={likeList}>
-            ❤️ {t('tierList.like', 'Gosto')} ({voteStats.likes})
+            {t('tierList.like', 'Gosto')} ({voteStats.likes})
           </button>
         </div>
       </div>
@@ -549,7 +549,7 @@ export default function TierListGenerator() {
   return (
     <div className="tier-list-generator">
       <div className="generator-header">
-        <h1>{t('tierList.title', '📊 Gerador de Tier Lists')}</h1>
+        <h1>{t('tierList.title', 'Gerador de Tier Lists')}</h1>
         <div className="tabs">
           {['create', 'my-lists', 'community', 'official', 'compare'].map(
             (tab) => (
@@ -642,7 +642,7 @@ export default function TierListGenerator() {
                         className="remove-btn"
                         onClick={() => removeDeckFromTier(d.archetype, tid)}
                       >
-                        ✕
+                        ×
                       </button>
                     </div>
                   ))}
@@ -694,10 +694,10 @@ export default function TierListGenerator() {
 
           <div className="tier-list-actions">
             <button type="button" className="btn-primary" onClick={saveTierList}>
-              💾 {t('tierList.save', 'Guardar')}
+              {t('tierList.save', 'Guardar')}
             </button>
             <button type="button" className="btn-secondary" onClick={shareTierList}>
-              🔗 {t('tierList.share', 'Partilhar')}
+              {t('tierList.share', 'Partilhar')}
             </button>
             <button
               type="button"
@@ -733,7 +733,7 @@ export default function TierListGenerator() {
           <h2>{t('tierList.myLists', 'As minhas tier lists')}</h2>
           {savedLists.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">📊</div>
+              <div className="empty-icon empty-icon--muted" aria-hidden="true" />
               <p>{t('tierList.emptyMine', 'Ainda não há listas guardadas (com login).')}</p>
               <button
                 type="button"
@@ -750,9 +750,9 @@ export default function TierListGenerator() {
                   <h3>{list.title}</h3>
                   <p>{list.description}</p>
                   <div className="card-stats">
-                    <span>👍 {list.agree ?? 0}</span>
-                    <span>👎 {list.disagree ?? 0}</span>
-                    <span>❤️ {list.likes ?? 0}</span>
+                    <span>{t('tierList.agree', 'Concordo')}: {list.agree ?? 0}</span>
+                    <span>{t('tierList.disagree', 'Discordo')}: {list.disagree ?? 0}</span>
+                    <span>{t('tierList.like', 'Gosto')}: {list.likes ?? 0}</span>
                   </div>
                   <div className="card-actions">
                     <button
@@ -803,8 +803,8 @@ export default function TierListGenerator() {
                 <h3>{list.title}</h3>
                 <p>{list.description}</p>
                 <div className="card-stats">
-                  <span>❤️ {list.likes ?? 0}</span>
-                  <span>👍 {list.agree ?? 0}</span>
+                  <span>{t('tierList.like', 'Gosto')}: {list.likes ?? 0}</span>
+                  <span>{t('tierList.agree', 'Concordo')}: {list.agree ?? 0}</span>
                 </div>
                 <button
                   type="button"
@@ -897,7 +897,7 @@ export default function TierListGenerator() {
                     <td>{r.user || '—'}</td>
                     <td>{r.official || '—'}</td>
                     <td>
-                      {r.heat === 'match' && '✅'}
+                      {r.heat === 'match' && 'OK'}
                       {r.heat === 'close' && '◑'}
                       {r.heat === 'far' && '△'}
                       {r.heat === 'na' && '—'}

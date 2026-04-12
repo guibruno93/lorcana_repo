@@ -47,7 +47,15 @@
 }
 
 .panel-title .icon {
-  font-size: 18px;
+  display: inline-block;
+}
+
+.panel-title .icon--accent {
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #a78bfa, #6366f1);
+  flex-shrink: 0;
 }
 
 .panel-body {
@@ -448,7 +456,16 @@
 }
 
 .stat-icon {
-  font-size: 28px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.45),
+    rgba(168, 85, 247, 0.35)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stat-content {

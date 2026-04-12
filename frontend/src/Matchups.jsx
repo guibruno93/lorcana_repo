@@ -87,9 +87,9 @@ export default function Matchups(props) {
     <div className="tab-layout">
       <div className="panel">
         <div className="panel-header">
-          <span className="panel-title">⚔️ {t('matchups.title')}</span>
+          <span className="panel-title">{t('matchups.title')}</span>
           <button className="btn btn-primary btn-sm" onClick={run} disabled={loading}>
-            {loading ? `⏳ ${t('matchups.calculating')}` : `🔄 ${t('matchups.recalculate')}`}
+            {loading ? t('matchups.calculating') : t('matchups.recalculate')}
           </button>
         </div>
 
@@ -184,7 +184,7 @@ export default function Matchups(props) {
         {normalizedMatchups.length === 0 && !loading && !err && (
           <div className="panel-body">
             <div className="empty-state">
-              <div className="empty-icon">⚔️</div>
+              <div className="empty-icon empty-icon--muted" aria-hidden="true" />
               {deckText.trim()
                 ? t('matchups.clickToRecalculate')
                 : t('matchups.emptyState')}

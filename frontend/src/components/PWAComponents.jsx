@@ -37,8 +37,8 @@ export const InstallPrompt = () => {
   return (
     <div className="install-prompt">
       <div className="install-prompt-content">
-        <div className="install-prompt-icon">
-          📱
+        <div className="install-prompt-icon" aria-hidden="true">
+          PWA
         </div>
         <div className="install-prompt-text">
           <div className="install-prompt-title">Install Lorcana Meta</div>
@@ -57,7 +57,7 @@ export const InstallPrompt = () => {
             className="install-prompt-btn dismiss-btn"
             onClick={handleDismiss}
           >
-            ✕
+            ×
           </button>
         </div>
       </div>
@@ -80,12 +80,12 @@ export const OfflineBanner = () => {
       <div className="offline-banner-content">
         {isOffline ? (
           <>
-            <span className="offline-icon">📡</span>
+            <span className="offline-icon" aria-hidden="true">Off</span>
             <span className="offline-text">You're offline - Showing cached data</span>
           </>
         ) : (
           <>
-            <span className="online-icon">✓</span>
+            <span className="online-icon" aria-hidden="true">OK</span>
             <span className="online-text">Back online</span>
           </>
         )}
@@ -122,8 +122,8 @@ export const UpdateNotification = () => {
   return (
     <div className="update-notification">
       <div className="update-notification-content">
-        <div className="update-notification-icon">
-          🔄
+        <div className="update-notification-icon" aria-hidden="true">
+          Upd
         </div>
         <div className="update-notification-text">
           <div className="update-notification-title">Update Available</div>
@@ -201,7 +201,7 @@ export const InstallButton = ({ className = '' }) => {
   if (isInstalled) {
     return (
       <div className={`install-status ${className}`}>
-        <span className="install-status-icon">✓</span>
+        <span className="install-status-icon" aria-hidden="true">OK</span>
         <span className="install-status-text">App Installed</span>
       </div>
     );
@@ -216,7 +216,7 @@ export const InstallButton = ({ className = '' }) => {
       className={`install-button ${className}`}
       onClick={promptInstall}
     >
-      <span className="install-button-icon">⬇️</span>
+      <span className="install-button-icon" aria-hidden="true">DL</span>
       <span className="install-button-text">Install App</span>
     </button>
   );
@@ -232,7 +232,7 @@ export const CacheIndicator = ({ fromCache }) => {
 
   return (
     <div className="cache-indicator">
-      <span className="cache-indicator-icon">💾</span>
+      <span className="cache-indicator-icon" aria-hidden="true">C</span>
       <span className="cache-indicator-text">Cached data</span>
     </div>
   );

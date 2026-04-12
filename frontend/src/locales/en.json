@@ -58,7 +58,12 @@
     "back": "Back",
     "next": "Next",
     "search": "Search",
-    "filter": "Filter"
+    "filter": "Filter",
+    "showPassword": "Show",
+    "hidePassword": "Hide",
+    "inkCost": "{{n}} ink",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "deckAnalyzer": {
     "title": "Deck Analyzer",
@@ -296,7 +301,7 @@
     "deckExtras": "Deck list & statistics"
   },
   "tierList": {
-    "title": "📊 Tier list builder",
+    "title": "Tier list builder",
     "tabCreate": "New",
     "tabMine": "Mine",
     "tabCommunity": "Community",

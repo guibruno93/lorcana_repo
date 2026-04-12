@@ -125,7 +125,7 @@ export const DecklistVisual = ({ deckText, title = 'Deck' }) => {
                 color: '#667eea',
                 minWidth: '40px'
               }}>
-                💎 {cost}
+                {cost}
               </span>
               <span style={{ fontSize: '14px', color: '#aaa' }}>
                 {totalInGroup} cards

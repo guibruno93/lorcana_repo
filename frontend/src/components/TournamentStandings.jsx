@@ -135,7 +135,7 @@ export default function TournamentStandings() {
   }
 
   const top3 = standings.slice(0, 3);
-  const medals = ['🥇', '🥈', '🥉'];
+  const medals = ['1º', '2º', '3º'];
 
   return (
     <div className="tournament-standings">
@@ -150,7 +150,7 @@ export default function TournamentStandings() {
         </div>
         <div className="standings-header-actions">
           <button type="button" className="btn-export" onClick={exportCSV}>
-            📊 {t('tournamentsOrg.export')}
+            {t('tournamentsOrg.export')}
           </button>
           {tournament?.status === 'in-progress' && (
             <Link to="/tournaments" className="btn-new-round">

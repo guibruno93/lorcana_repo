@@ -89,7 +89,15 @@
 }
 
 .section-icon {
-  font-size: 24px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.section-icon--accent {
+  width: 4px;
+  height: 22px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #a78bfa, #6366f1);
 }
 
 /* Two column layout */

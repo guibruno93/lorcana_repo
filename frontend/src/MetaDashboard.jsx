@@ -33,7 +33,7 @@ export default function MetaDashboard() {
       }
       
       const data = await res.json();
-      console.log('📊 Dashboard data received:', data);
+      console.log('Dashboard data received:', data);
       setMetaData(data);
       
       const now = new Date();
@@ -128,7 +128,6 @@ export default function MetaDashboard() {
     );
   }
 
-  // ✅ CORRIGIDO: Usar campos corretos do JSON
   const totalDecks = metaData?.stats?.totalDecks || 0;
   const archetypes = metaData?.topArchetypes || metaData?.allArchetypes || [];
   const totalArchetypes = metaData?.stats?.totalArchetypes || 0;
@@ -146,13 +145,13 @@ export default function MetaDashboard() {
         </div>
         <div className="meta-header-actions">
           <button onClick={triggerScraping} className="btn-action" disabled={loading}>
-            🔍 {t('metaDashboard.actions.scrape')}
+            {t('metaDashboard.actions.scrape')}
           </button>
           <button onClick={triggerAnalysis} className="btn-action" disabled={loading}>
-            📊 {t('metaDashboard.actions.analyze')}
+            {t('metaDashboard.actions.analyze')}
           </button>
           <button onClick={() => fetchMetaData()} className="btn-refresh" disabled={loading}>
-            🔄 {t('metaDashboard.actions.refresh')}
+            {t('metaDashboard.actions.refresh')}
           </button>
           <span className="last-update">{t('metaDashboard.lastUpdate', { time: lastUpdate })}</span>
         </div>
@@ -160,7 +159,7 @@ export default function MetaDashboard() {
 
       {error && (
         <div className="error-banner">
-          ❌ {t('metaDashboard.error')}: {error}
+          {t('metaDashboard.error')}: {error}
           <button onClick={() => { setError(null); fetchMetaData(); }}>
             {t('metaDashboard.retry')}
           </button>
@@ -176,10 +175,9 @@ export default function MetaDashboard() {
             className={`meta-tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
           >
-            {tab === 'overview' && '📊 ' + t('metaDashboard.tabs.overview')}
-            {tab === 'meta-analysis' &&
-              '📈 ' + t('metaDashboard.tabs.metaAnalysis')}
-            {tab === 'cards' && '🃏 ' + t('metaDashboard.tabs.cards')}
+            {tab === 'overview' && t('metaDashboard.tabs.overview')}
+            {tab === 'meta-analysis' && t('metaDashboard.tabs.metaAnalysis')}
+            {tab === 'cards' && t('metaDashboard.tabs.cards')}
           </button>
         ))}
         <button
@@ -187,7 +185,7 @@ export default function MetaDashboard() {
           className="meta-tab meta-tab-link"
           onClick={() => navigate('/meta/tier-lists')}
         >
-          📋 {t('metaDashboard.tabs.tierLists', 'Tier lists')}
+          {t('metaDashboard.tabs.tierLists', 'Tier lists')}
         </button>
       </div>
 
@@ -195,7 +193,7 @@ export default function MetaDashboard() {
       {activeTab === 'overview' && (
       <div className="stats-cards">
         <div className="stat-card">
-          <div className="stat-icon">🏆</div>
+          <div className="stat-icon" aria-hidden="true" />
           <div className="stat-content">
             <div className="stat-number">{totalDecks}</div>
             <div className="stat-label">{t('metaDashboard.stats.totalDecks')}</div>
@@ -203,7 +201,7 @@ export default function MetaDashboard() {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon">🎯</div>
+          <div className="stat-icon" aria-hidden="true" />
           <div className="stat-content">
             <div className="stat-number">{totalArchetypes}</div>
             <div className="stat-label">{t('metaDashboard.stats.archetypes')}</div>
@@ -211,7 +209,7 @@ export default function MetaDashboard() {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon">📈</div>
+          <div className="stat-icon" aria-hidden="true" />
           <div className="stat-content">
             <div className="stat-number">0</div>
             <div className="stat-label">{t('metaDashboard.stats.uniqueCards')}</div>
@@ -219,7 +217,7 @@ export default function MetaDashboard() {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon">⏰</div>
+          <div className="stat-icon" aria-hidden="true" />
           <div className="stat-content">
             <div className="stat-number">30d</div>
             <div className="stat-label">{t('metaDashboard.stats.timeRange')}</div>
@@ -256,14 +254,13 @@ function OverviewTab({ archetypes, totalDecks, topCards, t }) {
     <div className="overview-tab">
       <div className="meta-section">
         <div className="section-header">
-          <span className="section-icon">🎯</span>
+          <span className="section-icon section-icon--accent" aria-hidden="true" />
           <span className="section-title">{t('metaDashboard.sections.archetypeBreakdown')}</span>
           <span className="section-badge">{archetypes.length} {t('metaDashboard.labels.total')}</span>
         </div>
 
         <div className="archetype-breakdown">
           {archetypes.map((archetype, i) => {
-            // ✅ CORRIGIDO: Usar campos corretos do JSON
             const playRate = archetype.playRate || archetype.play_rate || '0.0';
             const winRate = archetype.winrate || archetype.expected_winrate || '0.0';
             const sampleSize = archetype.sampleSize || archetype.sample_size || 0;

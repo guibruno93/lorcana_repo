@@ -6,13 +6,7 @@
 import React from 'react';
 
 function TierListTab({ tierList }) {
-  console.log('🔍 TierListTab rendered');
-  console.log('📊 tierList received:', tierList);
-  console.log('📊 tierList type:', typeof tierList);
-  console.log('📊 tierList keys:', tierList ? Object.keys(tierList) : 'null');
-  
   if (!tierList) {
-    console.log('⚠️ tierList is null/undefined');
     return (
       <div style={{ 
         padding: '60px', 
@@ -23,7 +17,7 @@ function TierListTab({ tierList }) {
         border: '2px dashed #e74c3c',
         margin: '20px'
       }}>
-        <div style={{ fontSize: '48px', marginBottom: '20px' }}>⚠️</div>
+        <div style={{ fontSize: '28px', marginBottom: '20px', fontWeight: 800, color: '#e74c3c' }}>!</div>
         <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#e74c3c', marginBottom: '10px' }}>
           Tier List Not Loaded
         </div>
@@ -50,10 +44,8 @@ function TierListTab({ tierList }) {
 
   // Verificar se tem dados
   const hasTiers = Object.keys(tierList).length > 0;
-  console.log(`📊 Has tiers: ${hasTiers}`);
-  
+
   if (!hasTiers) {
-    console.log('⚠️ tierList is empty object');
     return (
       <div style={{ 
         padding: '60px', 
@@ -64,7 +56,7 @@ function TierListTab({ tierList }) {
         border: '2px dashed #ffa502',
         margin: '20px'
       }}>
-        <div style={{ fontSize: '48px', marginBottom: '20px' }}>📦</div>
+        <div style={{ fontSize: '28px', marginBottom: '20px', fontWeight: 800, color: '#ffa502' }}>—</div>
         <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#ffa502', marginBottom: '10px' }}>
           Tier List is Empty
         </div>
@@ -108,7 +100,7 @@ function TierListTab({ tierList }) {
         border: '1px solid rgba(103, 126, 234, 0.3)'
       }}>
         <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#667eea', marginBottom: '8px' }}>
-          🔍 Debug Info:
+          Debug info
         </div>
         <div style={{ fontSize: '12px', fontFamily: 'monospace', color: '#aaa' }}>
           <div>• Tiers available: {Object.keys(tierList).join(', ')}</div>
@@ -119,8 +111,7 @@ function TierListTab({ tierList }) {
       {/* Tier List */}
       {['S', 'A', 'B', 'C', 'D'].map(tier => {
         const archetypes = tierList[tier] || [];
-        console.log(`📊 Tier ${tier}:`, archetypes.length, 'archetypes');
-        
+
         if (archetypes.length === 0) {
           return (
             <div key={tier} style={{

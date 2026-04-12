@@ -88,8 +88,8 @@ const DeckSaver = ({ deckName, deck, onSave, onLoad, onClose }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content deck-saver-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>💾 {mode === 'save' ? t('deckBuilder.saveDeck') : t('deckBuilder.loadDeck')}</h2>
-          <button onClick={onClose} className="btn-close">✕</button>
+          <h2>{mode === 'save' ? t('deckBuilder.saveDeck') : t('deckBuilder.loadDeck')}</h2>
+          <button type="button" onClick={onClose} className="btn-close" aria-label={t('common.close')}>×</button>
         </div>
 
         <div className="modal-body">
@@ -170,10 +170,12 @@ const DeckSaver = ({ deckName, deck, onSave, onLoad, onClose }) => {
                       Load
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleDelete(savedDeck.id)}
                       className="btn-delete-deck"
+                      aria-label={t('common.delete')}
                     >
-                      🗑️
+                      {t('common.delete')}
                     </button>
                   </div>
                 </div>

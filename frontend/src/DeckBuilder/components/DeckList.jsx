@@ -102,7 +102,7 @@ const DeckList = ({ deck, totalCards, onRemoveCard, onUpdateQuantity }) => {
 
                   <div className="card-cost">
                     {entry.card.ink_cost !== null && entry.card.ink_cost !== undefined && (
-                      <span>💧 {entry.card.ink_cost}</span>
+                      <span>{entry.card.ink_cost}</span>
                     )}
                   </div>
 
@@ -111,7 +111,7 @@ const DeckList = ({ deck, totalCards, onRemoveCard, onUpdateQuantity }) => {
                     className="btn-remove"
                     title={t('deckBuilder.removeCard')}
                   >
-                    ✕
+                    ×
                   </button>
                 </div>
               ))}

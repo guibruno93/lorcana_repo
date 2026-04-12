@@ -15,7 +15,7 @@ export default function CardFilters({
 }) {
   const { t } = useTranslation();
 
-  // 🚀 OTIMIZAÇÃO: Debounce na busca
+  // Debounce na busca
   const [searchInput, setSearchInput] = useState(filters.search || '');
   const debouncedSearch = useDebounce(searchInput, 300);
 
@@ -60,14 +60,14 @@ export default function CardFilters({
     <div className="card-filters">
       <div className="filters-header">
         <h3 className="filters-title">
-          🔍 {t('cardDatabase.filters.title')}
+          {t('cardDatabase.filters.title')}
         </h3>
         <button 
           onClick={onClearFilters}
           className="btn-clear-filters"
           disabled={!Object.values(filters).some(filterIsActive)}
         >
-          ✕ {t('cardDatabase.filters.clear')}
+          {t('cardDatabase.filters.clear')}
         </button>
       </div>
 

@@ -58,7 +58,7 @@ function DeckComparison({ analysis }) {
   return (
     <div className="deck-comparison">
       <div className="comparison-header">
-        <h2>📊 Comparação com Meta</h2>
+        <h2>Comparação com meta</h2>
         <p className="comparison-description">
           Compare seu deck com {analysis.totalCards || 60} cards contra o meta competitivo
         </p>
@@ -97,14 +97,14 @@ function DeckComparison({ analysis }) {
           </>
         ) : (
           <>
-            🔍 Comparar com Meta
+            Comparar com meta
           </>
         )}
       </button>
 
       {error && (
         <div className="error-message">
-          ❌ {error}
+          {error}
         </div>
       )}
 
@@ -169,7 +169,7 @@ function DeckComparison({ analysis }) {
           {/* Top 5 matches */}
           {result.comparison.top5Matches && result.comparison.top5Matches.length > 0 && (
             <div className="top-matches-card">
-              <h3>🏆 Top 5 Decks Similares</h3>
+              <h3>Top 5 decks similares</h3>
               <div className="matches-list">
                 {result.comparison.top5Matches.map((match, i) => (
                   <div key={i} className="match-item">
@@ -186,8 +186,7 @@ function DeckComparison({ analysis }) {
                       </div>
                       <div className="match-details">
                         <span className="match-placement">
-                          {match.placement <= 4 ? '🥇' : match.placement <= 8 ? '🥈' : '🥉'} 
-                          Placement: {match.placement}
+                          Posição: {match.placement}
                         </span>
                         <span className="match-tournament">{match.tournament}</span>
                       </div>
@@ -201,7 +200,7 @@ function DeckComparison({ analysis }) {
           {/* Mensagem se não encontrou */}
           {result.comparison.message && (
             <div className="info-message">
-              ℹ️ {result.comparison.message}
+              {result.comparison.message}
             </div>
           )}
         </div>

@@ -146,7 +146,7 @@ export default function DeckAnalyzerTab(props) {
         <div className="panel">
           <div className="panel-header">
             <span className="panel-title">
-              <span className="icon">📋</span> {t('deckAnalyzer.decklistTitle')}
+              <span className="icon icon--accent" aria-hidden="true" /> {t('deckAnalyzer.decklistTitle')}
             </span>
             <span className="badge badge-gray">
               {lines} {t('deckAnalyzer.lineCount', { count: lines })}
@@ -178,7 +178,7 @@ export default function DeckAnalyzerTab(props) {
           onClick={run}
           disabled={loading}
         >
-          {loading ? `⏳ ${t('deckAnalyzer.analyzing')}` : `⚡ ${t('deckAnalyzer.analyze')}`}
+          {loading ? t('deckAnalyzer.analyzing') : t('deckAnalyzer.analyze')}
         </button>
 
         {err && <div className="err-box">{err}</div>}
@@ -189,7 +189,7 @@ export default function DeckAnalyzerTab(props) {
         {!analysis ? (
           <div className="panel">
             <div className="empty-state">
-              <div className="empty-icon">🃏</div>
+              <div className="empty-icon empty-icon--muted" aria-hidden="true" />
               {t('deckAnalyzer.emptyState')}
             </div>
           </div>
@@ -199,14 +199,14 @@ export default function DeckAnalyzerTab(props) {
             <div className="panel">
               <div className="panel-header">
                 <span className="panel-title">
-                  <span className="icon">📊</span> {t('deckAnalyzer.summary')}
+                  <span className="icon icon--accent" aria-hidden="true" /> {t('deckAnalyzer.summary')}
                 </span>
                 {analysis.archetypeMethod && (
                   <span 
                     className={`badge ${analysis.archetypeMethod === 'rules' ? 'badge-green' : 'badge-blue'}`}
                     title={analysis.archetypeMethod === 'rules' ? t('deckAnalyzer.identifiedByRules') : t('deckAnalyzer.identifiedByML')}
                   >
-                    {analysis.archetypeMethod === 'rules' ? `🎯 ${t('deckAnalyzer.rules')}` : `🤖 ${t('deckAnalyzer.ml')}`}
+                    {analysis.archetypeMethod === 'rules' ? t('deckAnalyzer.rules') : t('deckAnalyzer.ml')}
                   </span>
                 )}
               </div>
@@ -246,7 +246,7 @@ export default function DeckAnalyzerTab(props) {
                 <div className="panel">
                   <div className="panel-header">
                     <span className="panel-title">
-                      <span className="icon">📊</span> {t('deckAnalyzer.manaCurve')}
+                      <span className="icon icon--accent" aria-hidden="true" /> {t('deckAnalyzer.manaCurve')}
                     </span>
                     <span className="badge badge-gray">
                       {t('deckAnalyzer.average')}: {curveStats.avgCost}
@@ -260,20 +260,20 @@ export default function DeckAnalyzerTab(props) {
                 <div className="panel">
                   <div className="panel-header">
                     <span className="panel-title">
-                      <span className="icon">📈</span> {t('deckAnalyzer.statistics')}
+                      <span className="icon icon--accent" aria-hidden="true" /> {t('deckAnalyzer.statistics')}
                     </span>
                   </div>
                   <div className="panel-body">
                     <div className="advanced-stats-grid">
                       <div className="stat-card">
-                        <div className="stat-icon">💰</div>
+                        <div className="stat-icon" aria-hidden="true" />
                         <div className="stat-content">
                           <div className="stat-value">{curveStats.avgCost}</div>
                           <div className="stat-label">{t('deckAnalyzer.avgCost')}</div>
                         </div>
                       </div>
                       <div className="stat-card">
-                        <div className="stat-icon">⚡</div>
+                        <div className="stat-icon" aria-hidden="true" />
                         <div className="stat-content">
                           <div className="stat-value">{curveStats.earlyGamePct}%</div>
                           <div className="stat-label">{t('deckAnalyzer.earlyGame')}</div>

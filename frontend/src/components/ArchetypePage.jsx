@@ -80,7 +80,7 @@ export default function ArchetypePage() {
         {/* Core Cards */}
         <section className="archetype-section">
           <h2 className="section-title">
-            <span className="section-icon">🃏</span>
+            <span className="section-icon section-icon--accent" aria-hidden="true" />
             {t('archetypePage.coreCards')}
           </h2>
           <CoreCardsList cards={archetype.coreCards} />
@@ -89,7 +89,7 @@ export default function ArchetypePage() {
         {/* Matchups */}
         <section className="archetype-section">
           <h2 className="section-title">
-            <span className="section-icon">⚔️</span>
+            <span className="section-icon section-icon--accent" aria-hidden="true" />
             {t('archetypePage.matchups')}
           </h2>
           <MatchupsTable matchups={archetype.matchups} />
@@ -98,7 +98,7 @@ export default function ArchetypePage() {
         {/* Meta Evolution */}
         <section className="archetype-section">
           <h2 className="section-title">
-            <span className="section-icon">📈</span>
+            <span className="section-icon section-icon--accent" aria-hidden="true" />
             {t('archetypePage.metaEvolution')}
           </h2>
           <MetaEvolutionChart evolution={archetype.metaEvolution} />
@@ -108,7 +108,7 @@ export default function ArchetypePage() {
         <div className="two-column-section">
           <section className="archetype-section">
             <h2 className="section-title">
-              <span className="section-icon">💪</span>
+              <span className="section-icon section-icon--accent" aria-hidden="true" />
               {t('archetypePage.strengths')}
             </h2>
             <ul className="strength-list">
@@ -123,7 +123,7 @@ export default function ArchetypePage() {
 
           <section className="archetype-section">
             <h2 className="section-title">
-              <span className="section-icon">⚠️</span>
+              <span className="section-icon section-icon--accent" aria-hidden="true" />
               {t('archetypePage.weaknesses')}
             </h2>
             <ul className="weakness-list">
@@ -140,7 +140,7 @@ export default function ArchetypePage() {
         {/* Piloting Tips */}
         <section className="archetype-section">
           <h2 className="section-title">
-            <span className="section-icon">💡</span>
+            <span className="section-icon section-icon--accent" aria-hidden="true" />
             {t('archetypePage.tips')}
           </h2>
           <div className="tips-grid">
@@ -157,7 +157,7 @@ export default function ArchetypePage() {
         {archetype.exampleDecklists && archetype.exampleDecklists.length > 0 && (
           <section className="archetype-section">
             <h2 className="section-title">
-              <span className="section-icon">📋</span>
+              <span className="section-icon section-icon--accent" aria-hidden="true" />
               {t('archetypePage.exampleDecklists')}
             </h2>
             <DecklistViewer decklists={archetype.exampleDecklists} />
