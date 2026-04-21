@@ -7,7 +7,13 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "render-build": "bash scripts/render-build-freetier.sh",
-    "postinstall": "node scripts/puppeteer-browser-install.cjs"
+    "postinstall": "node scripts/puppeteer-browser-install.cjs",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:auth": "jest auth.test.js",
+    "test:decks": "jest decks.test.js",
+    "test:tournaments": "jest tournaments.test.js",
+    "test:all": "jest --coverage --verbose"
   },
   "engines": {
     "node": "20.x",
@@ -34,6 +40,9 @@
     "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.4"
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.4",
+    "supertest": "^6.3.4"
   }
 }

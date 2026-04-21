@@ -7,8 +7,6 @@ const express = require('express');
 const router = express.Router();
 const { createClient } = require('@supabase/supabase-js');
 const { HybridArchetypeIdentifier } = require('../services/archetype-ml');
-const { authenticateToken } = require('./auth');
-
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
@@ -37,10 +35,12 @@ async function getMLIdentifier() {
   return mlIdentifier;
 }
 
-// Inicializar no startup
-getMLIdentifier().catch(err => {
-  console.error('❌ Failed to initialize ML:', err.message);
-});
+// Inicializar no startup (em Jest o carregamento do app não dispara ML para não bloquear a suite)
+if (process.env.NODE_ENV !== 'test') {
+  getMLIdentifier().catch((err) => {
+    console.error('❌ Failed to initialize ML:', err.message);
+  });
+}
 
 // ═══════════════════════════════════════════════════════════════════
 // HELPER FUNCTIONS
@@ -544,64 +544,6 @@ router.post('/matchups', async (req, res) => {
       error: err.message 
     });
   }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// ROTAS PROTEGIDAS - Deck Management (com authenticateToken)
-// ═══════════════════════════════════════════════════════════════════
-
-// POST /api/decks
-router.post('/', authenticateToken, async (req, res) => {
-  const { name, description, archetype, cards } = req.body;
-  
-  // Insert deck
-  const deck = await db.query(
-    'INSERT INTO decks (user_id, name, description, archetype) VALUES ($1, $2, $3, $4) RETURNING *',
-    [req.user.id, name, description, archetype]
-  );
-  
-  // Insert cards
-  for (const card of cards) {
-    await db.query(
-      'INSERT INTO deck_cards (deck_id, card_id, quantity) VALUES ($1, $2, $3)',
-      [deck.rows[0].id, card.card_id, card.quantity]
-    );
-  }
-  
-  res.json(deck.rows[0]);
-});
-
-// GET /api/decks
-router.get('/', authenticateToken, async (req, res) => {
-  const decks = await db.query(
-    'SELECT * FROM decks WHERE user_id = $1 ORDER BY updated_at DESC',
-    [req.user.id]
-  );
-  res.json(decks.rows);
-});
-
-// GET /api/decks/:id
-router.get('/:id', authenticateToken, async (req, res) => {
-  const deck = await db.query(
-    'SELECT * FROM decks WHERE id = $1 AND user_id = $2',
-    [req.params.id, req.user.id]
-  );
-  
-  const cards = await db.query(
-    'SELECT * FROM deck_cards WHERE deck_id = $1',
-    [req.params.id]
-  );
-  
-  res.json({ ...deck.rows[0], cards: cards.rows });
-});
-
-// DELETE /api/decks/:id
-router.delete('/:id', authenticateToken, async (req, res) => {
-  await db.query(
-    'DELETE FROM decks WHERE id = $1 AND user_id = $2',
-    [req.params.id, req.user.id]
-  );
-  res.json({ message: 'Deck deleted' });
 });
 
 // ═══════════════════════════════════════════════════════════════════

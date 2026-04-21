@@ -1,0 +1,21 @@
+{
+  "name": "inkwell-labs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node tests/run-all-tests.js",
+    "test:quick": "node tests/validation/backend-health.js && node tests/validation/frontend-health.js",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm run cypress:run",
+    "test:e2e": "cross-env RUN_E2E=true npm run test",
+    "test:flow": "node tests/validation/full-flow.js",
+    "dev:all": "concurrently \"cd backend && npm start\" \"cd frontend && npm start\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "axios": "^1.6.5",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5"
+  }
+}

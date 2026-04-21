@@ -1,6 +1,506 @@
 {
   "tournaments": [
     {
+      "id": "257cf967-ae55-445f-b4f7-4f839053deea",
+      "organizerId": "f091bba5-e992-4b22-af5f-3fb1cdaec004",
+      "name": "Test BO3 Tournament",
+      "date": "2026-06-02",
+      "time": "14:00",
+      "location": "",
+      "format": "swiss",
+      "matchFormat": "bo3",
+      "roundTimeMinutes": 70,
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "registration",
+      "currentRound": 0,
+      "players": [],
+      "matches": [],
+      "matchHistory": {},
+      "createdAt": "2026-04-15T06:28:58.218Z"
+    },
+    {
+      "id": "018b9cf9-d01d-4ade-938e-44cc1ae860bf",
+      "organizerId": "f091bba5-e992-4b22-af5f-3fb1cdaec004",
+      "name": "Test BO1 Tournament",
+      "date": "2026-06-01",
+      "time": "14:00",
+      "location": "",
+      "format": "swiss",
+      "matchFormat": "bo1",
+      "roundTimeMinutes": 50,
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "in-progress",
+      "currentRound": 1,
+      "players": [
+        {
+          "id": "69c14360-e380-4aa8-830c-b8e2f4463e4b",
+          "playerName": "P1",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "36ef168f-bcc1-448c-a841-d67bb66601f7",
+          "playerName": "P2",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "026b091e-7575-46e9-a6b0-02930f0de5cc",
+          "playerName": "P3",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "0ae1c916-2f7e-40a6-b0f1-78b6ac8200d6",
+          "playerName": "P4",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        }
+      ],
+      "matches": [
+        {
+          "id": "bcd929c0-1fcd-46fb-bc19-1b87776a5efa",
+          "tournamentId": "018b9cf9-d01d-4ade-938e-44cc1ae860bf",
+          "round": 1,
+          "tableNumber": 1,
+          "player1Id": "69c14360-e380-4aa8-830c-b8e2f4463e4b",
+          "player2Id": "36ef168f-bcc1-448c-a841-d67bb66601f7",
+          "winnerId": null,
+          "result": null
+        },
+        {
+          "id": "a5b0932d-ef72-4a06-8a0e-b4bdbfde7de0",
+          "tournamentId": "018b9cf9-d01d-4ade-938e-44cc1ae860bf",
+          "round": 1,
+          "tableNumber": 2,
+          "player1Id": "026b091e-7575-46e9-a6b0-02930f0de5cc",
+          "player2Id": "0ae1c916-2f7e-40a6-b0f1-78b6ac8200d6",
+          "winnerId": null,
+          "result": null
+        }
+      ],
+      "matchHistory": {
+        "69c14360-e380-4aa8-830c-b8e2f4463e4b": {
+          "36ef168f-bcc1-448c-a841-d67bb66601f7": true
+        },
+        "36ef168f-bcc1-448c-a841-d67bb66601f7": {
+          "69c14360-e380-4aa8-830c-b8e2f4463e4b": true
+        },
+        "026b091e-7575-46e9-a6b0-02930f0de5cc": {
+          "0ae1c916-2f7e-40a6-b0f1-78b6ac8200d6": true
+        },
+        "0ae1c916-2f7e-40a6-b0f1-78b6ac8200d6": {
+          "026b091e-7575-46e9-a6b0-02930f0de5cc": true
+        }
+      },
+      "createdAt": "2026-04-15T06:28:58.213Z"
+    },
+    {
+      "id": "c48364c8-d670-4a4a-a4b7-0189246fa86c",
+      "organizerId": "a2bacfa0-323e-4900-952c-41ea5bda7a82",
+      "name": "Test BO3 Tournament",
+      "date": "2026-06-02",
+      "time": "14:00",
+      "location": "",
+      "format": "swiss",
+      "matchFormat": "bo3",
+      "roundTimeMinutes": 70,
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "registration",
+      "currentRound": 0,
+      "players": [],
+      "matches": [],
+      "matchHistory": {},
+      "createdAt": "2026-04-15T06:20:33.052Z"
+    },
+    {
+      "id": "ccfb6df1-f6bb-4894-9c32-d7f49b213090",
+      "organizerId": "a2bacfa0-323e-4900-952c-41ea5bda7a82",
+      "name": "Test BO1 Tournament",
+      "date": "2026-06-01",
+      "time": "14:00",
+      "location": "",
+      "format": "swiss",
+      "matchFormat": "bo1",
+      "roundTimeMinutes": 50,
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "in-progress",
+      "currentRound": 1,
+      "players": [
+        {
+          "id": "46335561-575f-46ee-b5da-ec64c0006a47",
+          "playerName": "P1",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "6adc6a05-6bb9-4532-8c71-a3cbab48aca5",
+          "playerName": "P2",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "c92f4e31-2da2-4e98-8452-adf54ba98920",
+          "playerName": "P3",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "d16653ea-2de3-4ade-a8e8-452a346336ab",
+          "playerName": "P4",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        }
+      ],
+      "matches": [
+        {
+          "id": "9c6ca2c2-d95d-4b42-bb82-a6f36fb65484",
+          "tournamentId": "ccfb6df1-f6bb-4894-9c32-d7f49b213090",
+          "round": 1,
+          "tableNumber": 1,
+          "player1Id": "46335561-575f-46ee-b5da-ec64c0006a47",
+          "player2Id": "6adc6a05-6bb9-4532-8c71-a3cbab48aca5",
+          "winnerId": null,
+          "result": null
+        },
+        {
+          "id": "b702a9db-b05e-4a03-9eb2-fce501472309",
+          "tournamentId": "ccfb6df1-f6bb-4894-9c32-d7f49b213090",
+          "round": 1,
+          "tableNumber": 2,
+          "player1Id": "c92f4e31-2da2-4e98-8452-adf54ba98920",
+          "player2Id": "d16653ea-2de3-4ade-a8e8-452a346336ab",
+          "winnerId": null,
+          "result": null
+        }
+      ],
+      "matchHistory": {
+        "46335561-575f-46ee-b5da-ec64c0006a47": {
+          "6adc6a05-6bb9-4532-8c71-a3cbab48aca5": true
+        },
+        "6adc6a05-6bb9-4532-8c71-a3cbab48aca5": {
+          "46335561-575f-46ee-b5da-ec64c0006a47": true
+        },
+        "c92f4e31-2da2-4e98-8452-adf54ba98920": {
+          "d16653ea-2de3-4ade-a8e8-452a346336ab": true
+        },
+        "d16653ea-2de3-4ade-a8e8-452a346336ab": {
+          "c92f4e31-2da2-4e98-8452-adf54ba98920": true
+        }
+      },
+      "createdAt": "2026-04-15T06:20:33.047Z"
+    },
+    {
+      "id": "11538a14-a212-484e-8d02-9c57253627f4",
+      "organizerId": "8c7b133b-a840-42d9-a619-bfa217ea5013",
+      "name": "Test BO3 Tournament",
+      "date": "2026-06-02",
+      "time": "14:00",
+      "location": "",
+      "format": "swiss",
+      "matchFormat": "bo3",
+      "roundTimeMinutes": 70,
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "registration",
+      "currentRound": 0,
+      "players": [],
+      "matches": [],
+      "matchHistory": {},
+      "createdAt": "2026-04-15T06:14:50.785Z"
+    },
+    {
+      "id": "f4f56824-156e-4234-b944-820c53e44e5a",
+      "organizerId": "8c7b133b-a840-42d9-a619-bfa217ea5013",
+      "name": "Test BO1 Tournament",
+      "date": "2026-06-01",
+      "time": "14:00",
+      "location": "",
+      "format": "swiss",
+      "matchFormat": "bo1",
+      "roundTimeMinutes": 50,
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "in-progress",
+      "currentRound": 1,
+      "players": [
+        {
+          "id": "da42aeb0-b111-4496-a96b-9c42e019bab3",
+          "playerName": "P1",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "27faa16a-bc53-4c40-bac2-0dec96f12d0f",
+          "playerName": "P2",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "bad69043-c5ac-4af1-9198-16f932575378",
+          "playerName": "P3",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "10aa50ce-6b6f-447d-9482-2f7584b9582f",
+          "playerName": "P4",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        }
+      ],
+      "matches": [
+        {
+          "id": "1506154c-6fa5-4564-94ad-7d694d7c4080",
+          "tournamentId": "f4f56824-156e-4234-b944-820c53e44e5a",
+          "round": 1,
+          "tableNumber": 1,
+          "player1Id": "da42aeb0-b111-4496-a96b-9c42e019bab3",
+          "player2Id": "27faa16a-bc53-4c40-bac2-0dec96f12d0f",
+          "winnerId": null,
+          "result": null
+        },
+        {
+          "id": "280c69c9-8cf4-46b9-b5e4-1b3332306b6d",
+          "tournamentId": "f4f56824-156e-4234-b944-820c53e44e5a",
+          "round": 1,
+          "tableNumber": 2,
+          "player1Id": "bad69043-c5ac-4af1-9198-16f932575378",
+          "player2Id": "10aa50ce-6b6f-447d-9482-2f7584b9582f",
+          "winnerId": null,
+          "result": null
+        }
+      ],
+      "matchHistory": {
+        "da42aeb0-b111-4496-a96b-9c42e019bab3": {
+          "27faa16a-bc53-4c40-bac2-0dec96f12d0f": true
+        },
+        "27faa16a-bc53-4c40-bac2-0dec96f12d0f": {
+          "da42aeb0-b111-4496-a96b-9c42e019bab3": true
+        },
+        "bad69043-c5ac-4af1-9198-16f932575378": {
+          "10aa50ce-6b6f-447d-9482-2f7584b9582f": true
+        },
+        "10aa50ce-6b6f-447d-9482-2f7584b9582f": {
+          "bad69043-c5ac-4af1-9198-16f932575378": true
+        }
+      },
+      "createdAt": "2026-04-15T06:14:50.779Z"
+    },
+    {
+      "id": "6b147601-fedb-4512-9d1f-65129c03ccd1",
+      "organizerId": "13c9bf68-2c46-479b-87b9-2ba5c724a16e",
+      "name": "Test BO3 Tournament",
+      "date": "2026-06-02",
+      "time": "14:00",
+      "location": "",
+      "format": "swiss",
+      "matchFormat": "bo3",
+      "roundTimeMinutes": 70,
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "registration",
+      "currentRound": 0,
+      "players": [],
+      "matches": [],
+      "matchHistory": {},
+      "createdAt": "2026-04-15T06:03:28.559Z"
+    },
+    {
+      "id": "2c8246f2-b153-47be-9910-28759bbdc518",
+      "organizerId": "13c9bf68-2c46-479b-87b9-2ba5c724a16e",
+      "name": "Test BO1 Tournament",
+      "date": "2026-06-01",
+      "time": "14:00",
+      "location": "",
+      "format": "swiss",
+      "matchFormat": "bo1",
+      "roundTimeMinutes": 50,
+      "rounds": 4,
+      "topCut": 8,
+      "maxPlayers": 32,
+      "registrationType": "open",
+      "status": "in-progress",
+      "currentRound": 1,
+      "players": [
+        {
+          "id": "d23a7a4e-4c10-43e0-a8ee-41970b6f53e2",
+          "playerName": "P1",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "1033d3dc-299a-4d7f-ac66-30854d2830e6",
+          "playerName": "P2",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "ed7ca8ba-ebf6-47e6-9410-5a006271fcf4",
+          "playerName": "P3",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        },
+        {
+          "id": "3e49089e-1dd6-460f-a6b2-5fa61752ccb5",
+          "playerName": "P4",
+          "playerId": "",
+          "deckName": "",
+          "points": 0,
+          "wins": 0,
+          "losses": 0,
+          "draws": 0,
+          "gameWins": 0,
+          "gameLosses": 0
+        }
+      ],
+      "matches": [
+        {
+          "id": "0d1afac8-7713-438e-bf2f-e238004195ce",
+          "tournamentId": "2c8246f2-b153-47be-9910-28759bbdc518",
+          "round": 1,
+          "tableNumber": 1,
+          "player1Id": "d23a7a4e-4c10-43e0-a8ee-41970b6f53e2",
+          "player2Id": "1033d3dc-299a-4d7f-ac66-30854d2830e6",
+          "winnerId": null,
+          "result": null
+        },
+        {
+          "id": "5d8d2d71-40e6-47c2-b9a1-f588ecc6afc0",
+          "tournamentId": "2c8246f2-b153-47be-9910-28759bbdc518",
+          "round": 1,
+          "tableNumber": 2,
+          "player1Id": "ed7ca8ba-ebf6-47e6-9410-5a006271fcf4",
+          "player2Id": "3e49089e-1dd6-460f-a6b2-5fa61752ccb5",
+          "winnerId": null,
+          "result": null
+        }
+      ],
+      "matchHistory": {
+        "d23a7a4e-4c10-43e0-a8ee-41970b6f53e2": {
+          "1033d3dc-299a-4d7f-ac66-30854d2830e6": true
+        },
+        "1033d3dc-299a-4d7f-ac66-30854d2830e6": {
+          "d23a7a4e-4c10-43e0-a8ee-41970b6f53e2": true
+        },
+        "ed7ca8ba-ebf6-47e6-9410-5a006271fcf4": {
+          "3e49089e-1dd6-460f-a6b2-5fa61752ccb5": true
+        },
+        "3e49089e-1dd6-460f-a6b2-5fa61752ccb5": {
+          "ed7ca8ba-ebf6-47e6-9410-5a006271fcf4": true
+        }
+      },
+      "createdAt": "2026-04-15T06:03:28.546Z"
+    },
+    {
       "id": "f08173d7-48d8-4fb0-a955-7dd1c890ed11",
       "organizerId": "95abfab1-82d1-4ad8-963f-1e55c5f1c1e4",
       "name": "Torneio Teste",

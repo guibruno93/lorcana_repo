@@ -246,31 +246,35 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3002;
 
-const server = app.listen(PORT, () => {
-  console.log(`\nAPI on: http://localhost:${PORT}\n`);
-  console.log('Available routes:');
-  console.log('   - /api/auth/*');
-  console.log('   - /api/deck/*');
-  console.log('   - /api/ai/*');
-  console.log('   - /api/meta/*');
-  console.log('   - /api/meta-analysis/*');
-  console.log('   - /api/deck-comparison/*');
-  console.log('');
-  
-  // Initialize cron jobs DEPOIS do servidor iniciar
-  if (process.env.ENABLE_CRON !== 'false') {
-    //metaCron.init();
-  } else {
-    console.log('Cron jobs desabilitados');
-  }
-});
+let server;
+if (require.main === module) {
+  server = app.listen(PORT, () => {
+    console.log(`\nAPI on: http://localhost:${PORT}\n`);
+    console.log('Available routes:');
+    console.log('   - /api/auth/*');
+    console.log('   - /api/deck/*');
+    console.log('   - /api/ai/*');
+    console.log('   - /api/meta/*');
+    console.log('   - /api/meta-analysis/*');
+    console.log('   - /api/deck-comparison/*');
+    console.log('');
 
-server.on("error", (e) => {
-  if (e && e.code === "EADDRINUSE") {
-    console.error(
-      `Porta ${PORT} já está em uso. Feche o processo anterior ou altere PORT.`
-    );
-  } else {
-    console.error("Server error:", e);
-  }
-});
+    if (process.env.ENABLE_CRON !== 'false') {
+      //metaCron.init();
+    } else {
+      console.log('Cron jobs desabilitados');
+    }
+  });
+
+  server.on('error', (e) => {
+    if (e && e.code === 'EADDRINUSE') {
+      console.error(
+        `Porta ${PORT} já está em uso. Feche o processo anterior ou altere PORT.`
+      );
+    } else {
+      console.error('Server error:', e);
+    }
+  });
+}
+
+module.exports = app;
