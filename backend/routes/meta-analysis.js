@@ -9,6 +9,22 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
+function dedupeRowsBySource(rows) {
+  const seen = new Set();
+  const deduped = [];
+  for (const row of rows || []) {
+    const key = row?.source_deck_id || row?.source_url || null;
+    if (!key) {
+      deduped.push(row);
+      continue;
+    }
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(row);
+  }
+  return deduped;
+}
+
 /** Se META_SCRAPE_ADMIN_EMAILS estiver definido (emails separados por vírgula), só eles podem usar scrape/status. */
 function requireMetaScrapeAccess(req, res, next) {
   const raw = (process.env.META_SCRAPE_ADMIN_EMAILS || '').trim();
@@ -704,7 +720,7 @@ router.post(
         if (event.type === 'pageComplete') {
           const { decks: pageDecks, ...meta } = event;
           if (pageDecks && pageDecks.length > 0) {
-            const rows = pageDecks.map(deckToScrapedDeckRow);
+            const rows = dedupeRowsBySource(pageDecks.map(deckToScrapedDeckRow));
             const { error } = await supabase.from('scraped_decks').insert(rows);
             if (error) {
               sendEvent({
@@ -734,7 +750,7 @@ router.post(
       });
 
       if (decks.length > 0 && savedPages === 0) {
-        const rows = decks.map(deckToScrapedDeckRow);
+        const rows = dedupeRowsBySource(decks.map(deckToScrapedDeckRow));
         const { error } = await supabase.from('scraped_decks').insert(rows);
 
         if (error) {

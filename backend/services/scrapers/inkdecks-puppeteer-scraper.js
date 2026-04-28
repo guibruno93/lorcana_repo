@@ -284,6 +284,22 @@ function totalCardCopies(cards) {
   return (cards || []).reduce((s, c) => s + (c.quantity || 0), 0);
 }
 
+function normalizeStandingValue(rawStanding) {
+  const value = (rawStanding || '').toString().trim();
+  if (!value) return null;
+  const normalized = value.toLowerCase();
+  if (
+    normalized === 'other' ||
+    normalized === 'n/a' ||
+    normalized === 'na' ||
+    normalized === '-' ||
+    normalized === 'unknown'
+  ) {
+    return null;
+  }
+  return value;
+}
+
 /**
  * Heurísticas no texto da página do deck (Inkdecks): W/L, colocação, título do evento.
  * Evita depender de `:contains` (jQuery); `SCRAPER_DEBUG_PERF=true` regista o payload em log.
@@ -1153,7 +1169,10 @@ class InkdecksPuppeteerScraper {
 
             const wins = Number.isFinite(perf.wins) ? perf.wins : null;
             const losses = Number.isFinite(perf.losses) ? perf.losses : null;
-            const standing = meta.placement || perf.standing || null;
+            const standing =
+              normalizeStandingValue(meta.placement) ||
+              normalizeStandingValue(perf.standing) ||
+              null;
             const eventName =
               (meta.event.name && meta.event.name.trim()) ||
               perf.event_name ||

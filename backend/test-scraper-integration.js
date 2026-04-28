@@ -3,7 +3,7 @@
  * Teste completo do scraper (sem gravar no Supabase).
  */
 
-const { InkdecksScraper } = require('./services/scrapers/inkdecks-scraper-v2');
+const { InkdecksScraper } = require('./services/scrapers/inkdecks-puppeteer-scraper');
 
 async function test() {
   console.log('🔍 Testing Inkdecks Scraper Integration\n');
@@ -21,7 +21,9 @@ async function test() {
         warning: '⚠️',
       }[event.level] || '📝';
 
-      console.log(`${emoji} ${event.message}`);
+      if (event?.message) {
+        console.log(`${emoji} ${event.message}`);
+      }
     });
 
     console.log(`\n📊 Results: ${decks.length} decks scraped\n`);

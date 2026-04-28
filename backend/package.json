@@ -13,7 +13,10 @@
     "test:auth": "jest auth.test.js",
     "test:decks": "jest decks.test.js",
     "test:tournaments": "jest tournaments.test.js",
-    "test:all": "jest --coverage --verbose"
+    "test:all": "jest --coverage --verbose",
+    "smoke:http": "node scripts/smoke-meta-http.js",
+    "smoke:http:auth": "node scripts/smoke-meta-http-auth.js",
+    "ci:smoke": "npm run smoke:http && npm run smoke:http:auth"
   },
   "engines": {
     "node": "20.x",
