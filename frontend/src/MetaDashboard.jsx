@@ -8,6 +8,34 @@ import { ArchetypeWithIcons } from './components/InkIcons';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
+function parseJwtPayload(token) {
+  try {
+    const parts = String(token || '').split('.');
+    if (parts.length < 2) return null;
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const pad = '='.repeat((4 - (base64.length % 4)) % 4);
+    const decoded = atob(base64 + pad);
+    return JSON.parse(decoded);
+  } catch (_) {
+    return null;
+  }
+}
+
+function getUsableToken() {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  const payload = parseJwtPayload(token);
+  const exp = payload?.exp;
+  if (!exp || typeof exp !== 'number') return token;
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  if (exp <= nowSeconds) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    return null;
+  }
+  return token;
+}
+
 export default function MetaDashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -50,10 +78,15 @@ export default function MetaDashboard() {
     try {
       setLoading(true);
       setError(null);
-      const token = localStorage.getItem('token');
+      const token = getUsableToken();
       if (!token) {
-        alert(t('metaDashboard.scrapeLoginRequired', 'Faça login para executar o scraper.'));
-        navigate('/login');
+        alert(
+          t(
+            'metaDashboard.scrapeLoginRequired',
+            'Sessão expirada ou ausente. Faça login para executar o scraper.'
+          )
+        );
+        navigate('/login?next=/meta');
         return;
       }
       const res = await fetch(`${API}/api/meta-analysis/scrape`, {
@@ -66,6 +99,18 @@ export default function MetaDashboard() {
       });
       if (!res.ok) {
         const errBody = await res.text();
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          alert(
+            t(
+              'metaDashboard.scrapeSessionExpired',
+              'Sua sessão expirou. Faça login novamente para continuar.'
+            )
+          );
+          navigate('/login?next=/meta');
+          return;
+        }
         throw new Error(errBody || `HTTP ${res.status}`);
       }
       const text = await res.text();
