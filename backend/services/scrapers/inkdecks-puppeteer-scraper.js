@@ -54,6 +54,10 @@ const NAV_RETRY_DELAY_MS = parseInt(
   process.env.PUPPETEER_NAV_RETRY_DELAY_MS || '5000',
   10
 );
+const LAUNCH_TIMEOUT_MS = parseInt(
+  process.env.PUPPETEER_LAUNCH_TIMEOUT_MS || '120000',
+  10
+);
 /** `domcontentloaded` evita pendurar em `networkidle*` com analytics / long-polling. */
 const GOTO_WAIT_UNTIL =
   process.env.PUPPETEER_GOTO_WAIT_UNTIL || 'domcontentloaded';
@@ -788,23 +792,53 @@ class InkdecksPuppeteerScraper {
     }
 
     console.log(`🚀 Launching browser with: ${executablePath}`);
-
-    this.browser = await puppeteer.launch({
-      headless: process.env.PUPPETEER_HEADLESS !== 'false',
-      executablePath,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-        '--single-process',
-        '--disable-web-security',
-        '--disable-features=IsolateOrigins,site-per-process',
-        '--disable-blink-features=AutomationControlled',
-        '--window-size=1920,1080',
-      ],
-    });
+    this.browser = await this.launchBrowserWithFallbacks(executablePath);
     console.log('✅ Browser launched successfully');
+  }
+
+  async launchBrowserWithFallbacks(executablePath) {
+    const baseArgs = [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--disable-web-security',
+      '--disable-features=IsolateOrigins,site-per-process',
+      '--disable-blink-features=AutomationControlled',
+      '--window-size=1920,1080',
+    ];
+
+    const candidates = [
+      // Perfil 1: completo (mais rápido em algumas VMs)
+      [...baseArgs, '--single-process'],
+      // Perfil 2: sem --single-process (mais estável em cloud Linux)
+      [...baseArgs],
+      // Perfil 3: mínimo seguro para ambientes mais restritos
+      ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+    ];
+
+    let lastErr = null;
+    for (let i = 0; i < candidates.length; i++) {
+      const args = candidates[i];
+      try {
+        console.log(
+          `🧪 Launch attempt ${i + 1}/${candidates.length} (timeout=${LAUNCH_TIMEOUT_MS}ms, args=${args.length})`
+        );
+        const browser = await puppeteer.launch({
+          headless: process.env.PUPPETEER_HEADLESS !== 'false',
+          executablePath,
+          args,
+          timeout: LAUNCH_TIMEOUT_MS,
+        });
+        return browser;
+      } catch (err) {
+        lastErr = err;
+        console.warn(
+          `⚠️ Launch attempt ${i + 1} failed: ${err && err.message}`
+        );
+      }
+    }
+    throw lastErr || new Error('Failed to launch browser');
   }
 
   /**
