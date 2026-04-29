@@ -36,27 +36,27 @@ const LISTING_PAGE_LOAD_RETRIES = parseInt(
   10
 );
 
+function envInt(name, fallback) {
+  const raw = parseInt(process.env[name] || String(fallback), 10);
+  return Number.isFinite(raw) ? raw : fallback;
+}
+
 /** Timeouts ajustáveis no Render (rede lenta / Cloudflare / cold start). */
-const GOTO_TIMEOUT_MS = parseInt(
-  process.env.PUPPETEER_GOTO_TIMEOUT_MS || '180000',
-  10
+const GOTO_TIMEOUT_MS = Math.max(120000, envInt('PUPPETEER_GOTO_TIMEOUT_MS', 180000));
+const LISTING_SELECTOR_TIMEOUT_MS = Math.max(
+  60000,
+  envInt('PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS', 120000)
 );
-const LISTING_SELECTOR_TIMEOUT_MS = parseInt(
-  process.env.PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS || '120000',
-  10
+const DECK_CARD_SELECTOR_TIMEOUT_MS = Math.max(
+  60000,
+  envInt('PUPPETEER_DECK_SELECTOR_TIMEOUT_MS', 90000)
 );
-const DECK_CARD_SELECTOR_TIMEOUT_MS = parseInt(
-  process.env.PUPPETEER_DECK_SELECTOR_TIMEOUT_MS || '90000',
-  10
-);
-const NAV_MAX_RETRIES = parseInt(process.env.PUPPETEER_NAV_RETRIES || '3', 10);
-const NAV_RETRY_DELAY_MS = parseInt(
-  process.env.PUPPETEER_NAV_RETRY_DELAY_MS || '5000',
-  10
-);
-const LAUNCH_TIMEOUT_MS = parseInt(
-  process.env.PUPPETEER_LAUNCH_TIMEOUT_MS || '120000',
-  10
+const NAV_MAX_RETRIES = Math.max(3, envInt('PUPPETEER_NAV_RETRIES', 3));
+const NAV_RETRY_DELAY_MS = Math.max(5000, envInt('PUPPETEER_NAV_RETRY_DELAY_MS', 5000));
+const LAUNCH_TIMEOUT_MS = Math.max(90000, envInt('PUPPETEER_LAUNCH_TIMEOUT_MS', 120000));
+const PROTOCOL_TIMEOUT_MS = Math.max(
+  120000,
+  envInt('PUPPETEER_PROTOCOL_TIMEOUT_MS', 240000)
 );
 /** `domcontentloaded` evita pendurar em `networkidle*` com analytics / long-polling. */
 const GOTO_WAIT_UNTIL =
@@ -829,6 +829,7 @@ class InkdecksPuppeteerScraper {
           executablePath,
           args,
           timeout: LAUNCH_TIMEOUT_MS,
+          protocolTimeout: PROTOCOL_TIMEOUT_MS,
         });
         return browser;
       } catch (err) {
@@ -869,16 +870,27 @@ class InkdecksPuppeteerScraper {
         }
         return;
       } catch (err) {
+        const msg = String((err && err.message) || '');
+        const timedOutNavigate = /Page\.navigate timed out/i.test(msg);
+        if (timedOutNavigate) {
+          const detail = `Timeout de navegação detectado (attempt ${attempt}/${NAV_MAX_RETRIES}). timeout=${GOTO_TIMEOUT_MS}ms, protocolTimeout=${PROTOCOL_TIMEOUT_MS}ms`;
+          if (typeof emit === 'function') {
+            emit({ type: 'log', level: 'warning', message: detail });
+          } else {
+            console.warn(detail);
+          }
+        }
         if (attempt >= NAV_MAX_RETRIES) {
           throw err;
         }
-        const warn = `Falha na navegação (${attempt}/${NAV_MAX_RETRIES}): ${err.message} — nova tentativa em ${NAV_RETRY_DELAY_MS / 1000}s`;
+        const waitMs = NAV_RETRY_DELAY_MS * attempt;
+        const warn = `Falha na navegação (${attempt}/${NAV_MAX_RETRIES}): ${err.message} — nova tentativa em ${Math.round(waitMs / 1000)}s`;
         if (typeof emit === 'function') {
           emit({ type: 'log', level: 'warning', message: warn });
         } else {
           console.warn(warn);
         }
-        await sleep(NAV_RETRY_DELAY_MS);
+        await sleep(waitMs);
       }
     }
   }
