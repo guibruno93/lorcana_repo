@@ -9,12 +9,15 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+      NPM_CONFIG_PRODUCTION: 'false'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
           cache: 'npm'
@@ -23,15 +26,30 @@ jobs:
             frontend/package-lock.json
 
       - name: Install root tools
-        run: npm install
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --include=dev
+          else
+            npm install --include=dev
+          fi
 
       - name: Install backend dependencies
         working-directory: backend
-        run: npm install
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --include=dev
+          else
+            npm install --include=dev
+          fi
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm install
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --include=dev
+          else
+            npm install --include=dev
+          fi
 
       - name: Run backend tests
         working-directory: backend
