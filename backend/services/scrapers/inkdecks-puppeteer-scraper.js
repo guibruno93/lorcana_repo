@@ -61,6 +61,12 @@ const PROTOCOL_TIMEOUT_MS = Math.max(
 /** `domcontentloaded` evita pendurar em `networkidle*` com analytics / long-polling. */
 const GOTO_WAIT_UNTIL =
   process.env.PUPPETEER_GOTO_WAIT_UNTIL || 'domcontentloaded';
+const LISTING_DECK_SELECTORS = [
+  'tr[id^="desktop-deck-"]',
+  'tr[data-href*="/deck-"]',
+  'a[href*="/deck-"]',
+  '[data-href*="/deck-"]',
+];
 
 /** Cache gravável em runtime (Render: /tmp; build em /opt/render não persiste). */
 function resolvePuppeteerCacheDir() {
@@ -159,7 +165,78 @@ function listingUrlForPage(pageNum) {
 }
 
 function htmlLooksLikeCloudflareChallenge(html) {
-  return /Just a moment|checking your browser/i.test(html || '');
+  return /Just a moment|checking your browser|cf[- ]?challenge|cf-turnstile|captcha/i.test(
+    html || ''
+  );
+}
+
+function shouldSaveScraperDebug() {
+  return (
+    process.env.SCRAPER_SAVE_DEBUG === 'true' ||
+    process.env.GITHUB_ACTIONS === 'true'
+  );
+}
+
+function getScraperDebugDir() {
+  if (process.env.SCRAPER_DEBUG_DIR) return process.env.SCRAPER_DEBUG_DIR;
+  return path.join(__dirname, '..', '..', 'log', 'scrape-debug');
+}
+
+async function savePageDebugArtifacts(page, label, emit) {
+  if (!shouldSaveScraperDebug()) return;
+  const safe = String(label || 'unknown').replace(/[^a-zA-Z0-9_-]+/g, '_');
+  const ts = new Date().toISOString().replace(/[:.]/g, '-');
+  const dir = getScraperDebugDir();
+  fs.mkdirSync(dir, { recursive: true });
+  const htmlPath = path.join(dir, `${ts}_${safe}.html`);
+  const pngPath = path.join(dir, `${ts}_${safe}.png`);
+  try {
+    const html = await page.content();
+    fs.writeFileSync(htmlPath, html, 'utf8');
+    await page.screenshot({ path: pngPath, fullPage: true });
+    if (typeof emit === 'function') {
+      emit({
+        type: 'log',
+        level: 'warning',
+        message: `Debug salvo: ${htmlPath} e ${pngPath}`,
+      });
+    }
+  } catch (e) {
+    if (typeof emit === 'function') {
+      emit({
+        type: 'log',
+        level: 'warning',
+        message: `Falha ao salvar debug (${label}): ${e.message}`,
+      });
+    }
+  }
+}
+
+async function waitForCloudflareToClear(page, emit, label, maxWaitMs = 45000) {
+  const started = Date.now();
+  while (Date.now() - started < maxWaitMs) {
+    const html = await page.content();
+    if (!htmlLooksLikeCloudflareChallenge(html)) return true;
+    if (typeof emit === 'function') {
+      emit({
+        type: 'log',
+        level: 'warning',
+        message: `${label}: Cloudflare challenge detectado; aguardando…`,
+      });
+    }
+    await sleep(5000);
+  }
+  return false;
+}
+
+async function detectListingDeckCount(page) {
+  return page.evaluate((selectors) => {
+    for (const sel of selectors) {
+      const count = document.querySelectorAll(sel).length;
+      if (count > 0) return count;
+    }
+    return 0;
+  }, LISTING_DECK_SELECTORS);
 }
 
 /**
@@ -227,6 +304,35 @@ async function extractListingDeckMetaFromPage(page, maxDecks) {
         },
       });
     }
+    if (decks.length > 0) return decks;
+
+    // Fallback: grid/cards layout com links diretos para deck.
+    const seen = new Set();
+    const anchors = Array.from(document.querySelectorAll('a[href*="/deck-"]'));
+    for (const a of anchors) {
+      if (decks.length >= maxDecksInner) break;
+      const href = (a.getAttribute('href') || '').trim();
+      if (!href) continue;
+      const fullUrl = href.startsWith('http') ? href : base + href;
+      if (seen.has(fullUrl)) continue;
+      seen.add(fullUrl);
+      const title =
+        a.getAttribute('title') ||
+        a.textContent?.replace(/\s+/g, ' ').trim() ||
+        '';
+      const deckId = (href.match(/deck-(.+?)$/) || [])[1] || '';
+      if (!deckId) continue;
+      decks.push({
+        url: fullUrl,
+        deckId,
+        name: title || `Deck ${deckId}`,
+        author: '',
+        placement: '',
+        strategy: '',
+        inks: [],
+        event: { name: '', organizer: '', players: 0, date: '' },
+      });
+    }
     return decks;
   }, maxDecks, BASE_URL);
 }
@@ -244,38 +350,37 @@ async function ensureListingReady(page, emit, label) {
     level: 'info',
     message: `${label}: Aguardando possível verificação Cloudflare…`,
   });
-  await sleep(3000);
-  let html = await page.content();
-  if (htmlLooksLikeCloudflareChallenge(html)) {
-    emit({
-      type: 'log',
-      level: 'warning',
-      message: `${label}: Challenge Cloudflare detectado; aguardando mais…`,
-    });
-    await sleep(15000);
-    html = await page.content();
-  }
-  if (htmlLooksLikeCloudflareChallenge(html)) {
+  await sleep(2500);
+  const clear = await waitForCloudflareToClear(
+    page,
+    emit,
+    label,
+    Math.max(45000, LISTING_SELECTOR_TIMEOUT_MS)
+  );
+  if (!clear) {
     emit({
       type: 'log',
       level: 'error',
       message: `${label}: Bloqueado pelo Cloudflare.`,
     });
+    await savePageDebugArtifacts(page, `${label}_cloudflare_block`, emit);
     return false;
   }
-  try {
-    await page.waitForSelector('tr[id^="desktop-deck-"]', {
-      timeout: LISTING_SELECTOR_TIMEOUT_MS,
-    });
-    return true;
-  } catch {
-    emit({
-      type: 'log',
-      level: 'error',
-      message: `${label}: Não encontrou linhas tr[id^="desktop-deck-"].`,
-    });
-    return false;
+
+  const started = Date.now();
+  while (Date.now() - started < LISTING_SELECTOR_TIMEOUT_MS) {
+    const count = await detectListingDeckCount(page);
+    if (count > 0) return true;
+    await page.evaluate(() => window.scrollBy(0, 500)).catch(() => {});
+    await sleep(1200);
   }
+  emit({
+    type: 'log',
+    level: 'error',
+    message: `${label}: Não encontrou linhas de deck na listagem (selectors fallback falharam).`,
+  });
+  await savePageDebugArtifacts(page, `${label}_no_listing_rows`, emit);
+  return false;
 }
 
 /** Conta linhas de decklist visíveis no DOM. */
@@ -1072,46 +1177,9 @@ class InkdecksPuppeteerScraper {
       });
 
       await this.navigateWithRetry(page, listingUrlForPage(1), emit);
-
-      emit({
-        type: 'log',
-        level: 'info',
-        message: 'Aguardando possível verificação Cloudflare…',
-      });
-      await sleep(5000);
-
-      let html = await page.content();
-      if (htmlLooksLikeCloudflareChallenge(html)) {
-        emit({
-          type: 'log',
-          level: 'warning',
-          message: 'Challenge Cloudflare detectado; aguardando mais…',
-        });
-        await sleep(15000);
-        html = await page.content();
-      }
-
-      if (htmlLooksLikeCloudflareChallenge(html)) {
-        emit({
-          type: 'log',
-          level: 'error',
-          message:
-            'Ainda na página de challenge (Cloudflare). Tente IP residencial ou aumentar espera.',
-        });
-        return [];
-      }
-
-      try {
-        await page.waitForSelector('tr[id^="desktop-deck-"]', {
-          timeout: LISTING_SELECTOR_TIMEOUT_MS,
-        });
-      } catch {
-        emit({
-          type: 'log',
-          level: 'error',
-          message:
-            'Não encontrou linhas tr[id^=desktop-deck-] (HTML alterado ou bloqueio).',
-        });
+      const readyFirstPage = await ensureListingReady(page, emit, 'Página 1');
+      if (!readyFirstPage) {
+        await savePageDebugArtifacts(page, 'page1_not_ready', emit);
         return [];
       }
 
@@ -1178,6 +1246,11 @@ class InkdecksPuppeteerScraper {
             level: 'warning',
             message: `Página ${currentPage}: 0 decks encontrados — fim da listagem ou erro.`,
           });
+          await savePageDebugArtifacts(
+            page,
+            `page_${currentPage}_no_decks_after_retry`,
+            emit
+          );
           break;
         }
 

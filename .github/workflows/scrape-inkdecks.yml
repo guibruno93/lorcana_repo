@@ -9,10 +9,14 @@ on:
         description: 'Number of decks to scrape'
         required: false
         default: '50'
+      runner:
+        description: 'Runner label (ubuntu-latest or self-hosted)'
+        required: false
+        default: 'ubuntu-latest'
 
 jobs:
   scrape:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.runner || vars.SCRAPER_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 45
 
     steps:
@@ -41,6 +45,11 @@ jobs:
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           PUPPETEER_HEADLESS: 'true'
           GITHUB_ACTIONS: 'true'
+          SCRAPER_SAVE_DEBUG: 'true'
+          SCRAPER_MIN_EXPECTED_DECKS: '1'
+          PUPPETEER_PROTOCOL_TIMEOUT_MS: '300000'
+          PUPPETEER_GOTO_TIMEOUT_MS: '240000'
+          PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS: '180000'
           LIMIT: ${{ github.event.inputs.limit }}
         run: |
           LIMIT="${LIMIT:-50}"
@@ -61,4 +70,5 @@ jobs:
           path: |
             backend/*.log
             backend/error.png
+            backend/log/scrape-debug/**
           retention-days: 7

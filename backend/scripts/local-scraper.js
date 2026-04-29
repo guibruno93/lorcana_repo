@@ -19,6 +19,14 @@ const {
 async function main() {
   const startTime = Date.now();
   const limit = parseInt(process.argv[2] || '50', 10);
+  const minExpectedDecks = Math.max(
+    0,
+    parseInt(
+      process.env.SCRAPER_MIN_EXPECTED_DECKS ||
+        (process.env.GITHUB_ACTIONS === 'true' ? '1' : '0'),
+      10
+    ) || 0
+  );
 
   console.log('🚀 Inkwell Labs Scraper - Starting...');
   console.log(
@@ -26,6 +34,7 @@ async function main() {
     process.env.GITHUB_ACTIONS === 'true' ? 'GitHub Actions' : 'Local'
   );
   console.log('📊 Target limit:', limit, 'decks\n');
+  console.log('✅ Minimum expected decks:', minExpectedDecks, '\n');
 
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
     console.error('❌ Missing SUPABASE_URL or SUPABASE_SERVICE_KEY');
@@ -127,6 +136,13 @@ async function main() {
     );
   }
   console.log('');
+
+  if (totalScraped < minExpectedDecks) {
+    console.error(
+      `❌ Scrape validation failed: expected at least ${minExpectedDecks} deck(s), got ${totalScraped}.`
+    );
+    process.exit(1);
+  }
 }
 
 main().catch((err) => {
