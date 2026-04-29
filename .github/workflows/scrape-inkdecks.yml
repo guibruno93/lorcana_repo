@@ -18,6 +18,10 @@ jobs:
   scrape:
     runs-on: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.runner || vars.SCRAPER_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 45
+    # Evita aviso/depreciação de actions (ex.: upload-artifact) ainda empacotadas para Node 20 no runner.
+    # Ver: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
     steps:
       - name: Checkout repository
@@ -26,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
           cache-dependency-path: backend/package-lock.json
 
