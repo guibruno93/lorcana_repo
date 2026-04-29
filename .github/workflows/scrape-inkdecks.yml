@@ -40,6 +40,7 @@ jobs:
 
       - name: Run Puppeteer scraper
         working-directory: ./backend
+        shell: pwsh
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
@@ -52,9 +53,9 @@ jobs:
           PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS: '180000'
           LIMIT: ${{ github.event.inputs.limit }}
         run: |
-          LIMIT="${LIMIT:-50}"
-          echo "🚀 Starting scraper (limit: $LIMIT decks)..."
-          node scripts/local-scraper.js "$LIMIT"
+          $limitValue = if ($env:LIMIT) { $env:LIMIT } else { '50' }
+          Write-Host "🚀 Starting scraper (limit: $limitValue decks)..."
+          node scripts/local-scraper.js $limitValue
 
       - name: Check scraping results
         if: always()
