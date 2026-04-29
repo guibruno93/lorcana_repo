@@ -857,10 +857,30 @@ class InkdecksPuppeteerScraper {
         } else {
           console.log(msg);
         }
-        await page.goto(url, {
-          waitUntil: GOTO_WAIT_UNTIL,
-          timeout: GOTO_TIMEOUT_MS,
-        });
+        try {
+          await page.goto(url, {
+            waitUntil: GOTO_WAIT_UNTIL,
+            timeout: GOTO_TIMEOUT_MS,
+          });
+        } catch (primaryErr) {
+          const primaryMsg = String((primaryErr && primaryErr.message) || '');
+          const isNavTimeout =
+            /Page\.navigate timed out|Navigation timeout/i.test(primaryMsg);
+          if (!isNavTimeout) throw primaryErr;
+
+          const fallbackMsg = `Navegação fallback (${attempt}/${NAV_MAX_RETRIES}): ${url} com waitUntil=commit`;
+          if (typeof emit === 'function') {
+            emit({ type: 'log', level: 'warning', message: fallbackMsg });
+          } else {
+            console.warn(fallbackMsg);
+          }
+
+          await page.goto(url, {
+            waitUntil: 'commit',
+            timeout: GOTO_TIMEOUT_MS,
+          });
+          await sleep(2500);
+        }
         if (typeof emit === 'function') {
           emit({
             type: 'log',
