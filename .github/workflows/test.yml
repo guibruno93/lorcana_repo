@@ -45,11 +45,7 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: |
-          if [ -f package-lock.json ]; then
-            npm ci --include=dev
-          else
-            npm install --include=dev
-          fi
+          npm install --include=dev
 
       - name: Run backend tests
         working-directory: backend
