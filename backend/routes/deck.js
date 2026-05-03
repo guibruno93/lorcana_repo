@@ -308,240 +308,256 @@ function extractCostFromCard(cardName, cardMap) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// POST /api/deck/analyze
+// POST /api/deck/analyze  (lógica partilhada: runStructuredAnalyze)
 // ═══════════════════════════════════════════════════════════════════
+
+/**
+ * Análise estruturada (ML + Supabase + curva) — usada pelo router e por /api/ai/sidney.
+ * @param {string} deckText
+ * @returns {Promise<object>}
+ */
+async function runStructuredAnalyze(deckText) {
+  if (!deckText || typeof deckText !== 'string' || !deckText.trim()) {
+    throw new Error('deckText is required');
+  }
+
+  const enriched = await enrichDeck(deckText);
+  const { cards, inks, totalCards, byInk } = enriched;
+
+  const byType = {};
+  const byCost = {};
+  const byRarity = {};
+
+  for (const card of cards) {
+    if (card.type) {
+      byType[card.type] = (byType[card.type] || 0) + card.quantity;
+    }
+
+    if (card.cost != null) {
+      const bucket = card.cost >= 10 ? '10+' : String(card.cost);
+      byCost[bucket] = (byCost[bucket] || 0) + card.quantity;
+    }
+
+    if (card.rarity) {
+      byRarity[card.rarity] = (byRarity[card.rarity] || 0) + card.quantity;
+    }
+  }
+
+  let totalCost = 0;
+  let countedCards = 0;
+  for (const card of cards) {
+    if (card.cost != null) {
+      totalCost += card.cost * card.quantity;
+      countedCards += card.quantity;
+    }
+  }
+  const avgCost = countedCards > 0 ? (totalCost / countedCards).toFixed(2) : '0';
+
+  const inkableCount = cards
+    .filter(c => c.inkable === true)
+    .reduce((sum, c) => sum + c.quantity, 0);
+
+  const inkablePct =
+    totalCards > 0 ? ((inkableCount / totalCards) * 100).toFixed(1) : 0;
+
+  const identifier = await getMLIdentifier();
+  const mlResult = await identifier.identify({ cards, inks });
+
+  return {
+    success: true,
+    archetype: mlResult.archetype,
+    archetypeConfidence: mlResult.confidence,
+    archetypeMethod: mlResult.method,
+    archetypeAlternatives: mlResult.alternatives,
+    totalCards,
+    inkablePct: parseFloat(inkablePct),
+    curveCounts: byCost,
+    avgCost: parseFloat(avgCost),
+    inks,
+    cards,
+    analysis: {
+      cards,
+      stats: {
+        totalCards,
+        uniqueCards: cards.length,
+        foundInDatabase: cards.filter(c => c.found).length,
+      },
+      breakdown: { byInk, byType, byCost, byRarity },
+      curve: {
+        avgCost: parseFloat(avgCost),
+        distribution: byCost,
+      },
+      inks,
+      ml: {
+        archetype: mlResult.archetype,
+        confidence: mlResult.confidence,
+        method: mlResult.method,
+        alternatives: mlResult.alternatives,
+      },
+    },
+  };
+}
 
 router.post('/analyze', async (req, res) => {
   try {
     console.log('📊 /analyze request received');
-    
-    let deckText = req.body.deckText 
-                || req.body.decklist 
-                || req.body.deck 
-                || req.body.text;
-    
+
+    let deckText =
+      req.body.deckText ||
+      req.body.decklist ||
+      req.body.deck ||
+      req.body.text;
+
     if (!deckText && req.body.cards && Array.isArray(req.body.cards)) {
       deckText = req.body.cards
         .map(c => `${c.quantity || 1}x ${c.name || c.card_name}`)
         .join('\n');
     }
-    
+
     if (!deckText) {
       return res.status(400).json({
         success: false,
-        error: 'deckText is required'
+        error: 'deckText is required',
       });
     }
 
-    // ✅ Usar função unificada
-    const enriched = await enrichDeck(deckText);
-    const { cards, inks, totalCards, byInk } = enriched;
-
-    // Estatísticas adicionais
-    const byType = {};
-    const byCost = {};
-    const byRarity = {};
-    
-    for (const card of cards) {
-      if (card.type) {
-        byType[card.type] = (byType[card.type] || 0) + card.quantity;
-      }
-      
-      if (card.cost != null) {
-        const bucket = card.cost >= 10 ? '10+' : String(card.cost);
-        byCost[bucket] = (byCost[bucket] || 0) + card.quantity;
-      }
-      
-      if (card.rarity) {
-        byRarity[card.rarity] = (byRarity[card.rarity] || 0) + card.quantity;
-      }
-    }
-
-    // Custo médio
-    let totalCost = 0;
-    let countedCards = 0;
-    for (const card of cards) {
-      if (card.cost != null) {
-        totalCost += card.cost * card.quantity;
-        countedCards += card.quantity;
-      }
-    }
-    const avgCost = countedCards > 0 ? (totalCost / countedCards).toFixed(2) : '0';
-
-    // Inkable %
-    const inkableCount = cards
-      .filter(c => c.inkable === true)
-      .reduce((sum, c) => sum + c.quantity, 0);
-    
-    const inkablePct = totalCards > 0 
-      ? ((inkableCount / totalCards) * 100).toFixed(1) 
-      : 0;
-
-    // ML
-    console.log('🤖 Identifying archetype with ML...');
-    const identifier = await getMLIdentifier();
-    const mlResult = await identifier.identify({ cards, inks });
-    
-    console.log(`✅ Archetype: ${mlResult.archetype} (${(mlResult.confidence * 100).toFixed(1)}% confidence, method: ${mlResult.method})`);
-
-    // Resposta
-    res.json({
-      success: true,
-      archetype: mlResult.archetype,
-      archetypeConfidence: mlResult.confidence,
-      archetypeMethod: mlResult.method,
-      archetypeAlternatives: mlResult.alternatives,
-      totalCards,
-      inkablePct: parseFloat(inkablePct),
-      curveCounts: byCost,
-      avgCost: parseFloat(avgCost),
-      inks,
-      cards,
-      analysis: {
-        cards,
-        stats: {
-          totalCards,
-          uniqueCards: cards.length,
-          foundInDatabase: cards.filter(c => c.found).length
-        },
-        breakdown: { byInk, byType, byCost, byRarity },
-        curve: {
-          avgCost: parseFloat(avgCost),
-          distribution: byCost
-        },
-        inks,
-        ml: {
-          archetype: mlResult.archetype,
-          confidence: mlResult.confidence,
-          method: mlResult.method,
-          alternatives: mlResult.alternatives
-        }
-      }
-    });
-    
+    const payload = await runStructuredAnalyze(deckText);
+    res.json(payload);
   } catch (err) {
     console.error('❌ /analyze error:', err);
     res.status(500).json({
       success: false,
-      error: err.message
+      error: err.message,
     });
   }
 });
 
 // ═══════════════════════════════════════════════════════════════════
-// POST /api/deck/matchups
+// POST /api/deck/matchups  (lógica partilhada: runMatchupsStructured)
 // ═══════════════════════════════════════════════════════════════════
 
-router.post('/matchups', async (req, res) => {
-  try {
-    let deckText = req.body.deckText || req.body.decklist;
-    
-    if (!deckText) {
-      return res.status(400).json({
-        success: false,
-        error: 'deckText is required'
-      });
-    }
-    
-    // ✅ Usar função unificada
-    const enriched = await enrichDeck(deckText);
-    const { cards, inks } = enriched;
-    
-    // ML
-    const identifier = await getMLIdentifier();
-    const mlResult = await identifier.identify({ cards, inks });
-    
-    console.log(`🎯 Identified: ${mlResult.archetype} (${(mlResult.confidence * 100).toFixed(0)}%)`);
-    
-    // Buscar matchups
-    const { data: matchupData, error: matchupError } = await supabase
-      .from('matchup_matrix')
-      .select('*')
-      .ilike('archetype', mlResult.archetype)
-      .eq('format', 'core')
-      .order('winrate', { ascending: false });
-    
-    if (matchupError || !matchupData || matchupData.length === 0) {
-      return res.json({
-        success: true,
-        deck: {
-          archetype: mlResult.archetype,
-          confidence: mlResult.confidence,
-          method: mlResult.method
-        },
-        matchups: {
-          available: false,
-          message: 'No matchup data found for this archetype'
-        }
-      });
-    }
-    
-    // Buscar meta share
-    const { data: metaData } = await supabase
-      .from('archetype_meta')
-      .select('archetype, meta_share, tier')
-      .eq('format', 'core')
-      .eq('days', 30);
-    
-    // Enriquecer matchups
-    const enrichedMatchups = matchupData.map(m => {
-      const meta = metaData?.find(a => 
-        a.archetype.toLowerCase() === m.opponent.toLowerCase()
-      );
-      
-      return {
-        opponent: m.opponent,
-        winrate: m.winrate,
-        metaShare: meta?.meta_share || 0,
-        tier: meta?.tier || 'D',
-        difficulty: 
-          m.winrate >= 60 ? 'favorable' :
-          m.winrate >= 50 ? 'even' : 'unfavorable'
-      };
-    });
-    
-    enrichedMatchups.sort((a, b) => b.metaShare - a.metaShare);
-    
-    // Calcular expected WR
-    const totalMeta = enrichedMatchups.reduce((sum, m) => sum + m.metaShare, 0);
-    const expectedWR = totalMeta > 0
-      ? enrichedMatchups.reduce((sum, m) => 
-          sum + (m.winrate / 100) * m.metaShare, 0
-        ) / totalMeta * 100
-      : null;
-    
-    // Calcular tier
-    let deckTier = 'C';
-    if (expectedWR >= 55) deckTier = 'S';
-    else if (expectedWR >= 52) deckTier = 'A';
-    else if (expectedWR >= 48) deckTier = 'B';
-    else if (expectedWR >= 45) deckTier = 'C';
-    else deckTier = 'D';
-    
-    res.json({
+/**
+ * Matchups enriquecidos (Supabase) — usado pelo router e por /api/ai/sidney e /api/ai/jack.
+ * @param {string} deckText
+ * @returns {Promise<object>}
+ */
+async function runMatchupsStructured(deckText) {
+  if (!deckText || typeof deckText !== 'string' || !deckText.trim()) {
+    throw new Error('deckText is required');
+  }
+
+  const enriched = await enrichDeck(deckText);
+  const { cards, inks } = enriched;
+
+  const identifier = await getMLIdentifier();
+  const mlResult = await identifier.identify({ cards, inks });
+
+  console.log(
+    `🎯 Identified: ${mlResult.archetype} (${(mlResult.confidence * 100).toFixed(0)}%)`
+  );
+
+  const { data: matchupData, error: matchupError } = await supabase
+    .from('matchup_matrix')
+    .select('*')
+    .ilike('archetype', mlResult.archetype)
+    .eq('format', 'core')
+    .order('winrate', { ascending: false });
+
+  if (matchupError || !matchupData || matchupData.length === 0) {
+    return {
       success: true,
       deck: {
         archetype: mlResult.archetype,
         confidence: mlResult.confidence,
         method: mlResult.method,
-        tier: deckTier,
-        expectedWinrate: expectedWR ? expectedWR.toFixed(1) : null
       },
-      matchups: enrichedMatchups,
-      summary: {
-        avgWinrate: expectedWR ? expectedWR.toFixed(1) : null,
-        tier: deckTier,
-        favorable: enrichedMatchups.filter(m => m.winrate >= 60).length,
-        even: enrichedMatchups.filter(m => m.winrate >= 50 && m.winrate < 60).length,
-        unfavorable: enrichedMatchups.filter(m => m.winrate < 50).length
-      }
-    });
-    
+      matchups: {
+        available: false,
+        message: 'No matchup data found for this archetype',
+      },
+    };
+  }
+
+  const { data: metaData } = await supabase
+    .from('archetype_meta')
+    .select('archetype, meta_share, tier')
+    .eq('format', 'core')
+    .eq('days', 30);
+
+  const enrichedMatchups = matchupData.map(m => {
+    const meta = metaData?.find(
+      a => a.archetype.toLowerCase() === m.opponent.toLowerCase()
+    );
+
+    return {
+      opponent: m.opponent,
+      winrate: m.winrate,
+      metaShare: meta?.meta_share || 0,
+      tier: meta?.tier || 'D',
+      difficulty:
+        m.winrate >= 60 ? 'favorable' : m.winrate >= 50 ? 'even' : 'unfavorable',
+    };
+  });
+
+  enrichedMatchups.sort((a, b) => b.metaShare - a.metaShare);
+
+  const totalMeta = enrichedMatchups.reduce((sum, m) => sum + m.metaShare, 0);
+  const expectedWR =
+    totalMeta > 0
+      ? (enrichedMatchups.reduce(
+          (sum, m) => sum + (m.winrate / 100) * m.metaShare,
+          0
+        ) /
+          totalMeta) *
+        100
+      : null;
+
+  let deckTier = 'C';
+  if (expectedWR >= 55) deckTier = 'S';
+  else if (expectedWR >= 52) deckTier = 'A';
+  else if (expectedWR >= 48) deckTier = 'B';
+  else if (expectedWR >= 45) deckTier = 'C';
+  else deckTier = 'D';
+
+  return {
+    success: true,
+    deck: {
+      archetype: mlResult.archetype,
+      confidence: mlResult.confidence,
+      method: mlResult.method,
+      tier: deckTier,
+      expectedWinrate: expectedWR ? expectedWR.toFixed(1) : null,
+    },
+    matchups: enrichedMatchups,
+    summary: {
+      avgWinrate: expectedWR ? expectedWR.toFixed(1) : null,
+      tier: deckTier,
+      favorable: enrichedMatchups.filter(m => m.winrate >= 60).length,
+      even: enrichedMatchups.filter(m => m.winrate >= 50 && m.winrate < 60)
+        .length,
+      unfavorable: enrichedMatchups.filter(m => m.winrate < 50).length,
+    },
+  };
+}
+
+router.post('/matchups', async (req, res) => {
+  try {
+    const deckText = req.body.deckText || req.body.decklist;
+
+    if (!deckText) {
+      return res.status(400).json({
+        success: false,
+        error: 'deckText is required',
+      });
+    }
+
+    const payload = await runMatchupsStructured(deckText);
+    res.json(payload);
   } catch (err) {
     console.error('❌ /matchups error:', err);
-    res.status(500).json({ 
-      success: false, 
-      error: err.message 
+    res.status(500).json({
+      success: false,
+      error: err.message,
     });
   }
 });
@@ -776,5 +792,7 @@ router.post('/simulate-mulligan', async (req, res) => {
   }
 });
 
+router.runStructuredAnalyze = runStructuredAnalyze;
+router.runMatchupsStructured = runMatchupsStructured;
 
 module.exports = router;
