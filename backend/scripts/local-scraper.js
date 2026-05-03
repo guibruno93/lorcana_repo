@@ -6,6 +6,10 @@
  * Grava em Supabase (scraped_decks) via service role.
  *
  * Uso: node scripts/local-scraper.js [limit]
+ *
+ * Env úteis contra Cloudflare em CI:
+ * - PUPPETEER_PROXY_SERVER — ex. http://user:pass@host:port (Chromium --proxy-server)
+ * - SCRAPER_CI_STRICT_MIN_DECKS=true — falhar o job se 0 decks mesmo após bloqueio CF
  */
 
 require('dotenv').config();
@@ -55,6 +59,9 @@ async function main() {
     scrapedDecks = await scraper.scrapeDecks(limit, async (event) => {
       if (event.type === 'scrapeAbort' && event.reason) {
         scrapeAbortReason = event.reason;
+        const lab = event.label ? ` (${event.label})` : '';
+        console.log(`[warning] Scraping interrompido: ${event.reason}${lab}`);
+        return;
       }
       if (event.type === 'pageComplete') {
         if (event.decks && event.decks.length > 0) {

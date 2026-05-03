@@ -1,8 +1,14 @@
 name: Scrape Inkdecks Decks
 
 # Runners GitHub-hosted são frequentemente bloqueados pelo Cloudflare do Inkdecks.
-# O script sai com 0 nesse caso (ver backend/scripts/local-scraper.js) salvo
-# SCRAPER_CI_STRICT_MIN_DECKS=true no env do job.
+# O script sai com código 0 nesse caso (local-scraper.js), salvo SCRAPER_CI_STRICT_MIN_DECKS=true.
+#
+# Alternativas para obter dados sem bloqueio (ou com menos bloqueio):
+# - Self-hosted runner (IP residencial / menos partilhado).
+# - Secret PUPPETEER_PROXY_SERVER: proxy HTTP(S) residencial (ex. Bright Data, Oxylabs, IPRoyal).
+# - Cron noutro host (Render, VPS) em vez de GHA — outro fingerprint de rede.
+# - Serviço tipo FlareSolverr / scraping API que devolve HTML já validado (integração manual).
+# - Contactar Inkdecks para API ou allowlist do teu IP (se existir política comercial).
 
 on:
   schedule:
@@ -54,6 +60,7 @@ jobs:
           PUPPETEER_PROTOCOL_TIMEOUT_MS: '300000'
           PUPPETEER_GOTO_TIMEOUT_MS: '240000'
           PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS: '180000'
+          PUPPETEER_PROXY_SERVER: ${{ secrets.PUPPETEER_PROXY_SERVER }}
           LIMIT: ${{ github.event.inputs.limit }}
         run: |
           set -e

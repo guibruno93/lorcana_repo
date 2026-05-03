@@ -903,6 +903,14 @@ class InkdecksPuppeteerScraper {
   }
 
   async launchBrowserWithFallbacks(executablePath) {
+    const proxy = (process.env.PUPPETEER_PROXY_SERVER || '').trim();
+    if (proxy) {
+      console.log(
+        '🌐 PUPPETEER_PROXY_SERVER definido — o Chrome usa proxy (URL não registada no log).'
+      );
+    }
+    const proxyArgs = proxy ? [`--proxy-server=${proxy}`] : [];
+
     const baseArgs = [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -912,6 +920,7 @@ class InkdecksPuppeteerScraper {
       '--disable-features=IsolateOrigins,site-per-process',
       '--disable-blink-features=AutomationControlled',
       '--window-size=1920,1080',
+      ...proxyArgs,
     ];
 
     const candidates = [
@@ -920,7 +929,12 @@ class InkdecksPuppeteerScraper {
       // Perfil 2: sem --single-process (mais estável em cloud Linux)
       [...baseArgs],
       // Perfil 3: mínimo seguro para ambientes mais restritos
-      ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+      [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        ...proxyArgs,
+      ],
     ];
 
     let lastErr = null;
