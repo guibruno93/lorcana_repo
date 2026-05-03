@@ -87,6 +87,7 @@ jobs:
           set -e
           LIMIT_VALUE="${LIMIT:-50}"
           echo "🚀 Starting scraper (limit: ${LIMIT_VALUE} decks)..."
+          echo "🔥 FlareSolverr env: ENABLED=${FLARESOLVERR_ENABLED:-} URL=${FLARESOLVERR_URL:-}"
           node scripts/local-scraper.js "${LIMIT_VALUE}"
 
       - name: Check scraping results

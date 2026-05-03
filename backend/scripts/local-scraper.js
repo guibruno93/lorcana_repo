@@ -44,6 +44,21 @@ async function main() {
   console.log('📊 Target limit:', limit, 'decks\n');
   console.log('✅ Minimum expected decks:', minExpectedDecks, '\n');
 
+  const flareFlag = String(process.env.FLARESOLVERR_ENABLED || '').toLowerCase();
+  const flareOn =
+    flareFlag === 'true' || flareFlag === '1' || flareFlag === 'yes';
+  if (flareOn) {
+    console.log(
+      '🔥 FlareSolverr: ATIVO —',
+      process.env.FLARESOLVERR_URL || 'http://127.0.0.1:8191',
+      '(cookies/UA aplicados antes da listagem Inkdecks)\n'
+    );
+  } else {
+    console.log(
+      '🔥 FlareSolverr: desativado — defina FLARESOLVERR_ENABLED=true (+ URL) para bypass Cloudflare.\n'
+    );
+  }
+
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
     console.error('❌ Missing SUPABASE_URL or SUPABASE_SERVICE_KEY');
     process.exit(1);
