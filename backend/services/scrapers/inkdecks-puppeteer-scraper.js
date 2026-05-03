@@ -1145,6 +1145,45 @@ class InkdecksPuppeteerScraper {
     await this.navigateWithRetry(page, targetUrl, emit);
   }
 
+  /**
+   * Obtém cookies/UA via FlareSolverr e aplica na página antes do goto Inkdecks.
+   * @param {import('puppeteer').Page} page
+   * @param {string} url
+   * @param {(e: object) => void} [emit]
+   * @returns {Promise<boolean>}
+   */
+  async primeFlareSolverrForUrl(page, url, emit) {
+    let mod;
+    try {
+      mod = require('./flaresolverr-client');
+    } catch (e) {
+      emit?.({
+        type: 'log',
+        level: 'warning',
+        message: `FlareSolverr: módulo não carregado: ${e.message}`,
+      });
+      return false;
+    }
+    if (!mod.isFlareSolverrEnabled()) return false;
+    emit?.({
+      type: 'log',
+      level: 'info',
+      message: `FlareSolverr: a resolver ${url} (${mod.flareSolverrBaseUrl()})…`,
+    });
+    try {
+      const solution = await mod.flareSolverRequestGet(url, { emit });
+      await mod.applyFlareSolutionToPage(page, solution, emit);
+      return true;
+    } catch (e) {
+      emit?.({
+        type: 'log',
+        level: 'warning',
+        message: `FlareSolverr: falhou (${e.message}); continua sem bypass.`,
+      });
+      return false;
+    }
+  }
+
   async close() {
     if (this.browser) {
       await this.browser.close();
@@ -1180,10 +1219,19 @@ class InkdecksPuppeteerScraper {
       );
 
       await page.setViewport({ width: 1920, height: 1080 });
-      const ua =
-        process.env.PUPPETEER_UA ||
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36';
-      await page.setUserAgent(ua);
+      const listingFirst = listingUrlForPage(1);
+
+      const flarePrimed = await this.primeFlareSolverrForUrl(
+        page,
+        listingFirst,
+        emit
+      );
+      if (!flarePrimed) {
+        const ua =
+          process.env.PUPPETEER_UA ||
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36';
+        await page.setUserAgent(ua);
+      }
 
       emit({
         type: 'log',
@@ -1191,8 +1239,27 @@ class InkdecksPuppeteerScraper {
         message: 'Abrindo listagem Inkdecks (Puppeteer, modo paginado)…',
       });
 
-      await this.navigateWithRetry(page, listingUrlForPage(1), emit);
-      const readyFirstPage = await ensureListingReady(page, emit, 'Página 1');
+      await this.navigateWithRetry(page, listingFirst, emit);
+      let readyFirstPage = await ensureListingReady(page, emit, 'Página 1');
+
+      if (!readyFirstPage && flarePrimed) {
+        emit({
+          type: 'log',
+          level: 'warning',
+          message:
+            'FlareSolverr: listagem ainda indisponível; nova tentativa request.get…',
+        });
+        const retryFlare = await this.primeFlareSolverrForUrl(
+          page,
+          listingFirst,
+          emit
+        );
+        if (retryFlare) {
+          await this.navigateWithRetry(page, listingFirst, emit);
+          readyFirstPage = await ensureListingReady(page, emit, 'Página 1');
+        }
+      }
+
       if (!readyFirstPage) {
         await savePageDebugArtifacts(page, 'page1_not_ready', emit);
         return [];
@@ -1222,11 +1289,31 @@ class InkdecksPuppeteerScraper {
         if (currentPage > 1) {
           await this.navigateToListingPage(page, currentPage, emit);
           await sleep(1500);
-          const ok = await ensureListingReady(
+          let ok = await ensureListingReady(
             page,
             emit,
             `Página ${currentPage}`
           );
+          if (!ok) {
+            const primedAgain = await this.primeFlareSolverrForUrl(
+              page,
+              listingUrlForPage(currentPage),
+              emit
+            );
+            if (primedAgain) {
+              await this.navigateWithRetry(
+                page,
+                listingUrlForPage(currentPage),
+                emit
+              );
+              await sleep(1500);
+              ok = await ensureListingReady(
+                page,
+                emit,
+                `Página ${currentPage} (pós-Flare)`
+              );
+            }
+          }
           if (!ok) break;
         }
 

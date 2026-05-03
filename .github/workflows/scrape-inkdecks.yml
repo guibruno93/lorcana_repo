@@ -3,12 +3,8 @@ name: Scrape Inkdecks Decks
 # Runners GitHub-hosted são frequentemente bloqueados pelo Cloudflare do Inkdecks.
 # O script sai com código 0 nesse caso (local-scraper.js), salvo SCRAPER_CI_STRICT_MIN_DECKS=true.
 #
-# Alternativas para obter dados sem bloqueio (ou com menos bloqueio):
-# - Self-hosted runner (IP residencial / menos partilhado).
-# - Secret PUPPETEER_PROXY_SERVER: proxy HTTP(S) residencial (ex. Bright Data, Oxylabs, IPRoyal).
-# - Cron noutro host (Render, VPS) em vez de GHA — outro fingerprint de rede.
-# - Serviço tipo FlareSolverr / scraping API que devolve HTML já validado (integração manual).
-# - Contactar Inkdecks para API ou allowlist do teu IP (se existir política comercial).
+# O job inclui o serviço FlareSolverr (porta 8191); o scraper usa FLARESOLVERR_* quando ativo.
+# Alternativas extra: self-hosted runner, PUPPETEER_PROXY_SERVER (secret), cron noutro host.
 
 on:
   schedule:
@@ -27,7 +23,14 @@ on:
 jobs:
   scrape:
     runs-on: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.runner || vars.SCRAPER_RUNNER || 'ubuntu-latest' }}
-    timeout-minutes: 45
+    timeout-minutes: 55
+
+    services:
+      flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        ports:
+          - 8191:8191
+        options: --shm-size=2g
 
     steps:
       - name: Checkout repository
@@ -48,6 +51,18 @@ jobs:
           npm ci
           npx puppeteer browsers install chrome
 
+      - name: Wait for FlareSolverr
+        run: |
+          echo "À espera de FlareSolverr em 127.0.0.1:8191…"
+          for i in $(seq 1 45); do
+            if curl -sS --max-time 5 http://127.0.0.1:8191/ >/dev/null 2>&1; then
+              echo "FlareSolverr respondeu."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "::warning::FlareSolverr não respondeu a tempo; o bypass pode falhar."
+
       - name: Run Puppeteer scraper
         working-directory: ./backend
         env:
@@ -61,6 +76,12 @@ jobs:
           PUPPETEER_GOTO_TIMEOUT_MS: '240000'
           PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS: '180000'
           PUPPETEER_PROXY_SERVER: ${{ secrets.PUPPETEER_PROXY_SERVER }}
+          FLARESOLVERR_ENABLED: 'true'
+          FLARESOLVERR_URL: 'http://127.0.0.1:8191'
+          # Cloudflare em CI pode demorar; o fetch ao FlareSolverr deve ser > maxTimeout
+          FLARESOLVERR_MAX_TIMEOUT_MS: '180000'
+          FLARESOLVERR_CLIENT_TIMEOUT_MS: '300000'
+          FLARESOLVERR_WAIT_AFTER: '3'
           LIMIT: ${{ github.event.inputs.limit }}
         run: |
           set -e

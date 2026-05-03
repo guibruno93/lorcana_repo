@@ -1,0 +1,15 @@
+# FlareSolverr local para o scraper Inkdecks (Cloudflare).
+# Uso: docker compose -f docker-compose.flaresolverr.yml up -d
+# Depois (exemplo):
+#   FLARESOLVERR_ENABLED=true FLARESOLVERR_URL=http://127.0.0.1:8191 \
+#   FLARESOLVERR_MAX_TIMEOUT_MS=180000 FLARESOLVERR_CLIENT_TIMEOUT_MS=300000 \
+#   node scripts/local-scraper.js
+
+services:
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    ports:
+      - '8191:8191'
+    environment:
+      - LOG_LEVEL=info
+    shm_size: '2gb'

@@ -10,6 +10,10 @@
  * Env úteis contra Cloudflare em CI:
  * - PUPPETEER_PROXY_SERVER — ex. http://user:pass@host:port (Chromium --proxy-server)
  * - SCRAPER_CI_STRICT_MIN_DECKS=true — falhar o job se 0 decks mesmo após bloqueio CF
+ * - FLARESOLVERR_ENABLED=true + FLARESOLVERR_URL — bypass Cloudflare via FlareSolverr (ver backend/docker-compose.flaresolverr.yml)
+ * - FLARESOLVERR_MAX_TIMEOUT_MS — maxTimeout enviado ao solver (default 120000; CI usa 180000)
+ * - FLARESOLVERR_CLIENT_TIMEOUT_MS — timeout do fetch Node ao FlareSolverr (default 180000; CI 300000)
+ * - FLARESOLVERR_WAIT_AFTER — waitInSeconds após resolver (default 2; CI 3)
  */
 
 require('dotenv').config();
@@ -65,6 +69,7 @@ async function main() {
       }
       if (event.type === 'pageComplete') {
         if (event.decks && event.decks.length > 0) {
+          scrapeAbortReason = null;
           const rows = event.decks.map(deckToScrapedDeckRow);
           const { error } = await supabase.from('scraped_decks').insert(rows);
           if (error) {
