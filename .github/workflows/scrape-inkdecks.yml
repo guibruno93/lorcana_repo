@@ -1,5 +1,9 @@
 name: Scrape Inkdecks Decks
 
+# Runners GitHub-hosted são frequentemente bloqueados pelo Cloudflare do Inkdecks.
+# O script sai com 0 nesse caso (ver backend/scripts/local-scraper.js) salvo
+# SCRAPER_CI_STRICT_MIN_DECKS=true no env do job.
+
 on:
   schedule:
     - cron: '0 */12 * * *'
@@ -18,10 +22,6 @@ jobs:
   scrape:
     runs-on: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.runner || vars.SCRAPER_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 45
-    # Força runtime JS das actions para Node 24 (changelog GitHub Actions).
-    # Ver: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
     steps:
       - name: Checkout repository
@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: '20'
           cache: 'npm'
           cache-dependency-path: backend/package-lock.json
 
@@ -44,7 +44,6 @@ jobs:
 
       - name: Run Puppeteer scraper
         working-directory: ./backend
-        shell: pwsh
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
@@ -57,9 +56,10 @@ jobs:
           PUPPETEER_LISTING_SELECTOR_TIMEOUT_MS: '180000'
           LIMIT: ${{ github.event.inputs.limit }}
         run: |
-          $limitValue = if ($env:LIMIT) { $env:LIMIT } else { '50' }
-          Write-Host "🚀 Starting scraper (limit: $limitValue decks)..."
-          node scripts/local-scraper.js $limitValue
+          set -e
+          LIMIT_VALUE="${LIMIT:-50}"
+          echo "🚀 Starting scraper (limit: ${LIMIT_VALUE} decks)..."
+          node scripts/local-scraper.js "${LIMIT_VALUE}"
 
       - name: Check scraping results
         if: always()

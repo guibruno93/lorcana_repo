@@ -363,6 +363,7 @@ async function ensureListingReady(page, emit, label) {
       level: 'error',
       message: `${label}: Bloqueado pelo Cloudflare.`,
     });
+    emit({ type: 'scrapeAbort', reason: 'cloudflare', label });
     await savePageDebugArtifacts(page, `${label}_cloudflare_block`, emit);
     return false;
   }

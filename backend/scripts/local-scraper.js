@@ -48,9 +48,14 @@ async function main() {
 
   let scrapedDecks = [];
   let savedIncremental = 0;
+  /** Definido quando o scraper emite `scrapeAbort` (ex.: Cloudflare na listagem). */
+  let scrapeAbortReason = null;
   try {
     const scraper = new InkdecksPuppeteerScraper();
     scrapedDecks = await scraper.scrapeDecks(limit, async (event) => {
+      if (event.type === 'scrapeAbort' && event.reason) {
+        scrapeAbortReason = event.reason;
+      }
       if (event.type === 'pageComplete') {
         if (event.decks && event.decks.length > 0) {
           const rows = event.decks.map(deckToScrapedDeckRow);
@@ -138,6 +143,22 @@ async function main() {
   console.log('');
 
   if (totalScraped < minExpectedDecks) {
+    const strictCiMin =
+      String(process.env.SCRAPER_CI_STRICT_MIN_DECKS || '').toLowerCase() ===
+        'true' ||
+      String(process.env.SCRAPER_CI_STRICT_MIN_DECKS || '') === '1';
+    if (
+      !strictCiMin &&
+      process.env.GITHUB_ACTIONS === 'true' &&
+      scrapeAbortReason === 'cloudflare' &&
+      totalScraped === 0
+    ) {
+      console.warn(
+        '⚠️ CI: Inkdecks bloqueou o runner (Cloudflare). Job concluído com código 0. ' +
+          'Para falhar quando não houver decks, define SCRAPER_CI_STRICT_MIN_DECKS=true ou usa runner self-hosted.'
+      );
+      process.exit(0);
+    }
     console.error(
       `❌ Scrape validation failed: expected at least ${minExpectedDecks} deck(s), got ${totalScraped}.`
     );
