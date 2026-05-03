@@ -49,7 +49,7 @@ export default function JackPage() {
       <div className="flex flex-col gap-3">
         <div className="coach-hero">
           <h1>
-            {t('coach.jackTitle')}
+            {t('tabs.deckCoach')}
             {result?.source && (
               <span className="coach-badge">
                 {result.source === 'anthropic' ? 'IA' : 'Local'}

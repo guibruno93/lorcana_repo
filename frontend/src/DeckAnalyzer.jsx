@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './DeckAnalyzer.css';
+import './pages/CoachPages.css';
 import DeckComparison from './components/DeckComparison';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
@@ -103,6 +104,9 @@ export default function DeckAnalyzerTab(props) {
   const [err, setErr] = useState('');
   const [analysis, setAnalysis] = useState(null);
   const [opts, setOpts] = useState({ compare: true, top: 32 });
+  const [sidneyLoading, setSidneyLoading] = useState(false);
+  const [sidneyErr, setSidneyErr] = useState('');
+  const [sidneyResult, setSidneyResult] = useState(null);
 
   const lines = useMemo(() => {
     return String(deckText || '').split(/\r?\n/).filter(l => l.trim().length).length;
@@ -138,6 +142,33 @@ export default function DeckAnalyzerTab(props) {
       setLoading(false);
     }
   }
+
+  async function runSidney() {
+    if (!String(deckText || '').trim()) {
+      setSidneyErr(t('coach.sidneyNeedList'));
+      return;
+    }
+    setSidneyErr('');
+    setSidneyLoading(true);
+    try {
+      const res = await fetch(`${API}/api/ai/sidney`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decklist: deckText }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      setSidneyResult(data);
+    } catch (e) {
+      setSidneyErr(e.message || 'Erro');
+    } finally {
+      setSidneyLoading(false);
+    }
+  }
+
+  const sidneyArch =
+    sidneyResult?.structured?.archetype ||
+    sidneyResult?.matchupsSummary?.deck?.archetype;
 
   return (
     <div className="sidebar-layout">
@@ -181,12 +212,38 @@ export default function DeckAnalyzerTab(props) {
           {loading ? t('deckAnalyzer.analyzing') : t('deckAnalyzer.analyze')}
         </button>
 
+        <div className="panel deck-analyzer-sidney">
+          <div className="panel-header">
+            <span className="panel-title">
+              <span className="icon icon--accent" aria-hidden="true" />{' '}
+              {t('deckAnalyzer.sidneySectionTitle')}
+            </span>
+            {sidneyResult?.source && (
+              <span className="badge badge-gray">
+                {sidneyResult.source === 'anthropic' ? 'IA' : 'Local'}
+              </span>
+            )}
+          </div>
+          <div className="panel-body">
+            <p className="deck-analyzer-sidney-hint">{t('deckAnalyzer.sidneyHint')}</p>
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={runSidney}
+              disabled={sidneyLoading || !String(deckText || '').trim()}
+            >
+              {sidneyLoading ? t('coach.diagnosing') : t('coach.diagnose')}
+            </button>
+          </div>
+        </div>
+
         {err && <div className="err-box">{err}</div>}
+        {sidneyErr && <div className="err-box">{sidneyErr}</div>}
       </div>
 
       {/* Results */}
       <div className="flex flex-col gap-4">
-        {!analysis ? (
+        {!analysis && !sidneyResult ? (
           <div className="panel">
             <div className="empty-state">
               <div className="empty-icon empty-icon--muted" aria-hidden="true" />
@@ -195,6 +252,8 @@ export default function DeckAnalyzerTab(props) {
           </div>
         ) : (
           <>
+            {analysis && (
+            <>
             {/* Summary com ML*/}
             <div className="panel">
               <div className="panel-header">
@@ -288,6 +347,92 @@ export default function DeckAnalyzerTab(props) {
             {/* Deck Comparison */}
             {analysis && analysis.cards && (
               <DeckComparison analysis={analysis} />
+            )}
+            </>
+            )}
+
+            {sidneyResult && (
+              <div className="panel">
+                <div className="panel-header">
+                  <span className="panel-title">
+                    <span className="icon icon--accent" aria-hidden="true" />{' '}
+                    {t('deckAnalyzer.sidneyResultsTitle')}
+                  </span>
+                </div>
+                <div className="panel-body deck-analyzer-sidney-results">
+                  {sidneyArch && (
+                    <div className="coach-result-block">
+                      <h3>{t('coach.sidneyServerArchetype')}</h3>
+                      <p>
+                        {sidneyArch}
+                        {sidneyResult.structured?.archetypeConfidence != null && (
+                          <span className="coach-meta-note">
+                            {' '}
+                            (
+                            {Math.round(
+                              (sidneyResult.structured.archetypeConfidence || 0) * 100
+                            )}
+                            %)
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  )}
+                  <div className="coach-result-block">
+                    <h3>{t('coach.summary')}</h3>
+                    <p>{sidneyResult.summary}</p>
+                  </div>
+                  <div className="coach-result-block">
+                    <h3>{t('coach.strengths')}</h3>
+                    <ul>
+                      {(sidneyResult.strengths || []).map((s, i) => (
+                        <li key={i}>{s}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="coach-result-block">
+                    <h3>{t('coach.weaknesses')}</h3>
+                    <ul>
+                      {(sidneyResult.weaknesses || []).length ? (
+                        (sidneyResult.weaknesses || []).map((s, i) => (
+                          <li key={i}>{s}</li>
+                        ))
+                      ) : (
+                        <li>{t('coach.noneListed')}</li>
+                      )}
+                    </ul>
+                  </div>
+                  {(sidneyResult.swaps || []).length > 0 && (
+                    <div className="coach-result-block">
+                      <h3>{t('coach.swaps')}</h3>
+                      <table className="coach-swaps-table">
+                        <thead>
+                          <tr>
+                            <th>{t('coach.swapOut')}</th>
+                            <th>{t('coach.swapIn')}</th>
+                            <th>{t('coach.swapWhy')}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(sidneyResult.swaps || []).map((row, i) => (
+                            <tr key={i}>
+                              <td>{row.out || row.remove || '—'}</td>
+                              <td>{row.in || row.add || '—'}</td>
+                              <td>{row.reason || '—'}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                  {sidneyResult.metaNote && (
+                    <div className="coach-result-block">
+                      <h3>{t('coach.metaNote')}</h3>
+                      <p className="coach-meta-note">{sidneyResult.metaNote}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </>
         )}

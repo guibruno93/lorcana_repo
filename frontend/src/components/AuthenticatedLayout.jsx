@@ -105,20 +105,6 @@ export default function AuthenticatedLayout({
         </button>
         <button
           type="button"
-          onClick={() => navigate('/ai-deck')}
-          className={`tab ${activeTab === 'ai-deck' ? 'tab-active' : ''}`}
-        >
-          {t('tabs.aiDeck')}
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate('/sidney')}
-          className={`tab ${activeTab === 'sidney' ? 'tab-active' : ''}`}
-        >
-          {t('tabs.sidney')}
-        </button>
-        <button
-          type="button"
           onClick={() => navigate('/lorena')}
           className={`tab ${activeTab === 'lorena' ? 'tab-active' : ''}`}
         >
@@ -129,7 +115,7 @@ export default function AuthenticatedLayout({
           onClick={() => navigate('/jack')}
           className={`tab ${activeTab === 'jack' ? 'tab-active' : ''}`}
         >
-          {t('tabs.jack')}
+          {t('tabs.deckCoach')}
         </button>
         <button
           type="button"

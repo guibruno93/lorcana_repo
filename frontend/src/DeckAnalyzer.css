@@ -4,6 +4,17 @@
 
 /* ── Layout ──────────────────────────────────────────────────────────────── */
 
+.deck-analyzer-sidney-hint {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0 0 0.75rem;
+  line-height: 1.45;
+}
+
+.deck-analyzer-sidney-results .coach-result-block:first-of-type {
+  margin-top: 0;
+}
+
 .sidebar-layout {
   display: grid;
   grid-template-columns: 400px 1fr;

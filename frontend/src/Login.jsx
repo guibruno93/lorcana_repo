@@ -14,10 +14,8 @@ const ALLOWED_POST_LOGIN = new Set([
   '/deck-builder',
   '/matchups',
   '/profile',
-  '/sidney',
   '/lorena',
   '/jack',
-  '/ai-deck',
   '/collection',
   '/tournaments',
 ]);
@@ -76,7 +74,12 @@ function Login({ onLoginSuccess, initialMode = 'login' }) {
   function resolvePostLoginPath() {
     const raw = searchParams.get('next');
     if (!raw) return '/deck';
-    const legacy = { '/doctor': '/sidney', '/sage': '/lorena' };
+    const legacy = {
+      '/doctor': '/deck',
+      '/sidney': '/deck',
+      '/ai-deck': '/deck',
+      '/sage': '/lorena',
+    };
     const normalized = legacy[raw] || raw;
     if (ALLOWED_POST_LOGIN.has(normalized)) return normalized;
     if (ALLOWED_POST_LOGIN.has(raw)) return raw;
