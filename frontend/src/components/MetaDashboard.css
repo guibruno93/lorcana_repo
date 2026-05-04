@@ -498,6 +498,89 @@
   font-weight: 600;
 }
 
+.scraped-meta-sub--link {
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+}
+
+.scraped-meta-sub--link a {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+.scraped-meta-sub--link a:hover {
+  color: #bfdbfe;
+}
+
+.scraped-table-scroll {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.scraped-meta-dist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.scraped-meta-dist-table th,
+.scraped-meta-dist-table td {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.scraped-meta-dist-table th {
+  background: rgba(15, 23, 42, 0.85);
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.scraped-meta-dist-table tbody tr:hover {
+  background: rgba(30, 41, 59, 0.45);
+}
+
+.scraped-glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.scraped-glossary-card {
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+}
+
+.scraped-glossary-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.scraped-glossary-sub {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+}
+
+.scraped-glossary-body {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #e2e8f0;
+}
+
+.scraped-dash-count {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .scraped-meta-dashboard {
     padding: 1rem 0.75rem 2.5rem;

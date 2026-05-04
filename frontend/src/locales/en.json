@@ -168,6 +168,7 @@
   "metaDashboard": {
     "title": "Meta Analysis",
     "subtitle": "Real-time tournament data • {{count}} decks analyzed • last 30 days",
+    "scheduledHint": "Inkdecks scraping runs on GitHub Actions (scheduled). The LLM glossary on the server uses ENABLE_INKDECKS_NIGHTLY_CRON=true (night, America/Sao_Paulo).",
     "lastUpdate": "Updated at {{time}}",
     "tabs": {
       "overview": "Overview",

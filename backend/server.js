@@ -28,7 +28,7 @@ const express = require("express");
 const cors = require("cors");
 const userRoutes = require('./routes/user');
 const app = express();
-//const metaCron = require('./jobs/meta-cron'); - comentado até implementar scraper usando puppeteer; 
+// const metaCron = require('./jobs/meta-cron'); // torneios legacy
 
 // ── CORS (Vercel + browser preflight) ───────────────────────────────────────
 const extraOrigins = (process.env.CORS_ORIGIN || "")
@@ -260,9 +260,19 @@ if (require.main === module) {
     console.log('');
 
     if (process.env.ENABLE_CRON !== 'false') {
-      //metaCron.init();
+      // metaCron.init(); // legacy torneios
     } else {
-      console.log('Cron jobs desabilitados');
+      console.log('Cron jobs desabilitados (ENABLE_CRON=false)');
+    }
+
+    if (String(process.env.ENABLE_INKDECKS_NIGHTLY_CRON || '').toLowerCase() === 'true') {
+      try {
+        const inkCron = require('./jobs/inkdecks-meta-cron');
+        inkCron.start();
+        console.log('⏰ Cron meta: glossário LLM noturno ativo (ENABLE_INKDECKS_NIGHTLY_CRON).');
+      } catch (e) {
+        console.warn('inkdecks-meta-cron não iniciado:', e.message);
+      }
     }
   });
 

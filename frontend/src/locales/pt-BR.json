@@ -170,6 +170,7 @@
   "metaDashboard": {
     "title": "Análise do Meta",
     "subtitle": "Dados de torneios em tempo real • {{count}} decks analisados • últimos 30 dias",
+    "scheduledHint": "A recolha Inkdecks corre automaticamente no GitHub Actions (cron). O glossário IA no servidor usa ENABLE_INKDECKS_NIGHTLY_CRON=true (madrugada, fuso America/Sao_Paulo).",
     "lastUpdate": "Atualizado às {{time}}",
     "tabs": {
       "overview": "Visão Geral",

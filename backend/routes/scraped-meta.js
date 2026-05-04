@@ -266,4 +266,28 @@ router.get('/stats', async (req, res) => {
   }
 });
 
+/**
+ * GET /api/meta/glossary
+ * Glossário e descrições de jogo geradas por LLM (ficheiro local no servidor).
+ */
+router.get('/glossary', async (req, res) => {
+  try {
+    const { readGlossary } = require('../services/meta-glossary-store');
+    const doc = readGlossary();
+    res.json({
+      success: true,
+      generated_at: doc.generated_at || null,
+      entries: doc.entries || [],
+      inkdecks_winrate_matrix_url:
+        'https://inkdecks.com/meta/winrate?metagame_id=16&hide_banned=0&relevance=&date_range=all&start_date=&end_date=&group_by=archetypes',
+    });
+  } catch (error) {
+    console.error('Error reading glossary:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to read glossary',
+    });
+  }
+});
+
 module.exports = router;

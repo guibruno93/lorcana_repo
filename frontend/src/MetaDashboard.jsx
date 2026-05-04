@@ -8,34 +8,6 @@ import { ArchetypeWithIcons } from './components/InkIcons';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
-function parseJwtPayload(token) {
-  try {
-    const parts = String(token || '').split('.');
-    if (parts.length < 2) return null;
-    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
-    const pad = '='.repeat((4 - (base64.length % 4)) % 4);
-    const decoded = atob(base64 + pad);
-    return JSON.parse(decoded);
-  } catch (_) {
-    return null;
-  }
-}
-
-function getUsableToken() {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-  const payload = parseJwtPayload(token);
-  const exp = payload?.exp;
-  if (!exp || typeof exp !== 'number') return token;
-  const nowSeconds = Math.floor(Date.now() / 1000);
-  if (exp <= nowSeconds) {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    return null;
-  }
-  return token;
-}
-
 export default function MetaDashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -74,96 +46,6 @@ export default function MetaDashboard() {
     }
   }
 
-  async function triggerScraping() {
-    try {
-      setLoading(true);
-      setError(null);
-      const token = getUsableToken();
-      if (!token) {
-        alert(
-          t(
-            'metaDashboard.scrapeLoginRequired',
-            'Sessão expirada ou ausente. Faça login para executar o scraper.'
-          )
-        );
-        navigate('/login?next=/meta');
-        return;
-      }
-      const res = await fetch(`${API}/api/meta-analysis/scrape`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ limit: 10 }),
-      });
-      if (!res.ok) {
-        const errBody = await res.text();
-        if (res.status === 401 || res.status === 403) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          alert(
-            t(
-              'metaDashboard.scrapeSessionExpired',
-              'Sua sessão expirou. Faça login novamente para continuar.'
-            )
-          );
-          navigate('/login?next=/meta');
-          return;
-        }
-        throw new Error(errBody || `HTTP ${res.status}`);
-      }
-      const text = await res.text();
-      const lines = text.trim().split('\n').filter(Boolean);
-      let total = 0;
-      const logs = [];
-      for (const line of lines) {
-        try {
-          const evt = JSON.parse(line);
-          if (evt.type === 'log' && evt.message) logs.push(evt.message);
-          if (evt.type === 'complete') total = evt.total ?? total;
-        } catch (_) {
-          /* linha inválida */
-        }
-      }
-      alert(
-        `${t('metaDashboard.scrapeDone', 'Scraping concluído.')}\n` +
-          `${t('metaDashboard.scrapeDecks', 'Decks')}: ${total}\n\n` +
-          logs.slice(-8).join('\n')
-      );
-      fetchMetaData();
-    } catch (e) {
-      console.error('Error triggering scraping:', e);
-      alert(
-        t('metaDashboard.scrapeFailed', 'Falha ao executar scraping') + `: ${e.message}`
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function triggerAnalysis() {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await fetch(`${API}/api/meta-analysis/analyze`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const data = await res.json();
-      
-      if (data.success) {
-        alert('Analysis completed!');
-        fetchMetaData();
-      }
-    } catch (e) {
-      console.error('Error triggering analysis:', e);
-      alert('Failed to trigger analysis');
-    } finally {
-      setLoading(false);
-    }
-  }
-
   if (loading && !metaData) {
     return (
       <div className="meta-dashboard-loading">
@@ -187,14 +69,9 @@ export default function MetaDashboard() {
           <p className="meta-subtitle">
             {t('metaDashboard.subtitle', { count: totalDecks })}
           </p>
+          <p className="meta-scheduled-hint">{t('metaDashboard.scheduledHint')}</p>
         </div>
         <div className="meta-header-actions">
-          <button onClick={triggerScraping} className="btn-action" disabled={loading}>
-            {t('metaDashboard.actions.scrape')}
-          </button>
-          <button onClick={triggerAnalysis} className="btn-action" disabled={loading}>
-            {t('metaDashboard.actions.analyze')}
-          </button>
           <button onClick={() => fetchMetaData()} className="btn-refresh" disabled={loading}>
             {t('metaDashboard.actions.refresh')}
           </button>

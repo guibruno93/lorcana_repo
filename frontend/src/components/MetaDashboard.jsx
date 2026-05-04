@@ -13,6 +13,9 @@ import {
 import './MetaDashboard.css';
 import { ArchetypeWithIcons } from './InkIcons';
 
+const INKDECKS_WINRATE_MATRIX_URL =
+  'https://inkdecks.com/meta/winrate?metagame_id=16&hide_banned=0&relevance=&date_range=all&start_date=&end_date=&group_by=archetypes';
+
 function MetaShareTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
@@ -46,6 +49,8 @@ const CHART_COLORS = [
   '#64748b',
 ];
 
+const WR_TIER_ORDER = ['S', 'A', 'B', 'C', 'D'];
+
 function formatDate(iso) {
   if (!iso) return '—';
   const d = new Date(iso);
@@ -55,39 +60,56 @@ function formatDate(iso) {
 export default function ScrapedMetaDashboard({ embedded = false }) {
   const navigate = useNavigate();
   const [metaShare, setMetaShare] = useState(null);
-  const [tierList, setTierList] = useState(null);
+  const [wrTiers, setWrTiers] = useState(null);
+  const [glossaryDoc, setGlossaryDoc] = useState(null);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [wrError, setWrError] = useState(null);
 
   const fetchMetaData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const [shareRes, tierRes, statsRes] = await Promise.all([
+      setWrError(null);
+
+      const [shareRes, statsRes, wrRes, glossRes] = await Promise.all([
         fetch(`${API_BASE}/api/meta/share`),
-        fetch(`${API_BASE}/api/meta/tier-list`),
         fetch(`${API_BASE}/api/meta/stats`),
+        fetch(`${API_BASE}/api/meta-analysis/scraped-tier-list?min_games=1`),
+        fetch(`${API_BASE}/api/meta/glossary`),
       ]);
 
-      if (!shareRes.ok || !tierRes.ok || !statsRes.ok) {
+      if (!shareRes.ok || !statsRes.ok) {
         const parts = [
           !shareRes.ok && `share ${shareRes.status}`,
-          !tierRes.ok && `tier-list ${tierRes.status}`,
           !statsRes.ok && `stats ${statsRes.status}`,
         ].filter(Boolean);
         throw new Error(parts.join(', ') || 'Failed to fetch meta data');
       }
 
-      const [shareData, tierData, statsData] = await Promise.all([
+      const [shareData, statsData] = await Promise.all([
         shareRes.json(),
-        tierRes.json(),
         statsRes.json(),
       ]);
 
       setMetaShare(shareData);
-      setTierList(tierData);
       setStats(statsData);
+
+      if (wrRes.ok) {
+        const wrJson = await wrRes.json();
+        setWrTiers(wrJson);
+      } else {
+        setWrTiers(null);
+        setWrError(`Win-rate tiers: HTTP ${wrRes.status}`);
+      }
+
+      if (glossRes.ok) {
+        const g = await glossRes.json();
+        setGlossaryDoc(g);
+      } else {
+        setGlossaryDoc(null);
+      }
     } catch (err) {
       console.error('Error fetching meta data:', err);
       setError(err.message || 'Network error');
@@ -113,6 +135,19 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
     }));
   }, [metaShare]);
 
+  const distributionRows = useMemo(
+    () => metaShare?.archetypes || [],
+    [metaShare]
+  );
+
+  const glossaryByArch = useMemo(() => {
+    const map = {};
+    for (const e of glossaryDoc?.entries || []) {
+      if (e && e.archetype) map[e.archetype] = e;
+    }
+    return map;
+  }, [glossaryDoc]);
+
   const popularPct = useMemo(() => {
     const t = stats?.total_decks;
     const c = stats?.most_popular_count;
@@ -120,7 +155,7 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
     return ((c / t) * 100).toFixed(1);
   }, [stats]);
 
-  if (loading && !metaShare && !tierList && !stats) {
+  if (loading && !metaShare && !stats) {
     return (
       <div className="scraped-meta-dashboard scraped-meta-loading" aria-busy="true">
         <div className="scraped-meta-spinner" aria-hidden />
@@ -129,7 +164,7 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
     );
   }
 
-  if (error && !metaShare && !tierList && !stats) {
+  if (error && !metaShare && !stats) {
     return (
       <div className="scraped-meta-dashboard scraped-meta-error">
         <h2>Erro ao carregar a meta</h2>
@@ -161,7 +196,16 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
         <div className="scraped-meta-hero-glow" aria-hidden />
         <h1>Lorcana — Meta &amp; tiers</h1>
         <p className="scraped-meta-sub">
-          Dados em tempo real a partir de <code>scraped_decks</code> (share, colocações e cobertura).
+          Dados a partir de <code>scraped_decks</code> (campo <code>archetype</code> por deck). A
+          recolha de listagens corre no{' '}
+          <strong>GitHub Actions</strong> (agendado); o glossário com IA pode correr de madrugada
+          no backend se <code>ENABLE_INKDECKS_NIGHTLY_CRON=true</code>.
+        </p>
+        <p className="scraped-meta-sub scraped-meta-sub--link">
+          Matriz global de win rate por arquétipo (referência Inkdecks):{' '}
+          <a href={INKDECKS_WINRATE_MATRIX_URL} target="_blank" rel="noopener noreferrer">
+            inkdecks.com/meta/winrate…
+          </a>
         </p>
         <div className="scraped-meta-hero-stats">
           <span className="scraped-meta-pill">
@@ -179,6 +223,11 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
       {error && (
         <div className="scraped-meta-banner-warn" role="status">
           Aviso: {error} — a mostrar dados em cache se existirem.
+        </div>
+      )}
+      {wrError && (
+        <div className="scraped-meta-banner-warn" role="status">
+          {wrError}
         </div>
       )}
 
@@ -202,50 +251,80 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
         </article>
       </section>
 
-      <section className="scraped-meta-section" aria-labelledby="tier-heading">
-        <h2 id="tier-heading">Tier list</h2>
+      <section className="scraped-meta-section" aria-labelledby="dist-heading">
+        <h2 id="dist-heading">Distribuição de Arquétipos</h2>
         <p className="scraped-meta-section-lead">
-          Baseada em meta share e desempenho agregado (Top 8 / 16 / 32).
+          Contagem de decks por valor de <code>archetype</code> na base (todos os registos).
+        </p>
+        <div className="scraped-table-scroll">
+          <table className="scraped-meta-dist-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Arquétipo</th>
+                <th>Partilha</th>
+                <th>Decks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {distributionRows.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="scraped-tier-empty">
+                    Sem dados de arquétipo.
+                  </td>
+                </tr>
+              ) : (
+                distributionRows.map((row, idx) => (
+                  <tr key={row.archetype || idx}>
+                    <td>{idx + 1}</td>
+                    <td>
+                      <ArchetypeWithIcons archetype={row.archetype} size="sm" />
+                    </td>
+                    <td>{row.percentage}%</td>
+                    <td>{row.count}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="scraped-meta-section" aria-labelledby="tier-wr-heading">
+        <h2 id="tier-wr-heading">Tier list (por win rate agregado)</h2>
+        <p className="scraped-meta-section-lead">
+          Agrupa arquétipos com registo W–L nos decks scrapeados; tiers S–D por percentil de score
+          (WR + meta share). Compara com a matriz oficial em{' '}
+          <a href={INKDECKS_WINRATE_MATRIX_URL} target="_blank" rel="noopener noreferrer">
+            Inkdecks
+          </a>
+          .
         </p>
 
-        {['S', 'A', 'B', 'C'].map((tier) => (
+        {WR_TIER_ORDER.map((tier) => (
           <div key={tier} className={`scraped-tier scraped-tier-${tier}`}>
             <div className="scraped-tier-header">
               <span className="scraped-tier-label">{tier}</span>
               <span className="scraped-tier-count">
-                {tierList?.tiers?.[tier]?.length ?? 0} arquétipos
+                {wrTiers?.tier_list?.[tier]?.length ?? 0} arquétipos
               </span>
             </div>
             <div className="scraped-tier-body">
-              {tierList?.tiers?.[tier]?.length > 0 ? (
-                tierList.tiers[tier].map((arch) => (
+              {(wrTiers?.tier_list?.[tier] || []).length > 0 ? (
+                wrTiers.tier_list[tier].map((arch) => (
                   <div key={arch.archetype} className="scraped-archetype-card">
                     <div className="scraped-archetype-title">
                       <ArchetypeWithIcons archetype={arch.archetype} />
                     </div>
                     <div className="scraped-archetype-row">
-                      <span className="scraped-meta-share">{arch.meta_share}% meta</span>
+                      <span className="scraped-meta-share" title="Win rate agregado (W/(W+L))">
+                        WR {arch.win_rate}%
+                      </span>
+                      <span className="scraped-deck-count">{arch.meta_share}% meta</span>
                       <span className="scraped-deck-count">{arch.deck_count} decks</span>
-                      {arch.avg_standing != null && (
-                        <span className="scraped-avg-standing" title="Média aproximada de colocação">
-                          Ø rank {arch.avg_standing}
-                        </span>
-                      )}
-                    </div>
-                    <div className="scraped-finishes">
-                      {arch.top8_finishes > 0 && (
-                        <span className="scraped-finish scraped-finish-t8">
-                          Top 8: {arch.top8_finishes}
-                        </span>
-                      )}
-                      {arch.top16_finishes > 0 && (
-                        <span className="scraped-finish scraped-finish-t16">
-                          Top 16: {arch.top16_finishes}
-                        </span>
-                      )}
-                      {arch.top32_finishes > 0 && (
-                        <span className="scraped-finish scraped-finish-t32">
-                          Top 32: {arch.top32_finishes}
+                      {arch.total_games > 0 && (
+                        <span className="scraped-avg-standing" title="Partidas com registo">
+                          {arch.total_games} partidas
                         </span>
                       )}
                     </div>
@@ -258,6 +337,33 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
           </div>
         ))}
       </section>
+
+      {(glossaryDoc?.entries?.length > 0 || glossaryDoc?.generated_at) && (
+        <section className="scraped-meta-section" aria-labelledby="glossary-heading">
+          <h2 id="glossary-heading">Glossário &amp; como jogar</h2>
+          <p className="scraped-meta-section-lead">
+            Texto gerado por LLM a partir dos arquétipos mais frequentes em{' '}
+            <code>scraped_decks</code>. Última geração:{' '}
+            {glossaryDoc?.generated_at
+              ? new Date(glossaryDoc.generated_at).toLocaleString()
+              : '—'}
+            .
+          </p>
+          <div className="scraped-glossary-grid">
+            {(glossaryDoc?.entries || []).map((entry) => (
+              <article key={entry.archetype} className="scraped-glossary-card">
+                <h3>
+                  <ArchetypeWithIcons archetype={entry.archetype} />
+                </h3>
+                <h4 className="scraped-glossary-sub">Glossário</h4>
+                <p className="scraped-glossary-body">{entry.glossary}</p>
+                <h4 className="scraped-glossary-sub">Como o deck funciona</h4>
+                <p className="scraped-glossary-body">{entry.how_it_plays}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="scraped-meta-section" aria-labelledby="share-heading">
         <h2 id="share-heading">Meta share — top 10</h2>
@@ -327,6 +433,33 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
         )}
       </section>
 
+      {distributionRows.length > 0 && (
+        <section className="scraped-meta-section" aria-labelledby="guides-heading">
+          <h2 id="guides-heading">Painel por arquétipo (resumo)</h2>
+          <p className="scraped-meta-section-lead">
+            Combina a tabela de distribuição com o glossário (quando existir entrada para o mesmo
+            nome de arquétipo).
+          </p>
+          <div className="scraped-glossary-grid">
+            {distributionRows.slice(0, 12).map((row) => {
+              const g = glossaryByArch[row.archetype];
+              if (!g) return null;
+              return (
+                <article key={`dash-${row.archetype}`} className="scraped-glossary-card">
+                  <h3>
+                    <ArchetypeWithIcons archetype={row.archetype} />{' '}
+                    <span className="scraped-dash-count">
+                      ({row.count} decks · {row.percentage}%)
+                    </span>
+                  </h3>
+                  <p className="scraped-glossary-body">{g.how_it_plays || g.glossary}</p>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       <footer className="scraped-meta-footer">
         <button
           type="button"
@@ -336,9 +469,10 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
         >
           {loading ? 'A atualizar…' : 'Atualizar dados'}
         </button>
-        {tierList?.generated_at && (
+        {wrTiers?.meta?.total_decks != null && (
           <span className="scraped-meta-generated">
-            Tier list gerada: {new Date(tierList.generated_at).toLocaleString()}
+            Tiers WR: {wrTiers.meta.total_decks} decks ·{' '}
+            {wrTiers.meta.total_archetypes ?? 0} arquétipos com jogos registados
           </span>
         )}
       </footer>
