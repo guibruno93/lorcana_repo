@@ -16,11 +16,20 @@ export default function MetaDashboard() {
   const [metaData, setMetaData] = useState(null);
   const [lastUpdate, setLastUpdate] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
+  const [embedLoading, setEmbedLoading] = useState(false);
 
   useEffect(() => {
     fetchMetaData();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'meta-analysis') {
+      setEmbedLoading(true);
+    } else {
+      setEmbedLoading(false);
+    }
+  }, [activeTab]);
 
   async function fetchMetaData() {
     setLoading(true);
@@ -46,11 +55,35 @@ export default function MetaDashboard() {
     }
   }
 
+  const isRefreshing = Boolean(loading && metaData);
+  const showGlobalProgress =
+    isRefreshing || (activeTab === 'meta-analysis' && embedLoading);
+
   if (loading && !metaData) {
     return (
-      <div className="meta-dashboard-loading">
-        <div className="loading-spinner"></div>
-        <p>{t('metaDashboard.loading')}</p>
+      <div className="meta-loading-shell" aria-busy="true" aria-live="polite">
+        <div className="meta-loading-shell__aurora" aria-hidden />
+        <div className="meta-loading-shell__inner">
+          <div className="meta-loading-shell__logo-ring" aria-hidden />
+          <p className="meta-loading-shell__title">{t('metaDashboard.loading')}</p>
+          <div className="meta-skeleton-grid" aria-hidden>
+            {[1, 2, 3, 4].map((k) => (
+              <div key={k} className="meta-skeleton-card">
+                <span className="meta-skeleton-line meta-skeleton-line--short" />
+                <span className="meta-skeleton-line meta-skeleton-line--long" />
+              </div>
+            ))}
+          </div>
+          <div className="meta-skeleton-rows" aria-hidden>
+            {[1, 2, 3, 4, 5].map((k) => (
+              <div key={k} className="meta-skeleton-row">
+                <span className="meta-skeleton-pill" />
+                <span className="meta-skeleton-line meta-skeleton-line--flex" />
+                <span className="meta-skeleton-bar" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -61,7 +94,20 @@ export default function MetaDashboard() {
   const topCards = []; // Backend não retorna topCards ainda
 
   return (
-    <div className="meta-dashboard">
+    <div
+      className={`meta-dashboard${isRefreshing ? ' meta-dashboard--refreshing' : ''}`}
+      data-active-tab={activeTab}
+    >
+      {showGlobalProgress && (
+        <div
+          className="meta-global-progress"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-busy="true"
+          aria-label={t('metaDashboard.loading')}
+        />
+      )}
       {/* Header */}
       <div className="meta-header">
         <div className="meta-title-section">
@@ -89,17 +135,31 @@ export default function MetaDashboard() {
       )}
 
       {/* Tabs */}
-      <div className="meta-tabs">
+      <div className="meta-tabs" role="tablist" aria-label={t('metaDashboard.title')}>
         {['overview', 'meta-analysis', 'cards'].map((tab) => (
           <button
             key={tab}
             type="button"
+            role="tab"
+            id={`tab-${tab}`}
+            aria-selected={activeTab === tab}
+            aria-controls={`tabpanel-${tab}`}
+            data-loading={
+              tab === 'meta-analysis' && activeTab === 'meta-analysis' && embedLoading
+                ? 'true'
+                : undefined
+            }
             className={`meta-tab ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
           >
             {tab === 'overview' && t('metaDashboard.tabs.overview')}
             {tab === 'meta-analysis' && t('metaDashboard.tabs.metaAnalysis')}
             {tab === 'cards' && t('metaDashboard.tabs.cards')}
+            {tab === 'meta-analysis' &&
+              activeTab === 'meta-analysis' &&
+              embedLoading && (
+                <span className="meta-tab-pulse" aria-hidden />
+              )}
           </button>
         ))}
         <button
@@ -113,7 +173,10 @@ export default function MetaDashboard() {
 
       {/* Stats Cards — só na visão geral (evita duplicar com Análise do Meta) */}
       {activeTab === 'overview' && (
-      <div className="stats-cards">
+      <div
+        className="stats-cards"
+        aria-busy={isRefreshing && activeTab === 'overview'}
+      >
         <div className="stat-card">
           <div className="stat-icon" aria-hidden="true" />
           <div className="stat-content">
@@ -150,22 +213,45 @@ export default function MetaDashboard() {
 
       {/* Tab Content */}
       {activeTab === 'overview' && (
-        <OverviewTab
-          archetypes={archetypes}
-          totalDecks={totalDecks}
-          topCards={topCards}
-          t={t}
-        />
+        <div
+          className="meta-tab-panel meta-tab-panel--enter"
+          role="tabpanel"
+          id="tabpanel-overview"
+          aria-labelledby="tab-overview"
+        >
+          <OverviewTab
+            archetypes={archetypes}
+            totalDecks={totalDecks}
+            topCards={topCards}
+            t={t}
+          />
+        </div>
       )}
 
       {activeTab === 'meta-analysis' && (
-        <div className="meta-embedded-scraped">
-          <ScrapedMetaDashboard embedded />
+        <div
+          className="meta-tab-panel meta-tab-panel--enter meta-tab-panel--embed"
+          role="tabpanel"
+          id="tabpanel-meta-analysis"
+          aria-labelledby="tab-meta-analysis"
+          aria-busy={embedLoading}
+          aria-live="polite"
+        >
+          <div className="meta-embedded-scraped">
+            <ScrapedMetaDashboard embedded onLoadingChange={setEmbedLoading} />
+          </div>
         </div>
       )}
 
       {activeTab === 'cards' && (
-        <CardsTab cards={topCards} totalDecks={totalDecks} t={t} />
+        <div
+          className="meta-tab-panel meta-tab-panel--enter"
+          role="tabpanel"
+          id="tabpanel-cards"
+          aria-labelledby="tab-cards"
+        >
+          <CardsTab cards={topCards} totalDecks={totalDecks} t={t} />
+        </div>
       )}
     </div>
   );

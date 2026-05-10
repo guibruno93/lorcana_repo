@@ -57,7 +57,7 @@ function formatDate(iso) {
   return Number.isNaN(d.getTime()) ? '—' : d.toLocaleDateString();
 }
 
-export default function ScrapedMetaDashboard({ embedded = false }) {
+export default function ScrapedMetaDashboard({ embedded = false, onLoadingChange }) {
   const navigate = useNavigate();
   const [metaShare, setMetaShare] = useState(null);
   const [wrTiers, setWrTiers] = useState(null);
@@ -66,6 +66,12 @@ export default function ScrapedMetaDashboard({ embedded = false }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [wrError, setWrError] = useState(null);
+
+  useEffect(() => {
+    if (typeof onLoadingChange === 'function') {
+      onLoadingChange(loading);
+    }
+  }, [loading, onLoadingChange]);
 
   const fetchMetaData = useCallback(async () => {
     try {

@@ -13,3 +13,16 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+if (
+  process.env.NODE_ENV === 'production' &&
+  'serviceWorker' in navigator &&
+  typeof window !== 'undefined'
+) {
+  window.addEventListener('load', () => {
+    const base = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
+    navigator.serviceWorker
+      .register(`${base}/sw.js`)
+      .catch(() => {});
+  });
+}

@@ -59,6 +59,13 @@
   ],
   "shortcuts": [
     {
+      "name": "Painel Meta",
+      "short_name": "Meta",
+      "description": "Visão geral e análise do meta Lorcana",
+      "url": "/meta",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
       "name": "Deck Analyzer",
       "short_name": "Analyzer",
       "description": "Analisar novo deck",
